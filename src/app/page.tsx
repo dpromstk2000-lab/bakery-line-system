@@ -20,13 +20,26 @@ export default function Home() {
           <p className="text-4xl font-bold text-amber-600 tracking-tight">¥ 1,500</p>
         </div>
 
-        {/* バーコード表示エリア（仮） */}
+        {/* QRコード表示エリア（修正） */}
         <div className="mt-8 flex justify-center">
-          <div className="w-full max-w-[250px] h-24 bg-gray-100 flex items-center justify-center rounded border border-gray-300 shadow-inner">
-            <span className="text-gray-400 tracking-widest text-2xl font-mono">||| |||| ||||| |||</span>
+          <div className="p-2 border-4 border-amber-400 rounded-2xl bg-amber-50">
+            {/* パン屋さんらしい色のQRコードのモック */}
+            <svg
+              viewBox="0 0 29 29"
+              className="w-[180px] h-[180px]"
+              shapeRendering="crispEdges"
+            >
+              <rect width="29" height="29" fill="#fffaf0" />
+              <path
+                d="M0 0h7v7H0zm22 0h7v7h-7zM0 22h7v7H0zm10 0h2v2h-2zm2 2h1v1h-1zm1 0h2v2h-2zm2-2h1v1h-1zm1 0h2v2h-2zm2 2h1v1h-1zm1-2h2v2h-2zm2 2h2v2h-2zm-2 2h1v1h-1zm1 0h1v1h-1zm0-10h1v1h-1zm1-1h1v1h-1zm1 1h2v2h-2zm2-1h2v2h-2zm-2 2h1v1h-1zm1 0h1v1h-1zm1-1h1v1h-1zm-9-2h2v2h-2zm2 2h1v1h-1zm1 0h1v1h-1zm-2 2h2v2h-2zm2 2h1v1h-1zm1 0h1v1h-1zm-2 2h2v2h-2zm2 2h1v1h-1zm1 0h1v1h-1z"
+                fill="#b45309"
+              />
+              <path d="M1 1h5v5H1zm23 0h5v5h-5zM1 23h5v5H1z" fill="#fffaf0" />
+              <path d="M2 2h3v3H2zm23 0h3v3h-3zM2 24h3v3H2z" fill="#d97706" />
+            </svg>
           </div>
         </div>
-        <p className="text-center text-xs text-gray-400 mt-2">レジでこのバーコードをご提示ください</p>
+        <p className="text-center text-xs text-gray-400 mt-2">レジでこのQRコードをご提示ください</p>
       </div>
 
       {/* アクションボタン */}
