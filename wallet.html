@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  <title>DPROベーカリー | wallet.html 正式QR対応</title>
+  <title>DPROベーカリー | wallet.html 定休日・臨時休業対応</title>
   <style>
     :root {
       --bg: #fff7ed;
@@ -16,8 +16,8 @@
       --soft: #ffedd5;
       --green: #16a34a;
       --red: #dc2626;
-      --yellow: #d97706;
       --blue: #2563eb;
+      --yellow: #d97706;
       --shadow: 0 22px 70px rgba(120, 53, 15, .12);
       --radius: 24px;
     }
@@ -34,37 +34,35 @@
         radial-gradient(circle at 90% 4%, rgba(245, 158, 11, .16), transparent 30%),
         linear-gradient(180deg, #fff7ed, #fffbeb 48%, #fef3c7);
       line-height: 1.65;
-      -webkit-tap-highlight-color: transparent;
     }
 
     .wrap {
-      width: min(760px, calc(100% - 22px));
-      margin: 12px auto 42px;
+      width: min(760px, calc(100% - 24px));
+      margin: 14px auto 46px;
     }
 
     .hero {
-      background: rgba(255,255,255,.94);
+      background: rgba(255,255,255,.96);
       border: 1px solid var(--line);
-      border-radius: 28px;
+      border-radius: 30px;
       box-shadow: var(--shadow);
-      padding: 20px;
-      overflow: hidden;
+      padding: 24px;
       position: relative;
+      overflow: hidden;
     }
 
     .hero::after {
       content: "🍞";
       position: absolute;
       right: 18px;
-      top: 18px;
-      font-size: 68px;
-      opacity: .12;
+      top: 6px;
+      font-size: 86px;
+      opacity: .10;
       pointer-events: none;
     }
 
     .badge {
       display: inline-flex;
-      align-items: center;
       border-radius: 999px;
       background: var(--soft);
       color: #9a3412;
@@ -73,36 +71,97 @@
       font-weight: 950;
     }
 
+    .badge.green { background: #dcfce7; color: #166534; }
+    .badge.red { background: #fee2e2; color: #991b1b; }
+    .badge.blue { background: #dbeafe; color: #1d4ed8; }
+
     h1 {
-      margin: 10px 0 8px;
-      font-size: clamp(28px, 7vw, 44px);
-      line-height: 1.04;
-      letter-spacing: -.04em;
+      margin: 12px 0 8px;
+      font-size: clamp(32px, 7vw, 56px);
+      line-height: 1.02;
+      letter-spacing: -.05em;
     }
 
     h2 {
       margin: 0;
-      font-size: 22px;
-      letter-spacing: -.03em;
+      font-size: 23px;
+      letter-spacing: -.04em;
     }
 
     h3 {
-      margin: 0 0 8px;
-      font-size: 16px;
+      margin: 3px 0 8px;
+      font-size: 18px;
+      letter-spacing: -.03em;
     }
 
     .lead {
       margin: 0;
       color: #44403c;
-      font-weight: 800;
-      font-size: 14px;
+      font-weight: 850;
+      font-size: 15px;
+    }
+
+    section.panel {
+      background: rgba(255,255,255,.96);
+      border: 1px solid var(--line);
+      box-shadow: 0 18px 52px rgba(120, 53, 15, .07);
+      border-radius: var(--radius);
+      padding: 20px;
+      margin: 14px 0;
+    }
+
+    .panel-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: flex-start;
+      margin-bottom: 14px;
+    }
+
+    .small {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 850;
+    }
+
+    .hidden { display: none !important; }
+
+    label {
+      display: block;
+      font-size: 12px;
+      font-weight: 950;
+      color: #57534e;
+      margin: 0 0 5px;
+    }
+
+    input, textarea, select {
+      width: 100%;
+      border: 1px solid #fdba74;
+      background: #fff;
+      border-radius: 14px;
+      padding: 12px 13px;
+      font-size: 15px;
+      color: var(--ink);
+      outline: none;
+    }
+
+    input:focus, textarea:focus, select:focus {
+      border-color: #f97316;
+      box-shadow: 0 0 0 4px rgba(249, 115, 22, .16);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 12px;
     }
 
     .button-row {
       display: flex;
       flex-wrap: wrap;
       gap: 10px;
-      margin-top: 12px;
+      margin-top: 14px;
     }
 
     button, .button-link {
@@ -112,9 +171,9 @@
       background: var(--main);
       color: #fff;
       font-weight: 950;
-      padding: 12px 17px;
+      padding: 12px 16px;
       cursor: pointer;
-      min-height: 46px;
+      min-height: 44px;
       text-decoration: none;
       display: inline-flex;
       align-items: center;
@@ -123,12 +182,10 @@
       font-size: 14px;
     }
 
-    button:hover, .button-link:hover { transform: translateY(-1px); }
-
-    button.green { background: var(--green); box-shadow: 0 14px 28px rgba(22, 163, 74, .18); }
-    button.blue { background: var(--blue); box-shadow: 0 14px 28px rgba(37, 99, 235, .18); }
+    button.green, .button-link.green { background: var(--green); box-shadow: 0 14px 28px rgba(22, 163, 74, .18); }
+    button.blue, .button-link.blue { background: var(--blue); box-shadow: 0 14px 28px rgba(37, 99, 235, .18); }
     button.red { background: var(--red); box-shadow: 0 14px 28px rgba(220, 38, 38, .16); }
-    button.dark { background: #1c1917; box-shadow: 0 14px 28px rgba(28, 25, 23, .18); }
+    button.dark, .button-link.dark { background: #1c1917; box-shadow: 0 14px 28px rgba(28, 25, 23, .18); }
 
     button.ghost, .button-link.ghost {
       background: #fff;
@@ -147,54 +204,6 @@
     button:disabled {
       opacity: .52;
       cursor: not-allowed;
-      transform: none;
-    }
-
-    label {
-      display: block;
-      font-size: 12px;
-      font-weight: 950;
-      color: #57534e;
-      margin: 0 0 5px;
-    }
-
-    input, textarea, select {
-      width: 100%;
-      border: 1px solid #fdba74;
-      background: #fff;
-      border-radius: 14px;
-      padding: 12px 13px;
-      font-size: 16px;
-      color: var(--ink);
-      outline: none;
-    }
-
-    input:focus, textarea:focus, select:focus {
-      border-color: #f97316;
-      box-shadow: 0 0 0 4px rgba(249, 115, 22, .16);
-    }
-
-    section.panel {
-      background: rgba(255,255,255,.95);
-      border: 1px solid var(--line);
-      box-shadow: 0 18px 52px rgba(120, 53, 15, .07);
-      border-radius: var(--radius);
-      padding: 18px;
-      margin: 14px 0;
-    }
-
-    .panel-head {
-      display: flex;
-      justify-content: space-between;
-      gap: 14px;
-      align-items: flex-start;
-      margin-bottom: 14px;
-    }
-
-    .small {
-      color: var(--muted);
-      font-size: 12px;
-      font-weight: 800;
     }
 
     .status-box {
@@ -206,6 +215,7 @@
       font-weight: 850;
       white-space: pre-wrap;
       word-break: break-word;
+      margin-top: 12px;
     }
 
     .status-box.ok { border-color: #bbf7d0; background: #f0fdf4; color: #166534; }
@@ -213,72 +223,57 @@
     .status-box.ng { border-color: #fecaca; background: #fef2f2; color: #991b1b; }
     .status-box.info { border-color: #bfdbfe; background: #eff6ff; color: #1e3a8a; }
 
-    .setup-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      margin-top: 14px;
-    }
-
     .question {
       display: grid;
-      gap: 9px;
-      margin: 16px 0 18px;
+      gap: 10px;
+      margin-top: 12px;
     }
 
     .option {
-      display: flex;
-      align-items: flex-start;
+      display: grid;
+      grid-template-columns: auto 1fr;
       gap: 10px;
-      width: 100%;
-      padding: 13px;
-      border: 1px solid #fdba74;
+      align-items: start;
+      border: 1px solid var(--line);
       background: #fff;
-      border-radius: 17px;
+      border-radius: 18px;
+      padding: 13px;
       cursor: pointer;
+      font-size: 14px;
       font-weight: 900;
-    }
-
-    .option input {
-      width: auto;
-      margin-top: 4px;
-      accent-color: #b45309;
     }
 
     .option span {
       display: block;
-      font-size: 13px;
-      color: #57534e;
+      color: var(--muted);
+      font-size: 12px;
       font-weight: 800;
-      margin-top: 3px;
+      margin-top: 2px;
     }
 
-    .option:has(input:checked) {
-      background: #ffedd5;
-      border-color: #f97316;
-      box-shadow: 0 0 0 4px rgba(249, 115, 22, .10);
-    }
+    .option input { width: auto; margin-top: 4px; }
 
     .wallet-card {
       background:
-        radial-gradient(circle at 15% 10%, rgba(251, 191, 36, .18), transparent 30%),
+        radial-gradient(circle at 14% 12%, rgba(251, 191, 36, .20), transparent 28%),
         linear-gradient(135deg, #1c1917, #431407 58%, #9a3412);
       color: #fff7ed;
       border-radius: 28px;
       padding: 22px;
-      box-shadow: 0 24px 70px rgba(67, 20, 7, .30);
-      position: relative;
+      box-shadow: 0 24px 70px rgba(67, 20, 7, .28);
       overflow: hidden;
+      position: relative;
     }
 
     .wallet-card::after {
       content: "";
       position: absolute;
-      inset: auto -60px -80px auto;
-      width: 190px;
-      height: 190px;
-      border-radius: 999px;
-      background: rgba(255,255,255,.10);
+      right: -40px;
+      top: -40px;
+      width: 160px;
+      height: 160px;
+      background: rgba(255,255,255,.08);
+      border-radius: 50%;
     }
 
     .wallet-top {
@@ -290,106 +285,185 @@
       z-index: 1;
     }
 
-    .wallet-title {
-      font-size: 13px;
-      font-weight: 950;
-      color: #fed7aa;
-    }
-
     .wallet-name {
-      font-size: 26px;
-      line-height: 1.15;
+      font-size: 24px;
+      font-weight: 950;
       letter-spacing: -.04em;
-      font-weight: 950;
-      margin-top: 5px;
-    }
-
-    .wallet-balance-label {
-      font-size: 12px;
-      color: #fed7aa;
-      font-weight: 950;
-      margin-top: 18px;
     }
 
     .wallet-balance {
-      font-size: clamp(42px, 12vw, 70px);
-      line-height: 1;
-      letter-spacing: -.07em;
+      margin: 18px 0;
+      font-size: 42px;
       font-weight: 950;
-      margin: 5px 0 14px;
+      line-height: 1;
+      letter-spacing: -.05em;
+      position: relative;
+      z-index: 1;
     }
 
-    .wallet-code {
-      font-size: 13px;
-      font-weight: 950;
+    .wallet-meta {
+      display: grid;
+      gap: 6px;
       color: #fed7aa;
-      word-break: break-all;
+      font-size: 12px;
+      font-weight: 850;
+      position: relative;
+      z-index: 1;
     }
 
     .qr-wrap {
-      background: #fff;
-      border-radius: 22px;
-      padding: 12px;
-      width: 166px;
-      min-height: 166px;
       display: grid;
       place-items: center;
+      background: #fff;
+      border-radius: 24px;
+      padding: 18px;
+      margin-top: 16px;
       position: relative;
       z-index: 1;
-      border: 4px solid rgba(255, 237, 213, .9);
     }
 
-    .qr-wrap canvas {
-      width: 132px;
-      height: 132px;
-      image-rendering: pixelated;
+    #qrCanvas {
+      width: 220px;
+      height: 220px;
+      max-width: 100%;
     }
 
-    .qr-fallback {
-      color: #1c1917;
-      font-size: 11px;
-      font-weight: 950;
-      text-align: center;
-      word-break: break-all;
-    }
-
-    .summary-grid {
+    .date-grid {
       display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 10px;
-      margin-top: 12px;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 8px;
+      margin-top: 10px;
     }
 
-    .summary-card {
+    .date-btn {
+      border: 1px solid #fdba74;
       background: #fff;
+      color: #44403c;
+      box-shadow: none;
+      border-radius: 16px;
+      min-height: 64px;
+      padding: 7px;
+      display: block;
+      text-align: center;
+      font-size: 11px;
+      line-height: 1.2;
+    }
+
+    .date-btn .date-num {
+      display: block;
+      font-size: 18px;
+      font-weight: 950;
+      margin-bottom: 2px;
+    }
+
+    .date-btn .reason {
+      display: block;
+      font-size: 10px;
+      color: #991b1b;
+      margin-top: 2px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .date-btn.selected {
+      background: #dcfce7;
+      border-color: #22c55e;
+      color: #166534;
+      box-shadow: 0 0 0 4px rgba(34, 197, 94, .12);
+    }
+
+    .date-btn.closed {
+      background: #f5f5f4;
+      border-color: #e7e5e4;
+      color: #a8a29e;
+      box-shadow: none;
+      cursor: not-allowed;
+    }
+
+    .date-btn.today-blocked {
+      background: #fffbeb;
+      border-color: #fde68a;
+      color: #92400e;
+    }
+
+    .product-grid {
+      display: grid;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .product-card {
       border: 1px solid var(--line);
       border-radius: 18px;
-      padding: 14px;
-      box-shadow: 0 12px 36px rgba(120, 53, 15, .06);
+      background: #fff;
+      padding: 13px;
+      display: grid;
+      gap: 10px;
     }
 
-    .summary-card .label {
-      font-size: 12px;
+    .product-card.selected {
+      border-color: #22c55e;
+      box-shadow: 0 0 0 4px rgba(34, 197, 94, .12);
+    }
+
+    .product-card strong {
+      font-size: 16px;
+      letter-spacing: -.03em;
+    }
+
+    .product-card span {
       color: var(--muted);
-      font-weight: 950;
+      font-size: 12px;
+      font-weight: 850;
     }
 
-    .summary-card .value {
+    .qty-row {
+      display: grid;
+      grid-template-columns: 44px 1fr 44px;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .qty-row button {
+      width: 44px;
+      height: 44px;
+      min-height: 44px;
+      padding: 0;
+      font-size: 20px;
+      border-radius: 14px;
+    }
+
+    .qty-number {
+      text-align: center;
+      font-size: 20px;
+      font-weight: 950;
+      background: #fff7ed;
+      border-radius: 14px;
+      min-height: 44px;
+      display: grid;
+      place-items: center;
+    }
+
+    .preorder-total {
+      margin-top: 14px;
+      border-radius: 18px;
+      background: #1c1917;
+      color: #fff7ed;
+      padding: 14px;
       font-size: 22px;
       font-weight: 950;
-      letter-spacing: -.04em;
-      margin-top: 2px;
-      word-break: break-word;
+      text-align: center;
     }
 
-    .charge-grid, .product-grid {
+    .charge-grid {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 10px;
-      margin-top: 12px;
+      margin-top: 14px;
     }
 
-    .charge-card, .product-card {
+    .charge-card {
       background: #fff;
       border: 1px solid var(--line);
       border-radius: 18px;
@@ -397,102 +471,34 @@
       cursor: pointer;
     }
 
-    .charge-card.selected, .product-card.selected {
-      background: #ffedd5;
-      border-color: #f97316;
-      box-shadow: 0 0 0 4px rgba(249, 115, 22, .10);
+    .charge-card.selected {
+      border-color: #22c55e;
+      box-shadow: 0 0 0 4px rgba(34, 197, 94, .12);
     }
 
-    .charge-card strong, .product-card strong {
+    .charge-card strong {
       display: block;
-      font-size: 17px;
-      margin-bottom: 2px;
+      font-size: 21px;
+      letter-spacing: -.04em;
     }
 
-    .charge-card span, .product-card span {
-      display: block;
+    .charge-card span {
       color: var(--muted);
       font-size: 12px;
-      font-weight: 800;
+      font-weight: 850;
     }
 
-    .qty-row {
-      display: grid;
-      grid-template-columns: 52px 1fr 52px;
-      gap: 10px;
-      align-items: center;
-      margin-top: 8px;
-    }
-
-    .qty-row button {
-      min-height: 42px;
-      padding: 0;
+    .url-card {
+      word-break: break-all;
+      background: #fff7ed;
+      border: 1px solid #fed7aa;
       border-radius: 14px;
-      box-shadow: none;
-      background: #ffedd5;
+      padding: 10px;
       color: #9a3412;
-      border: 1px solid #fdba74;
-      font-size: 20px;
-    }
-
-    .qty-number {
-      text-align: center;
-      font-size: 20px;
-      font-weight: 950;
-    }
-
-    .preorder-total {
-      font-size: 30px;
-      font-weight: 950;
-      letter-spacing: -.05em;
-      color: #9a3412;
-      margin-top: 10px;
-    }
-
-    .card-list {
-      display: grid;
-      gap: 10px;
-      margin-top: 12px;
-    }
-
-    .data-card {
-      background: #fff;
-      border: 1px solid var(--line);
-      border-radius: 16px;
-      padding: 13px;
-      font-size: 13px;
-    }
-
-    .data-card strong {
-      display: block;
-      font-size: 15px;
-      margin-bottom: 4px;
-    }
-
-    .tag-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
+      font-size: 12px;
+      font-weight: 850;
       margin-top: 8px;
     }
-
-    .pill {
-      display: inline-flex;
-      justify-content: center;
-      align-items: center;
-      border-radius: 999px;
-      padding: 5px 9px;
-      font-size: 11px;
-      font-weight: 950;
-      white-space: nowrap;
-      background: #e7e5e4;
-      color: #44403c;
-    }
-
-    .pill.green { background: #dcfce7; color: #166534; }
-    .pill.orange { background: #ffedd5; color: #9a3412; }
-    .pill.blue { background: #dbeafe; color: #1d4ed8; }
-    .pill.red { background: #fee2e2; color: #991b1b; }
 
     details {
       border: 1px solid var(--line);
@@ -514,8 +520,6 @@
       border-top: 1px solid var(--line);
     }
 
-    .hidden { display: none !important; }
-
     .footer {
       text-align: center;
       color: var(--muted);
@@ -524,15 +528,15 @@
       font-weight: 800;
     }
 
-    @media (max-width: 640px) {
-      .setup-grid, .summary-grid, .charge-grid, .product-grid { grid-template-columns: 1fr; }
-      .wallet-top { display: block; }
-      .qr-wrap { width: 100%; min-height: 190px; margin-top: 16px; }
-      .qr-wrap canvas { width: 160px; height: 160px; }
+    @media (max-width: 560px) {
+      .wrap { width: min(100% - 16px, 760px); margin-top: 8px; }
+      .hero { padding: 20px; border-radius: 24px; }
+      section.panel { padding: 16px; }
       .panel-head { display: block; }
+      .grid, .charge-grid { grid-template-columns: 1fr; }
+      .date-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
       button, .button-link { width: 100%; }
-      section.panel { padding: 15px; }
-      .hero { border-radius: 22px; }
+      .wallet-balance { font-size: 36px; }
     }
   </style>
 </head>
@@ -540,210 +544,135 @@
 <body>
   <div class="wrap">
     <header class="hero">
-      <div class="badge">DPRO SHOP / Bakery LIFF Wallet / STEP BAKERY-8</div>
-      <h1>デジタル<br>お財布会員証</h1>
+      <div class="badge">STEP BAKERY-14 / 定休日・臨時休業反映</div>
+      <h1>デジタルお財布<br>会員証</h1>
       <p class="lead">
-        レジで1秒決済、人気パンの取り置き、夕方限定ECOレスキューまでLINEから使えるパン屋専用会員証です。
+        レジでQRを見せるだけ。取り置き予約は、店舗の定休日・臨時休業日・受け取り時間に合わせて選べます。
       </p>
       <div class="button-row">
-        <button class="green" id="loadMyCardButton" type="button">会員証を表示</button>
-        <button class="ghost" id="refreshButton" type="button">更新</button>
+        <button class="green" data-scroll="#walletPanel" type="button">会員証</button>
+        <button class="blue" data-scroll="#preorderPanel" type="button">取り置き</button>
+        <button class="dark" data-scroll="#chargePanel" type="button">チャージ</button>
       </div>
-
-      <details>
-        <summary>DEMO・開発設定</summary>
-        <div class="detail-body">
-          <div class="setup-grid">
-            <div>
-              <label for="apiBaseInput">Worker API URL</label>
-              <input id="apiBaseInput" value="https://dpro-bakery-wallet-api.dpromstk2000.workers.dev" autocomplete="off" />
-            </div>
-            <div>
-              <label for="shopCodeInput">店舗コード</label>
-              <input id="shopCodeInput" value="bakery_demo" autocomplete="off" />
-            </div>
-            <div>
-              <label for="demoMemberInput">DEMO会員コード</label>
-              <input id="demoMemberInput" value="DEMO-BK-001" autocomplete="off" />
-            </div>
-            <div>
-              <label for="liffIdInput">LIFF ID</label>
-              <input id="liffIdInput" placeholder="LINE設定後に入力" autocomplete="off" />
-            </div>
-          </div>
-          <div class="button-row">
-            <button class="soft" id="useDemoMemberButton" type="button">DEMO会員で表示</button>
-            <button class="ghost" id="resetLocalButton" type="button">この端末の会員情報をリセット</button>
-          </div>
-        </div>
-      </details>
+      <div id="shopStatus" class="status-box info">店舗設定を読み込み中です。</div>
     </header>
 
-    <section class="panel" id="statusPanel">
-      <div id="statusBox" class="status-box info">会員証を読み込み中です。</div>
-    </section>
-
-    <section class="panel hidden" id="registerPanel">
+    <section class="panel" id="registerPanel">
       <div class="panel-head">
         <div>
           <h2>初回登録</h2>
-          <div class="small">最初だけ3つの質問に答えると、会員証が発行されます。</div>
+          <div class="small">3つの質問で会員証を発行します。</div>
         </div>
       </div>
 
-      <div>
-        <label for="customerNameInput">お名前</label>
-        <input id="customerNameInput" placeholder="例：佐藤 美咲" autocomplete="name" />
-      </div>
-      <div style="margin-top:10px;">
-        <label for="phoneInput">電話番号</label>
-        <input id="phoneInput" placeholder="例：090-0000-0000" autocomplete="tel" />
-      </div>
-
-      <div class="question">
-        <h3>質問① 普段の「いつもの買い方」を教えてください。</h3>
-        <label class="option">
-          <input type="radio" name="buyingHabit" value="family" checked />
-          <div>家族みんなの朝食・おやつ用に<span>ファミリー層向けの新作案内に活用します。</span></div>
-        </label>
-        <label class="option">
-          <input type="radio" name="buyingHabit" value="daily" />
-          <div>自分のランチや毎日の食パンに<span>ランチ・日常使いの案内に活用します。</span></div>
-        </label>
-        <label class="option">
-          <input type="radio" name="buyingHabit" value="weekend_reward" />
-          <div>週末のご褒美や手土産に<span>週末限定・ギフト向けの案内に活用します。</span></div>
-        </label>
+      <div class="grid">
+        <div>
+          <label for="nameInput">お名前</label>
+          <input id="nameInput" value="佐藤 花子" autocomplete="name" />
+        </div>
+        <div>
+          <label for="phoneInput">電話番号</label>
+          <input id="phoneInput" value="" autocomplete="tel" />
+        </div>
       </div>
 
+      <h3>普段の買い方</h3>
       <div class="question">
-        <h3>質問② 本日はどのようなご用件ですか？</h3>
-        <label class="option">
-          <input type="radio" name="visitPurpose" value="preorder" />
-          <div>人気のパンを事前予約して後で受け取る<span>取り置き予約へ進みやすくします。</span></div>
-        </label>
-        <label class="option">
-          <input type="radio" name="visitPurpose" value="charge" checked />
-          <div>会員証にお得に事前チャージして店舗へ買いに行く<span>5%上乗せのチャージへ進みやすくします。</span></div>
-        </label>
+        <label class="option"><input type="radio" name="buyingHabit" value="family" checked><div>家族みんなの朝食・おやつ用に<span>食パンや菓子パンをよく買う</span></div></label>
+        <label class="option"><input type="radio" name="buyingHabit" value="lunch"><div>自分のランチや毎日の食パンに<span>サンドや食パンを買いやすい</span></div></label>
+        <label class="option"><input type="radio" name="buyingHabit" value="gift"><div>週末のご褒美や手土産に<span>人気商品・限定商品を逃したくない</span></div></label>
       </div>
 
+      <h3>本日の用件</h3>
       <div class="question">
-        <h3>質問③ ECOレスキュー案内を受け取りますか？</h3>
-        <label class="option">
-          <input type="radio" name="ecoRescue" value="weekday_evening" checked />
-          <div>平日の夕方・仕事帰りなら寄れる<span>夕方の売れ残り対策に使います。</span></div>
-        </label>
-        <label class="option">
-          <input type="radio" name="ecoRescue" value="weekend_evening" />
-          <div>土日祝の夕方なら寄れる<span>週末の売り切り案内に使います。</span></div>
-        </label>
-        <label class="option">
-          <input type="radio" name="ecoRescue" value="none" />
-          <div>通知は不要<span>不要な通知は送りません。</span></div>
-        </label>
+        <label class="option"><input type="radio" name="visitPurpose" value="wallet" checked><div>会員証にチャージして使いたい<span>レジ会計を早くしたい</span></div></label>
+        <label class="option"><input type="radio" name="visitPurpose" value="preorder"><div>人気パンを取り置きしたい<span>受け取り時間にお店へ行きたい</span></div></label>
+      </div>
+
+      <h3>ECOレスキュー案内</h3>
+      <div class="question">
+        <label class="option"><input type="radio" name="ecoRescue" value="weekday_evening" checked><div>平日の夕方・仕事帰りなら寄れる</div></label>
+        <label class="option"><input type="radio" name="ecoRescue" value="weekend_evening"><div>土日祝の夕方なら寄れる</div></label>
+        <label class="option"><input type="radio" name="ecoRescue" value="none"><div>通知不要</div></label>
       </div>
 
       <div class="button-row">
         <button class="green" id="registerButton" type="button">会員証を発行する</button>
+        <button class="ghost" id="useDemoMemberButton" type="button">DEMO会員で表示</button>
       </div>
+
+      <div id="registerStatus" class="status-box info">登録すると、QR会員証が表示されます。</div>
     </section>
 
     <section class="panel hidden" id="walletPanel">
       <div class="wallet-card">
         <div class="wallet-top">
           <div>
-            <div class="wallet-title">DPROベーカリー 会員証</div>
+            <div class="small" style="color:#fed7aa;">DPROベーカリー会員証</div>
             <div class="wallet-name" id="walletName">お客様</div>
-            <div class="wallet-balance-label">チャージ残高</div>
-            <div class="wallet-balance" id="walletBalance">0円</div>
-            <div class="wallet-code" id="walletCode">会員コード：-</div>
           </div>
-          <div class="qr-wrap" id="qrWrap">
-            <canvas id="qrCanvas" width="132" height="132"></canvas>
-          </div>
+          <div class="badge green" id="walletRank">会員</div>
         </div>
-      </div>
-
-      <div class="summary-grid">
-        <div class="summary-card">
-          <div class="label">累計チャージ</div>
-          <div class="value" id="sumCharge">-</div>
+        <div class="wallet-balance" id="walletBalance">0円</div>
+        <div class="wallet-meta">
+          <div>会員コード：<span id="walletMemberCode">-</span></div>
+          <div>レジで下のQRを見せてください。</div>
         </div>
-        <div class="summary-card">
-          <div class="label">5%上乗せ分</div>
-          <div class="value" id="sumBonus">-</div>
-        </div>
-        <div class="summary-card">
-          <div class="label">ECO通知</div>
-          <div class="value" id="sumEco">-</div>
+        <div class="qr-wrap">
+          <canvas id="qrCanvas" width="260" height="260"></canvas>
         </div>
       </div>
 
       <div class="button-row">
-        <button class="green" data-scroll="#chargePanel" type="button">お得にチャージ</button>
-        <button class="blue" data-scroll="#preorderPanel" type="button">パンを取り置き</button>
-        <button class="ghost" id="copyMemberButton" type="button">会員コードをコピー</button>
+        <button class="ghost" id="copyMemberButton" type="button">会員コードコピー</button>
+        <button class="ghost" id="reloadMeButton" type="button">残高再読込</button>
       </div>
+      <div id="walletStatus" class="status-box info">会員証を表示しています。</div>
     </section>
 
     <section class="panel hidden" id="chargePanel">
       <div class="panel-head">
         <div>
-          <h2>お得にチャージ</h2>
-          <div class="small">DEMOではSquare本番決済ではなく、疑似チャージで5%上乗せを体験します。</div>
+          <h2>チャージ</h2>
+          <div class="small" id="chargeLead">DEMO店舗では、動作確認用のDEMOチャージが使えます。</div>
         </div>
+        <div id="chargeModeBadge" class="badge blue">確認中</div>
       </div>
 
       <div class="charge-grid" id="chargeGrid">
-        <div class="charge-card selected" data-charge="1000">
-          <strong>1,000円</strong>
-          <span>1,050円分使える</span>
-        </div>
-        <div class="charge-card" data-charge="3000">
-          <strong>3,000円</strong>
-          <span>3,150円分使える</span>
-        </div>
-        <div class="charge-card" data-charge="5000">
-          <strong>5,000円</strong>
-          <span>5,250円分使える</span>
-        </div>
-        <div class="charge-card" data-charge="10000">
-          <strong>10,000円</strong>
-          <span>10,500円分使える</span>
-        </div>
+        <div class="charge-card selected" data-charge="1000"><strong>1,000円</strong><span>上乗せあり</span></div>
+        <div class="charge-card" data-charge="3000"><strong>3,000円</strong><span>上乗せあり</span></div>
+        <div class="charge-card" data-charge="5000"><strong>5,000円</strong><span>上乗せあり</span></div>
+        <div class="charge-card" data-charge="10000"><strong>10,000円</strong><span>上乗せあり</span></div>
       </div>
 
       <div class="button-row">
         <button class="green" id="demoChargeButton" type="button">DEMOチャージする</button>
       </div>
-      <div id="chargeStatus" class="status-box info" style="margin-top:12px;">チャージ金額を選んでください。</div>
+      <div id="chargeStatus" class="status-box info">チャージ金額を選んでください。</div>
     </section>
 
     <section class="panel hidden" id="preorderPanel">
       <div class="panel-head">
         <div>
           <h2>事前取り置き予約</h2>
-          <div class="small">人気パンを確保して、受け取り時間にお店へ行けます。</div>
+          <div class="small">定休日・臨時休業日・当日締切は自動で反映されます。</div>
         </div>
       </div>
 
-      <div class="setup-grid">
+      <div class="grid">
         <div>
           <label for="pickupDateInput">受け取り日</label>
           <input id="pickupDateInput" type="date" />
         </div>
         <div>
           <label for="pickupTimeInput">受け取り時間</label>
-          <select id="pickupTimeInput">
-            <option value="10:00">10:00</option>
-            <option value="11:00">11:00</option>
-            <option value="12:00">12:00</option>
-            <option value="15:00">15:00</option>
-            <option value="17:30">17:30</option>
-          </select>
+          <select id="pickupTimeInput"></select>
         </div>
       </div>
+
+      <div class="date-grid" id="pickupDateGrid"></div>
+      <div id="pickupRuleStatus" class="status-box info">営業日設定を読み込み中です。</div>
 
       <div class="product-grid" id="productGrid">
         <div class="status-box info">商品を読み込み中です。</div>
@@ -754,47 +683,68 @@
         <button class="green" id="preorderButton" type="button">取り置き予約する</button>
         <button class="ghost" id="clearPreorderButton" type="button">数量クリア</button>
       </div>
-      <div id="preorderStatus" class="status-box info" style="margin-top:12px;">商品を選んでください。</div>
+      <div id="preorderStatus" class="status-box info">商品と受け取り日を選んでください。</div>
     </section>
 
     <section class="panel hidden" id="ecoPanel">
       <div class="panel-head">
         <div>
           <h2>ECOレスキュー通知設定</h2>
-          <div class="small">夕方にお得なECOパックが出る時だけ案内を受け取れます。</div>
+          <div class="small">夕方のECOパック案内を受け取る条件を変更できます。</div>
         </div>
       </div>
 
-      <div class="question" style="margin-top:0;">
-        <label class="option">
-          <input type="radio" name="ecoSetting" value="weekday_evening" />
-          <div>平日の夕方・仕事帰りなら寄れる</div>
-        </label>
-        <label class="option">
-          <input type="radio" name="ecoSetting" value="weekend_evening" />
-          <div>土日祝の夕方なら寄れる</div>
-        </label>
-        <label class="option">
-          <input type="radio" name="ecoSetting" value="none" />
-          <div>通知は不要</div>
-        </label>
+      <div class="question">
+        <label class="option"><input type="radio" name="ecoSetting" value="weekday_evening"><div>平日の夕方・仕事帰りなら寄れる</div></label>
+        <label class="option"><input type="radio" name="ecoSetting" value="weekend_evening"><div>土日祝の夕方なら寄れる</div></label>
+        <label class="option"><input type="radio" name="ecoSetting" value="none"><div>通知は不要</div></label>
       </div>
+
       <div class="button-row">
         <button class="green" id="saveEcoButton" type="button">通知設定を保存</button>
       </div>
-      <div id="ecoStatus" class="status-box info" style="margin-top:12px;">設定を変更できます。</div>
+      <div id="ecoStatus" class="status-box info">設定を変更できます。</div>
     </section>
+
+    <details>
+      <summary>DEMO・開発設定</summary>
+      <div class="detail-body">
+        <div class="grid">
+          <div>
+            <label for="apiBaseInput">Worker API URL</label>
+            <input id="apiBaseInput" value="https://dpro-bakery-wallet-api.dpromstk2000.workers.dev" />
+          </div>
+          <div>
+            <label for="shopCodeInput">店舗コード</label>
+            <input id="shopCodeInput" value="bakery_demo" />
+          </div>
+          <div>
+            <label for="liffIdInput">LIFF ID</label>
+            <input id="liffIdInput" placeholder="LIFF内で使う場合のみ" />
+          </div>
+          <div>
+            <label for="demoMemberInput">DEMO会員コード</label>
+            <input id="demoMemberInput" value="DEMO-BK-001" />
+          </div>
+        </div>
+        <div class="button-row">
+          <button class="ghost" id="reloadPublicButton" type="button">店舗設定再読込</button>
+          <button class="red" id="resetLocalButton" type="button">この端末の会員情報をリセット</button>
+        </div>
+        <div id="devStatus" class="status-box info">本番店舗では、お客様側DEMOチャージは使えません。</div>
+      </div>
+    </details>
 
     <details>
       <summary>確認用URL</summary>
       <div class="detail-body">
-        <div class="card-list" id="urlList"></div>
+        <div id="urlList"></div>
       </div>
     </details>
 
     <div class="footer">
       DPRO SHOP / パン屋専用LIFF会員証 / wallet.html<br>
-      Supabase Service Role Key はこの画面に書きません。すべて Worker API 経由で処理します。
+      定休日・臨時休業・受け取り時間は Worker API → Supabase の設定を読み込んで反映します。
     </div>
   </div>
 
@@ -803,38 +753,48 @@
       apiBase: "https://dpro-bakery-wallet-api.dpromstk2000.workers.dev",
       shopCode: "bakery_demo",
       localCustomerKey: "dpro_bakery_wallet_customer_key",
-      localGuestKey: "dpro_bakery_wallet_guest_id",
-      localProfileKey: "dpro_bakery_wallet_profile"
+      localGuestKey: "dpro_bakery_wallet_guest_id"
     };
 
+    let currentSettings = null;
+    let pickupRule = null;
+    let specialClosedDays = [];
+    let specialClosedMap = new Map();
     let currentCustomer = null;
     let currentProducts = [];
     let preorderItems = {};
     let selectedCharge = 1000;
+    let selectedPickupDate = "";
     let liffProfile = null;
-    let liffReady = false;
 
     const $ = (id) => document.getElementById(id);
 
+    function clean(value) {
+      return String(value ?? "").trim();
+    }
+
     function apiBase() {
-      return ($("apiBaseInput").value.trim() || DEFAULTS.apiBase).replace(/\/+$/, "");
+      return clean($("apiBaseInput").value || DEFAULTS.apiBase).replace(/\/+$/, "");
     }
 
     function shopCode() {
-      return $("shopCodeInput").value.trim() || DEFAULTS.shopCode;
+      return clean($("shopCodeInput").value || DEFAULTS.shopCode);
     }
 
-    function liffId() {
-      return $("liffIdInput").value.trim();
+    function customerStorageKey() {
+      return DEFAULTS.localCustomerKey + "_" + shopCode();
+    }
+
+    function guestStorageKey() {
+      return DEFAULTS.localGuestKey + "_" + shopCode();
     }
 
     function demoMemberCode() {
-      return $("demoMemberInput").value.trim() || "DEMO-BK-001";
+      return clean($("demoMemberInput").value || "DEMO-BK-001");
     }
 
     function yen(value) {
-      const n = Number(value || 0);
-      return n.toLocaleString("ja-JP") + "円";
+      return Number(value || 0).toLocaleString("ja-JP") + "円";
     }
 
     function escapeHtml(value) {
@@ -860,8 +820,13 @@
     }
 
     function selectedRadio(name) {
-      const checked = document.querySelector('input[name="' + name + '"]:checked');
-      return checked ? checked.value : "";
+      const el = document.querySelector(`input[name="${name}"]:checked`);
+      return el ? el.value : "";
+    }
+
+    function setRadio(name, value) {
+      const el = document.querySelector(`input[name="${name}"][value="${CSS.escape(value || "")}"]`);
+      if (el) el.checked = true;
     }
 
     function todayJST() {
@@ -873,68 +838,75 @@
       }).format(new Date());
     }
 
-    function tomorrowJST() {
-      const now = new Date();
-      now.setDate(now.getDate() + 1);
+    function formatDateJST(date) {
       return new Intl.DateTimeFormat("en-CA", {
         timeZone: "Asia/Tokyo",
         year: "numeric",
         month: "2-digit",
         day: "2-digit"
-      }).format(now);
+      }).format(date);
     }
 
-    function buildApiUrl(path, params = {}) {
-      const url = new URL(apiBase() + path);
-      url.searchParams.set("shop_code", shopCode());
-      Object.entries(params).forEach(([key, value]) => {
-        if (value !== undefined && value !== null && String(value).trim() !== "") {
-          url.searchParams.set(key, String(value));
-        }
-      });
-      return url.toString();
+    function weekdayLabel(dateString) {
+      const labels = ["日", "月", "火", "水", "木", "金", "土"];
+      const d = new Date(dateString + "T00:00:00+09:00");
+      return labels[d.getDay()] || "";
     }
 
-    async function apiGet(path, params = {}) {
-      const res = await fetch(buildApiUrl(path, params), {
-        method: "GET",
-        headers: { "Accept": "application/json" },
-        cache: "no-store"
-      });
-
-      return parseResponse(res);
+    function nowJstTimeHHMM() {
+      return new Intl.DateTimeFormat("ja-JP", {
+        timeZone: "Asia/Tokyo",
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: false
+      }).format(new Date());
     }
 
-    async function apiPost(path, body = {}) {
-      const res = await fetch(apiBase() + path, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Accept": "application/json"
-        },
-        body: JSON.stringify({
-          shop_code: shopCode(),
-          ...body
-        })
-      });
-
-      return parseResponse(res);
+    function getGuestId() {
+      let id = localStorage.getItem(guestStorageKey());
+      if (!id) {
+        id = "guest_" + crypto.randomUUID();
+        localStorage.setItem(guestStorageKey(), id);
+      }
+      return id;
     }
 
-    async function parseResponse(res) {
+    function saveCustomerKey(key) {
+      if (key) localStorage.setItem(customerStorageKey(), key);
+    }
+
+    function getSavedCustomerKey() {
+      return localStorage.getItem(customerStorageKey()) || "";
+    }
+
+    function apiUrl(path) {
+      const connector = path.includes("?") ? "&" : "?";
+      return apiBase() + path + connector + "shop_code=" + encodeURIComponent(shopCode());
+    }
+
+    async function apiGet(path) {
+      const res = await fetch(apiUrl(path), { headers: { "Accept": "application/json" } });
       const text = await res.text();
       let data = null;
-
       try { data = text ? JSON.parse(text) : null; } catch { data = text; }
-
-      if (!res.ok) {
-        const message = data?.message || data?.error || text || "HTTP " + res.status;
-        const error = new Error(message);
-        error.status = res.status;
-        error.data = data;
-        throw error;
+      if (!res.ok || data?.ok === false) {
+        throw new Error(data?.message || data?.error || text || "APIエラーです。");
       }
+      return data;
+    }
 
+    async function apiPost(path, body) {
+      const res = await fetch(apiUrl(path), {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "Accept": "application/json" },
+        body: JSON.stringify({ shop_code: shopCode(), ...body })
+      });
+      const text = await res.text();
+      let data = null;
+      try { data = text ? JSON.parse(text) : null; } catch { data = text; }
+      if (!res.ok || data?.ok === false) {
+        throw new Error(data?.message || data?.error || text || "APIエラーです。");
+      }
       return data;
     }
 
@@ -943,7 +915,6 @@
         await navigator.clipboard.writeText(String(text || ""));
         return true;
       }
-
       const temp = document.createElement("textarea");
       temp.value = String(text || "");
       temp.style.position = "fixed";
@@ -956,217 +927,290 @@
       return true;
     }
 
-    function getGuestId() {
-      let id = localStorage.getItem(DEFAULTS.localGuestKey);
-      if (!id) {
-        id = "guest_" + Math.random().toString(36).slice(2) + Date.now().toString(36);
-        localStorage.setItem(DEFAULTS.localGuestKey, id);
-      }
-      return id;
-    }
-
-    function customerKeyFromLocal() {
-      return localStorage.getItem(DEFAULTS.localCustomerKey) || "";
-    }
-
-    function saveCustomerKey(key) {
-      if (key) localStorage.setItem(DEFAULTS.localCustomerKey, key);
-    }
-
     function applyQueryParams() {
       const url = new URL(location.href);
       const api = url.searchParams.get("api");
-      const shop = url.searchParams.get("shop_code") || url.searchParams.get("shop");
-      const member = url.searchParams.get("member_code") || url.searchParams.get("customer_key");
+      const shop = url.searchParams.get("shop_code");
       const liff = url.searchParams.get("liff_id");
-
       if (api) $("apiBaseInput").value = api;
       if (shop) $("shopCodeInput").value = shop;
-      if (member) $("demoMemberInput").value = member;
       if (liff) $("liffIdInput").value = liff;
     }
 
-    async function loadLiffIfPossible() {
-      const id = liffId();
-      if (!id) {
-        return null;
-      }
-
+    async function loadPublicSettings() {
       try {
-        await loadScript("https://static.line-scdn.net/liff/edge/2/sdk.js");
+        const [settings, pickup, products] = await Promise.all([
+          apiGet("/api/public/settings"),
+          apiGet("/api/public/pickup-rules").catch(() => ({ ok: true, rule: null, special_closed_days: [] })),
+          apiGet("/api/public/products")
+        ]);
 
-        if (!window.liff) {
-          throw new Error("LIFF SDKを読み込めませんでした。");
-        }
+        currentSettings = settings;
+        pickupRule = pickup.rule || null;
+        specialClosedDays = pickup.special_closed_days || [];
+        specialClosedMap = new Map(specialClosedDays.map((d) => [d.closed_date || d.date, d.reason || "臨時休業"]));
+        currentProducts = (products.products || []).filter((p) => p.is_preorder_available !== false);
 
-        await window.liff.init({ liffId: id });
-        liffReady = true;
-
-        if (window.liff.isLoggedIn()) {
-          liffProfile = await window.liff.getProfile();
-          localStorage.setItem(DEFAULTS.localProfileKey, JSON.stringify(liffProfile));
-          return liffProfile;
-        }
-
-        return null;
+        renderShopStatus();
+        renderChargeMode();
+        renderPickupSettings();
+        renderProducts();
+        renderUrls();
       } catch (e) {
-        setStatus("statusBox", "LIFF初期化は未完了です。DEMO表示として続行します。\n" + (e.message || ""), "warn");
-        return null;
+        setStatus("shopStatus", e.message || "店舗設定の取得に失敗しました。", "ng");
+        setStatus("pickupRuleStatus", e.message || "営業日設定の取得に失敗しました。", "ng");
       }
     }
 
-    function loadScript(src) {
-      return new Promise((resolve, reject) => {
-        const existing = document.querySelector('script[src="' + src + '"]');
-        if (existing) {
-          existing.addEventListener("load", resolve, { once: true });
-          existing.addEventListener("error", reject, { once: true });
-          resolve();
-          return;
-        }
+    function renderShopStatus() {
+      const isDemo = !!currentSettings?.is_demo;
+      const name = currentSettings?.shop_name || "DPROベーカリー";
+      const bonus = Math.round(Number(currentSettings?.charge_bonus_rate ?? 0.05) * 100);
+      setStatus(
+        "shopStatus",
+        `${name} / ${isDemo ? "DEMO店舗" : "本番店舗"}\nチャージ上乗せ: ${bonus}% / 取り置き: ${currentSettings?.preorder_enabled === false ? "停止中" : "受付中"}`,
+        isDemo ? "ok" : "warn"
+      );
+    }
 
-        const script = document.createElement("script");
-        script.src = src;
-        script.async = true;
-        script.onload = resolve;
-        script.onerror = reject;
-        document.head.appendChild(script);
+    function renderChargeMode() {
+      const isDemo = !!currentSettings?.is_demo;
+      const bonus = Number(currentSettings?.charge_bonus_rate ?? 0.05);
+      document.querySelectorAll(".charge-card").forEach((card) => {
+        const amount = Number(card.getAttribute("data-charge") || 0);
+        const total = Math.round(amount * (1 + bonus));
+        card.querySelector("span").textContent = `${yen(total)}分使える`;
+      });
+
+      if (isDemo && shopCode() === "bakery_demo") {
+        $("chargeModeBadge").className = "badge green";
+        $("chargeModeBadge").textContent = "DEMO可";
+        $("demoChargeButton").disabled = false;
+        $("demoChargeButton").classList.remove("hidden");
+        $("chargeLead").textContent = "DEMO店舗では、動作確認用のDEMOチャージが使えます。";
+        setStatus("chargeStatus", "チャージ金額を選んでください。", "info");
+      } else {
+        $("chargeModeBadge").className = "badge red";
+        $("chargeModeBadge").textContent = "本番";
+        $("demoChargeButton").disabled = true;
+        $("demoChargeButton").classList.add("hidden");
+        $("chargeLead").textContent = "本番店舗では、お客様側DEMOチャージは使えません。店頭で支払い確認後、オーナー管理画面から手動チャージします。";
+        setStatus("chargeStatus", "本番店舗では、店頭支払い確認後に管理画面から手動チャージします。", "warn");
+      }
+    }
+
+    function pickupTimes() {
+      return Array.isArray(pickupRule?.pickup_times) && pickupRule.pickup_times.length
+        ? pickupRule.pickup_times
+        : ["10:00", "11:00", "12:00", "15:00", "17:30"];
+    }
+
+    function maxDaysAhead() {
+      return Math.max(1, Math.min(Number(pickupRule?.max_days_ahead || 7), 62));
+    }
+
+    function dateStatus(dateString) {
+      const today = todayJST();
+      if (dateString < today) return { ok: false, reason: "過去" };
+
+      const d = new Date(dateString + "T00:00:00+09:00");
+      const weekday = d.getDay();
+      const closedWeekdays = Array.isArray(pickupRule?.closed_weekdays) ? pickupRule.closed_weekdays.map(Number) : [0];
+
+      if (closedWeekdays.includes(weekday)) {
+        return { ok: false, reason: "定休日" };
+      }
+
+      if (specialClosedMap.has(dateString)) {
+        return { ok: false, reason: specialClosedMap.get(dateString) || "臨時休業" };
+      }
+
+      if (dateString === today && pickupRule?.same_day_cutoff_time) {
+        const cutoff = String(pickupRule.same_day_cutoff_time).slice(0, 5);
+        if (nowJstTimeHHMM() > cutoff) {
+          return { ok: false, reason: `本日受付終了` };
+        }
+      }
+
+      return { ok: true, reason: "受付可" };
+    }
+
+    function firstAvailableDate() {
+      const start = new Date();
+      start.setHours(0,0,0,0);
+      const days = maxDaysAhead();
+
+      for (let i = 0; i <= days; i++) {
+        const d = new Date(start.getTime());
+        d.setDate(start.getDate() + i);
+        const date = formatDateJST(d);
+        if (dateStatus(date).ok) return date;
+      }
+
+      return "";
+    }
+
+    function renderPickupSettings() {
+      const times = pickupTimes();
+      $("pickupTimeInput").innerHTML = times.map((t) => `<option value="${escapeHtml(t)}">${escapeHtml(t)}</option>`).join("");
+
+      const first = selectedPickupDate && dateStatus(selectedPickupDate).ok ? selectedPickupDate : firstAvailableDate();
+      selectedPickupDate = first;
+      $("pickupDateInput").value = first;
+      $("pickupDateInput").min = todayJST();
+
+      renderPickupDateGrid();
+      updatePickupStatus();
+
+      const enabled = !!first && currentSettings?.preorder_enabled !== false;
+      $("preorderButton").disabled = !enabled;
+    }
+
+    function renderPickupDateGrid() {
+      const grid = $("pickupDateGrid");
+      const start = new Date();
+      start.setHours(0,0,0,0);
+      const days = maxDaysAhead();
+
+      const items = [];
+      for (let i = 0; i <= days; i++) {
+        const d = new Date(start.getTime());
+        d.setDate(start.getDate() + i);
+        const date = formatDateJST(d);
+        const st = dateStatus(date);
+        const isSelected = date === selectedPickupDate;
+        const cls = st.ok ? (isSelected ? "selected" : "") : (date === todayJST() && st.reason.includes("受付終了") ? "today-blocked closed" : "closed");
+        items.push(`
+          <button class="date-btn ${cls}" type="button" data-pickup-date="${escapeHtml(date)}" ${st.ok ? "" : "disabled"}>
+            <span class="date-num">${d.getDate()}</span>
+            <span>${escapeHtml(weekdayLabel(date))}</span>
+            <span class="reason">${escapeHtml(st.ok ? "受付可" : st.reason)}</span>
+          </button>
+        `);
+      }
+
+      grid.innerHTML = items.join("");
+
+      document.querySelectorAll("[data-pickup-date]").forEach((button) => {
+        button.addEventListener("click", () => {
+          const date = button.getAttribute("data-pickup-date");
+          if (!dateStatus(date).ok) return;
+          selectedPickupDate = date;
+          $("pickupDateInput").value = date;
+          renderPickupDateGrid();
+          updatePickupStatus();
+        });
       });
     }
 
-    async function loadMyCard() {
-      setStatus("statusBox", "会員証を確認しています。", "info");
+    function updatePickupStatus() {
+      const date = $("pickupDateInput").value || selectedPickupDate;
+      const st = dateStatus(date);
+      const times = pickupTimes().join(" / ");
+      const closed = Array.isArray(pickupRule?.closed_weekdays) ? pickupRule.closed_weekdays.join(",") : "0";
+      const cutoff = String(pickupRule?.same_day_cutoff_time || "10:00").slice(0,5);
 
-      try {
-        await loadLiffIfPossible();
-
-        const localKey = customerKeyFromLocal();
-        const url = new URL(location.href);
-        const queryMember = url.searchParams.get("member_code") || url.searchParams.get("customer_key");
-        const lineUserId = liffProfile?.userId || "";
-        const key = queryMember || localKey || lineUserId || "";
-
-        if (key) {
-          await fetchCustomer(key, queryMember || localKey ? "member_code" : "line_user_id");
-          return;
-        }
-
-        showRegister();
-      } catch (e) {
-        setStatus("statusBox", e.message || "会員証の確認に失敗しました。", "ng");
-        showRegister();
-      }
-    }
-
-    async function fetchCustomer(key, mode = "member_code") {
-      try {
-        const params = {};
-        if (mode === "line_user_id") {
-          params.line_user_id = key;
-        } else {
-          params.member_code = key;
-        }
-
-        const data = await apiGet("/api/customer/me", params);
-        currentCustomer = data.customer || null;
-
-        if (!currentCustomer) {
-          showRegister();
-          return;
-        }
-
-        saveCustomerKey(currentCustomer.member_code || currentCustomer.line_user_id || currentCustomer.id);
-        renderWallet();
-        showWallet();
-      } catch (e) {
-        showRegister();
-        setStatus("statusBox", "会員情報がまだありません。初回登録してください。", "warn");
-      }
-    }
-
-    function showRegister() {
-      showPanel("registerPanel", true);
-      showPanel("walletPanel", false);
-      showPanel("chargePanel", false);
-      showPanel("preorderPanel", false);
-      showPanel("ecoPanel", false);
-
-      if (liffProfile?.displayName && !$("customerNameInput").value) {
-        $("customerNameInput").value = liffProfile.displayName;
+      if (!date) {
+        setStatus("pickupRuleStatus", "受付できる日がありません。オーナー管理画面の取り置き設定を確認してください。", "warn");
+        $("preorderButton").disabled = true;
+        return;
       }
 
-      setStatus("statusBox", "初回登録をお願いします。3つの質問に答えると会員証が発行されます。", "info");
+      if (!st.ok) {
+        setStatus("pickupRuleStatus", `${date} は ${st.reason} のため選べません。`, "warn");
+        $("preorderButton").disabled = true;
+        return;
+      }
+
+      setStatus(
+        "pickupRuleStatus",
+        `選択中: ${date}（${weekdayLabel(date)}） / 受け取り時間: ${times}\n当日締切: ${cutoff} / 定休日コード: ${closed} / 臨時休業登録: ${specialClosedDays.length}件`,
+        "ok"
+      );
+      $("preorderButton").disabled = false;
     }
 
-    function showWallet() {
-      showPanel("registerPanel", false);
+    function renderProducts() {
+      if (!currentProducts.length) {
+        $("productGrid").innerHTML = '<div class="status-box warn">取り置き可能な商品がありません。</div>';
+        return;
+      }
+
+      $("productGrid").innerHTML = currentProducts.map((p) => {
+        const code = p.product_code || p.id;
+        const qty = preorderItems[code] || 0;
+        return `
+          <div class="product-card ${qty > 0 ? "selected" : ""}">
+            <strong>${escapeHtml(p.product_name || "-")}</strong>
+            <span>${yen(p.preorder_price || p.price)} / ${escapeHtml(p.description || "")}</span>
+            <div class="qty-row">
+              <button type="button" data-qty-minus="${escapeHtml(code)}">−</button>
+              <div class="qty-number">${qty}</div>
+              <button type="button" data-qty-plus="${escapeHtml(code)}">＋</button>
+            </div>
+          </div>
+        `;
+      }).join("");
+
+      document.querySelectorAll("[data-qty-plus]").forEach((button) => {
+        button.addEventListener("click", () => changeQty(button.getAttribute("data-qty-plus"), 1));
+      });
+
+      document.querySelectorAll("[data-qty-minus]").forEach((button) => {
+        button.addEventListener("click", () => changeQty(button.getAttribute("data-qty-minus"), -1));
+      });
+
+      renderPreorderTotal();
+    }
+
+    function changeQty(code, delta) {
+      const current = preorderItems[code] || 0;
+      const next = Math.max(0, Math.min(20, current + delta));
+      preorderItems[code] = next;
+      if (next === 0) delete preorderItems[code];
+      renderProducts();
+    }
+
+    function buildPreorderItems() {
+      return currentProducts.map((p) => {
+        const code = p.product_code || p.id;
+        const quantity = preorderItems[code] || 0;
+        if (!quantity) return null;
+        const price = Number(p.preorder_price || p.price || 0);
+        return {
+          product_code: code,
+          product_name: p.product_name,
+          qty: quantity,
+          quantity,
+          price,
+          amount: price * quantity
+        };
+      }).filter(Boolean);
+    }
+
+    function preorderTotal() {
+      return buildPreorderItems().reduce((sum, item) => sum + item.amount, 0);
+    }
+
+    function renderPreorderTotal() {
+      $("preorderTotal").textContent = "合計 " + yen(preorderTotal());
+    }
+
+    function renderWallet() {
+      if (!currentCustomer) return;
+      const name = currentCustomer.customer_name || currentCustomer.line_display_name || "お客様";
+      const member = currentCustomer.member_code || currentCustomer.line_user_id || currentCustomer.id || "";
+      $("walletName").textContent = name;
+      $("walletBalance").textContent = yen(currentCustomer.balance);
+      $("walletMemberCode").textContent = member;
+      $("walletRank").textContent = currentCustomer.customer_rank || "会員";
+      renderRealQr(member);
       showPanel("walletPanel", true);
       showPanel("chargePanel", true);
       showPanel("preorderPanel", true);
       showPanel("ecoPanel", true);
-      setStatus("statusBox", "会員証を表示しました。レジでQRを見せてください。", "ok");
     }
 
-    async function registerCustomer() {
-      try {
-        const name = $("customerNameInput").value.trim();
-        const phone = $("phoneInput").value.trim();
-
-        if (!name) {
-          alert("お名前を入力してください。");
-          $("customerNameInput").focus();
-          return;
-        }
-
-        const lineUserId = liffProfile?.userId || "";
-        const guestId = lineUserId ? "" : getGuestId();
-
-        const data = await apiPost("/api/customer/register", {
-          line_user_id: lineUserId,
-          guest_id: guestId,
-          line_display_name: liffProfile?.displayName || "",
-          customer_name: name,
-          phone,
-          buying_habit: selectedRadio("buyingHabit"),
-          visit_purpose: selectedRadio("visitPurpose"),
-          eco_rescue_ok: selectedRadio("ecoRescue")
-        });
-
-        currentCustomer = data.customer || null;
-
-        if (!currentCustomer) {
-          throw new Error("会員証登録に失敗しました。");
-        }
-
-        saveCustomerKey(currentCustomer.member_code || currentCustomer.line_user_id || currentCustomer.id);
-        renderWallet();
-        showWallet();
-        await loadProducts();
-
-        setStatus("statusBox", "会員証を発行しました。レジでQRを見せるだけで決済できます。", "ok");
-      } catch (e) {
-        setStatus("statusBox", e.message || "会員証登録に失敗しました。", "ng");
-      }
-    }
-
-    async function useDemoMember() {
-      await fetchCustomer(demoMemberCode(), "member_code");
-      await loadProducts();
-    }
-
-    function renderWallet() {
-      const c = currentCustomer;
-      if (!c) return;
-
-      $("walletName").textContent = c.customer_name || c.line_display_name || "お客様";
-      $("walletBalance").textContent = yen(c.balance || 0);
-      $("walletCode").textContent = "会員コード：" + (c.member_code || "-");
-      $("sumCharge").textContent = yen(c.total_charge_amount || 0);
-      $("sumBonus").textContent = yen(c.total_bonus_amount || 0);
-      $("sumEco").textContent = labelEco(c.eco_rescue_ok);
-
-      const ecoRadio = document.querySelector('input[name="ecoSetting"][value="' + (c.eco_rescue_ok || "none") + '"]');
-      if (ecoRadio) ecoRadio.checked = true;
 
       renderPseudoQr(c.member_code || c.line_user_id || c.id);
     }
@@ -1447,9 +1491,87 @@
       for (let i = 8; i < 15; i++) modules[8][size - 15 + i] = bit(i);
     }
 
+
+
+    async function registerCustomer() {
+      try {
+        $("registerButton").disabled = true;
+        $("registerButton").textContent = "発行中...";
+
+        const data = await apiPost("/api/customer/register", {
+          customer_name: clean($("nameInput").value),
+          phone: clean($("phoneInput").value),
+          line_user_id: liffProfile?.userId || getGuestId(),
+          line_display_name: liffProfile?.displayName || clean($("nameInput").value),
+          buying_habit: selectedRadio("buyingHabit"),
+          visit_purpose: selectedRadio("visitPurpose"),
+          eco_rescue_ok: selectedRadio("ecoRescue")
+        });
+
+        currentCustomer = data.customer;
+        if (!currentCustomer) throw new Error("会員証登録に失敗しました。");
+        saveCustomerKey(currentCustomer.member_code || currentCustomer.line_user_id || currentCustomer.id);
+        renderWallet();
+        setStatus("registerStatus", "会員証を発行しました。", "ok");
+      } catch (e) {
+        setStatus("registerStatus", e.message || "会員証登録に失敗しました。", "ng");
+      } finally {
+        $("registerButton").disabled = false;
+        $("registerButton").textContent = "会員証を発行する";
+      }
+    }
+
+    async function loadCustomerByKey(key) {
+      if (!key) return null;
+      return apiGet("/api/customer/me?member_code=" + encodeURIComponent(key));
+    }
+
+    async function useDemoMember() {
+      try {
+        const data = await loadCustomerByKey(demoMemberCode());
+        currentCustomer = data.customer;
+        saveCustomerKey(currentCustomer.member_code || currentCustomer.line_user_id || currentCustomer.id);
+        renderWallet();
+        setStatus("registerStatus", "DEMO会員を表示しました。", "ok");
+      } catch (e) {
+        setStatus("registerStatus", e.message || "DEMO会員が見つかりません。営業前DEMO設定を確認してください。", "ng");
+      }
+    }
+
+    async function loadSavedCustomer() {
+      const key = getSavedCustomerKey();
+      if (!key) return;
+      try {
+        const data = await loadCustomerByKey(key);
+        currentCustomer = data.customer;
+        renderWallet();
+        setStatus("walletStatus", "保存済み会員証を読み込みました。", "ok");
+      } catch (e) {
+        localStorage.removeItem(customerStorageKey());
+      }
+    }
+
+    async function reloadMe() {
+      try {
+        if (!currentCustomer) throw new Error("会員証を先に表示してください。");
+        const key = currentCustomer.member_code || currentCustomer.line_user_id || currentCustomer.id;
+        const data = await loadCustomerByKey(key);
+        currentCustomer = data.customer;
+        renderWallet();
+        setStatus("walletStatus", "残高を再読み込みしました。", "ok");
+      } catch (e) {
+        setStatus("walletStatus", e.message, "ng");
+      }
+    }
+
     async function demoCharge() {
       if (!currentCustomer) {
         alert("先に会員証を表示してください。");
+        return;
+      }
+
+      if (!currentSettings?.is_demo || shopCode() !== "bakery_demo") {
+        setStatus("chargeStatus", "本番店舗では、お客様側DEMOチャージは使えません。店頭で支払い確認後、オーナー管理画面から手動チャージします。", "warn");
         return;
       }
 
@@ -1465,14 +1587,7 @@
           memo: "wallet.htmlからDEMOチャージ"
         });
 
-        if (data.ok === false) {
-          throw new Error(data.error || data.message || "チャージに失敗しました。");
-        }
-
         currentCustomer.balance = data.balance_after;
-        currentCustomer.total_charge_amount = Number(currentCustomer.total_charge_amount || 0) + Number(data.amount || 0);
-        currentCustomer.total_bonus_amount = Number(currentCustomer.total_bonus_amount || 0) + Number(data.bonus_amount || 0);
-
         renderWallet();
         setStatus("chargeStatus", "チャージ完了です。\n" + yen(data.amount) + "に" + yen(data.bonus_amount) + "上乗せされました。", "ok");
       } catch (e) {
@@ -1480,85 +1595,20 @@
       } finally {
         $("demoChargeButton").disabled = false;
         $("demoChargeButton").textContent = "DEMOチャージする";
+        renderChargeMode();
       }
-    }
-
-    async function loadProducts() {
-      try {
-        const data = await apiGet("/api/public/products");
-        currentProducts = (data.products || []).filter((p) => p.is_preorder_available !== false);
-        renderProducts();
-      } catch (e) {
-        $("productGrid").innerHTML = '<div class="status-box ng">' + escapeHtml(e.message || "商品取得に失敗しました。") + '</div>';
-      }
-    }
-
-    function renderProducts() {
-      if (!currentProducts.length) {
-        $("productGrid").innerHTML = '<div class="status-box warn">取り置き可能な商品がありません。</div>';
-        return;
-      }
-
-      $("productGrid").innerHTML = currentProducts.map((p) => {
-        const qty = preorderItems[p.product_code] || 0;
-        return `
-          <div class="product-card ${qty > 0 ? "selected" : ""}" data-product-code="${escapeHtml(p.product_code)}">
-            <strong>${escapeHtml(p.product_name || "-")}</strong>
-            <span>${yen(p.preorder_price || p.price)} / ${escapeHtml(p.description || "")}</span>
-            <div class="qty-row">
-              <button type="button" data-qty-minus="${escapeHtml(p.product_code)}">−</button>
-              <div class="qty-number">${qty}</div>
-              <button type="button" data-qty-plus="${escapeHtml(p.product_code)}">＋</button>
-            </div>
-          </div>
-        `;
-      }).join("");
-
-      document.querySelectorAll("[data-qty-plus]").forEach((button) => {
-        button.addEventListener("click", () => changeQty(button.getAttribute("data-qty-plus"), 1));
-      });
-
-      document.querySelectorAll("[data-qty-minus]").forEach((button) => {
-        button.addEventListener("click", () => changeQty(button.getAttribute("data-qty-minus"), -1));
-      });
-
-      renderPreorderTotal();
-    }
-
-    function changeQty(code, delta) {
-      const current = preorderItems[code] || 0;
-      const next = Math.max(0, Math.min(20, current + delta));
-      preorderItems[code] = next;
-      if (next === 0) delete preorderItems[code];
-      renderProducts();
-    }
-
-    function renderPreorderTotal() {
-      $("preorderTotal").textContent = "合計 " + yen(preorderTotal());
-    }
-
-    function preorderTotal() {
-      return buildPreorderItems().reduce((sum, item) => sum + item.qty * item.price, 0);
-    }
-
-    function buildPreorderItems() {
-      return currentProducts
-        .map((p) => {
-          const qty = preorderItems[p.product_code] || 0;
-          if (!qty) return null;
-          return {
-            product_code: p.product_code,
-            product_name: p.product_name,
-            qty,
-            price: p.preorder_price || p.price || 0
-          };
-        })
-        .filter(Boolean);
     }
 
     async function createPreorder() {
       if (!currentCustomer) {
         alert("先に会員証を表示してください。");
+        return;
+      }
+
+      const date = $("pickupDateInput").value || selectedPickupDate;
+      const st = dateStatus(date);
+      if (!st.ok) {
+        setStatus("preorderStatus", `${date} は ${st.reason} のため取り置きできません。`, "warn");
         return;
       }
 
@@ -1579,22 +1629,18 @@
           line_user_id: currentCustomer.line_user_id,
           customer_name: currentCustomer.customer_name || currentCustomer.line_display_name || "お客様",
           phone: currentCustomer.phone || "",
-          pickup_date: $("pickupDateInput").value || tomorrowJST(),
-          pickup_time: $("pickupTimeInput").value || "12:00",
+          pickup_date: date,
+          pickup_time: $("pickupTimeInput").value || pickupTimes()[0],
           payment_status: "unpaid",
           payment_method: "store",
           total_amount: total,
           items,
-          memo: "wallet.htmlから取り置き予約"
+          memo: "wallet.html STEP BAKERY-14から取り置き予約"
         });
-
-        if (data.ok === false) {
-          throw new Error(data.error || data.message || "取り置き予約に失敗しました。");
-        }
 
         preorderItems = {};
         renderProducts();
-        setStatus("preorderStatus", "取り置き予約を受け付けました。\n合計 " + yen(total) + " / 受け取り " + ($("pickupTimeInput").value || "-"), "ok");
+        setStatus("preorderStatus", "取り置き予約を受け付けました。\n合計 " + yen(total) + " / 受け取り " + date + " " + ($("pickupTimeInput").value || "-"), "ok");
       } catch (e) {
         setStatus("preorderStatus", e.message || "取り置き予約に失敗しました。", "ng");
       } finally {
@@ -1610,79 +1656,93 @@
       }
 
       try {
-        const eco = selectedRadio("ecoSetting");
         const data = await apiPost("/api/customer/register", {
-          line_user_id: currentCustomer.line_user_id || currentCustomer.member_code || currentCustomer.id,
-          line_display_name: currentCustomer.line_display_name || "",
-          customer_name: currentCustomer.customer_name || "",
+          customer_name: currentCustomer.customer_name || currentCustomer.line_display_name || "お客様",
           phone: currentCustomer.phone || "",
-          buying_habit: currentCustomer.buying_habit || "daily",
-          visit_purpose: currentCustomer.visit_purpose || "charge",
-          eco_rescue_ok: eco
+          line_user_id: currentCustomer.line_user_id || currentCustomer.member_code,
+          line_display_name: currentCustomer.line_display_name || currentCustomer.customer_name || "お客様",
+          buying_habit: currentCustomer.buying_habit || "family",
+          visit_purpose: currentCustomer.visit_purpose || "wallet",
+          eco_rescue_ok: selectedRadio("ecoSetting")
         });
 
         currentCustomer = data.customer || currentCustomer;
-        renderWallet();
         setStatus("ecoStatus", "ECOレスキュー通知設定を保存しました。", "ok");
       } catch (e) {
-        setStatus("ecoStatus", e.message || "通知設定の保存に失敗しました。", "ng");
+        setStatus("ecoStatus", e.message || "設定保存に失敗しました。", "ng");
       }
-    }
-
-    function resetLocal() {
-      localStorage.removeItem(DEFAULTS.localCustomerKey);
-      localStorage.removeItem(DEFAULTS.localGuestKey);
-      localStorage.removeItem(DEFAULTS.localProfileKey);
-      currentCustomer = null;
-      showRegister();
-      setStatus("statusBox", "この端末の会員情報をリセットしました。", "warn");
     }
 
     function renderUrls() {
       const pagesBase = "https://dpromstk2000-lab.github.io/bakery-line-system";
-      const urls = [
-        ["お客様会員証", pagesBase + "/wallet.html?shop_code=" + encodeURIComponent(shopCode()) + "&api=" + encodeURIComponent(apiBase())],
-        ["店員レジ", pagesBase + "/cashier.html?shop_code=" + encodeURIComponent(shopCode()) + "&api=" + encodeURIComponent(apiBase())],
-        ["オーナー管理", pagesBase + "/owner.html?shop_code=" + encodeURIComponent(shopCode()) + "&api=" + encodeURIComponent(apiBase())],
-        ["本番前チェック", pagesBase + "/system-check.html?shop_code=" + encodeURIComponent(shopCode()) + "&api=" + encodeURIComponent(apiBase())]
-      ];
-
-      $("urlList").innerHTML = urls.map(([label, url]) => `
-        <div class="data-card">
-          <strong>${escapeHtml(label)}</strong>
-          <div style="word-break:break-all;">${escapeHtml(url)}</div>
-          <div class="button-row">
-            <button class="ghost" type="button" data-copy-url="${escapeHtml(url)}">コピー</button>
-            <a class="button-link ghost" href="${escapeHtml(url)}" target="_blank" rel="noopener">開く</a>
-          </div>
+      const api = encodeURIComponent(apiBase());
+      const shop = encodeURIComponent(shopCode());
+      const urls = {
+        wallet: `${pagesBase}/wallet.html?shop_code=${shop}&api=${api}`,
+        owner: `${pagesBase}/owner.html?shop_code=${shop}&api=${api}`,
+        cashier: `${pagesBase}/cashier.html?shop_code=${shop}&api=${api}`,
+        system_check: `${pagesBase}/system-check.html?shop_code=${shop}&api=${api}`
+      };
+      $("urlList").innerHTML = Object.entries(urls).map(([k, v]) => `
+        <div style="margin-bottom:10px;">
+          <strong>${escapeHtml(k)}</strong>
+          <div class="url-card">${escapeHtml(v)}</div>
+          <div class="button-row"><button class="ghost" type="button" data-copy-url="${escapeHtml(v)}">URLコピー</button></div>
         </div>
       `).join("");
 
       document.querySelectorAll("[data-copy-url]").forEach((button) => {
         button.addEventListener("click", async () => {
-          await copyText(button.getAttribute("data-copy-url") || "");
-          setStatus("statusBox", "URLをコピーしました。", "ok");
+          await copyText(button.getAttribute("data-copy-url"));
+          setStatus("devStatus", "URLをコピーしました。", "ok");
         });
       });
     }
 
-    function bindEvents() {
-      $("loadMyCardButton").addEventListener("click", loadMyCard);
-      $("refreshButton").addEventListener("click", async () => {
-        if (currentCustomer) {
-          await fetchCustomer(currentCustomer.member_code || currentCustomer.line_user_id || currentCustomer.id, "member_code");
-        } else {
-          await loadMyCard();
-        }
-      });
+    function resetLocal() {
+      localStorage.removeItem(customerStorageKey());
+      currentCustomer = null;
+      showPanel("walletPanel", false);
+      showPanel("chargePanel", false);
+      showPanel("preorderPanel", false);
+      showPanel("ecoPanel", false);
+      setStatus("devStatus", "この端末の保存会員情報をリセットしました。", "ok");
+    }
 
+    function bindEvents() {
       $("registerButton").addEventListener("click", registerCustomer);
       $("useDemoMemberButton").addEventListener("click", useDemoMember);
-      $("resetLocalButton").addEventListener("click", resetLocal);
       $("copyMemberButton").addEventListener("click", async () => {
         if (!currentCustomer) return;
         await copyText(currentCustomer.member_code || "");
-        setStatus("statusBox", "会員コードをコピーしました。", "ok");
+        setStatus("walletStatus", "会員コードをコピーしました。", "ok");
+      });
+      $("reloadMeButton").addEventListener("click", reloadMe);
+      $("demoChargeButton").addEventListener("click", demoCharge);
+      $("preorderButton").addEventListener("click", createPreorder);
+      $("clearPreorderButton").addEventListener("click", () => {
+        preorderItems = {};
+        renderProducts();
+        setStatus("preorderStatus", "数量をクリアしました。", "info");
+      });
+      $("saveEcoButton").addEventListener("click", saveEcoSetting);
+      $("reloadPublicButton").addEventListener("click", loadPublicSettings);
+      $("resetLocalButton").addEventListener("click", resetLocal);
+
+      $("pickupDateInput").addEventListener("change", () => {
+        const date = $("pickupDateInput").value;
+        if (dateStatus(date).ok) {
+          selectedPickupDate = date;
+        }
+        renderPickupDateGrid();
+        updatePickupStatus();
+      });
+
+      document.querySelectorAll("[data-scroll]").forEach((button) => {
+        button.addEventListener("click", () => {
+          const target = document.querySelector(button.getAttribute("data-scroll"));
+          if (target) target.scrollIntoView({ behavior: "smooth", block: "start" });
+        });
       });
 
       document.querySelectorAll(".charge-card").forEach((card) => {
@@ -1694,36 +1754,22 @@
         });
       });
 
-      $("demoChargeButton").addEventListener("click", demoCharge);
-      $("preorderButton").addEventListener("click", createPreorder);
-      $("clearPreorderButton").addEventListener("click", () => {
-        preorderItems = {};
-        renderProducts();
-        setStatus("preorderStatus", "数量をクリアしました。", "info");
+      $("apiBaseInput").addEventListener("change", async () => {
+        renderUrls();
+        await loadPublicSettings();
       });
-      $("saveEcoButton").addEventListener("click", saveEcoSetting);
-
-      document.querySelectorAll("[data-scroll]").forEach((button) => {
-        button.addEventListener("click", () => {
-          const target = document.querySelector(button.getAttribute("data-scroll"));
-          if (target) target.scrollIntoView({ behavior: "smooth", block: "start" });
-        });
+      $("shopCodeInput").addEventListener("change", async () => {
+        renderUrls();
+        await loadPublicSettings();
       });
-
-      $("apiBaseInput").addEventListener("input", renderUrls);
-      $("shopCodeInput").addEventListener("input", renderUrls);
     }
 
     async function init() {
       applyQueryParams();
       bindEvents();
       renderUrls();
-
-      $("pickupDateInput").value = tomorrowJST();
-      $("pickupDateInput").min = todayJST();
-
-      await loadProducts();
-      await loadMyCard();
+      await loadPublicSettings();
+      await loadSavedCustomer();
     }
 
     init();
