@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  <title>DPROベーカリー | cashier.html</title>
+  <title>DPROベーカリー | cashier.html 正式QR読取対応</title>
   <style>
     :root {
       --bg: #fff7ed;
@@ -468,7 +468,7 @@
   <div class="wrap">
     <header class="hero">
       <div>
-        <div class="badge">DPRO SHOP / Bakery Cashier / STEP BAKERY-5</div>
+        <div class="badge">DPRO SHOP / Bakery Cashier / STEP BAKERY-8</div>
         <h1>店員用<br>1秒レジ決済</h1>
         <p class="lead">
           お客様の会員証QRを読み取り、金額を入れて決済するだけ。
@@ -521,7 +521,7 @@
       <div class="panel-head">
         <div>
           <h2>QR読み取り・会員選択</h2>
-          <div class="small">カメラが使えない端末では、会員コードを手入力できます。DEMOでは下のサンプル会員ボタンが確実です。</div>
+          <div class="small">カメラが使えない端末では、会員コードを手入力できます。正式QR対応済みです。カメラが使えない端末では、会員コード手入力や下のDEMO会員ボタンも使えます。</div>
         </div>
       </div>
 
@@ -874,7 +874,7 @@
 
         scanTimer = setInterval(scanFrame, 650);
       } catch (e) {
-        setStatus("scanStatus", "カメラを起動できませんでした。手入力またはDEMO会員ボタンを使ってください。\n" + (e.message || ""), "warn");
+        setStatus("scanStatus", "カメラを起動できませんでした。Safari/Chromeのカメラ許可を確認してください。手入力またはDEMO会員ボタンでも決済できます。\n" + (e.message || ""), "warn");
       }
     }
 
