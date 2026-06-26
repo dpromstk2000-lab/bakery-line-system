@@ -1,0 +1,298 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>DPROベーカリー | スマホ転送QRリンク集</title>
+  <style>
+    :root {
+      --bg: #fff7ed;
+      --panel: #ffffff;
+      --ink: #1c1917;
+      --muted: #78716c;
+      --line: #fed7aa;
+      --main: #b45309;
+      --soft: #ffedd5;
+      --shadow: 0 22px 70px rgba(120, 53, 15, .12);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--ink);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at 12% 0%, rgba(251, 146, 60, .20), transparent 34%),
+        radial-gradient(circle at 90% 4%, rgba(245, 158, 11, .16), transparent 30%),
+        linear-gradient(180deg, #fff7ed, #fffbeb 48%, #fef3c7);
+      line-height: 1.6;
+    }
+    .wrap {
+      width: min(1160px, calc(100% - 28px));
+      margin: 22px auto 56px;
+    }
+    .hero {
+      background: rgba(255,255,255,.94);
+      border: 1px solid var(--line);
+      border-radius: 30px;
+      box-shadow: var(--shadow);
+      padding: 26px;
+      margin-bottom: 16px;
+    }
+    .badge {
+      display: inline-flex;
+      border-radius: 999px;
+      background: var(--soft);
+      color: #9a3412;
+      padding: 6px 12px;
+      font-size: 12px;
+      font-weight: 950;
+    }
+    h1 {
+      margin: 12px 0 8px;
+      font-size: clamp(30px, 5vw, 52px);
+      line-height: 1.04;
+      letter-spacing: -.05em;
+    }
+    .lead {
+      margin: 0;
+      color: #44403c;
+      font-weight: 850;
+      font-size: 15px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+    .card {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 26px;
+      padding: 20px;
+      box-shadow: 0 18px 52px rgba(120, 53, 15, .08);
+    }
+    .top {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: flex-start;
+      margin-bottom: 12px;
+    }
+    .label {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 950;
+    }
+    h2 {
+      margin: 3px 0 0;
+      font-size: 23px;
+      letter-spacing: -.04em;
+      line-height: 1.15;
+    }
+    .pill {
+      white-space: nowrap;
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      padding: 6px 10px;
+      background: #dcfce7;
+      color: #166534;
+      font-size: 12px;
+      font-weight: 950;
+    }
+    .qr {
+      display: block;
+      width: min(100%, 360px);
+      height: auto;
+      margin: 12px auto;
+      border-radius: 18px;
+      border: 8px solid #fff7ed;
+    }
+    .url {
+      word-break: break-all;
+      background: #fff7ed;
+      border: 1px solid #fed7aa;
+      border-radius: 14px;
+      padding: 10px;
+      color: #9a3412;
+      font-size: 12px;
+      font-weight: 850;
+    }
+    .buttons {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+    a, button {
+      appearance: none;
+      border: 0;
+      border-radius: 999px;
+      background: var(--main);
+      color: #fff;
+      font-weight: 950;
+      padding: 11px 15px;
+      cursor: pointer;
+      min-height: 42px;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 14px 28px rgba(180, 83, 9, .22);
+      font-size: 13px;
+    }
+    button {
+      background: #fff;
+      color: #9a3412;
+      border: 1px solid #fdba74;
+      box-shadow: none;
+    }
+    .note {
+      margin-top: 16px;
+      padding: 14px 16px;
+      border-radius: 18px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1e3a8a;
+      font-size: 13px;
+      font-weight: 850;
+    }
+    @media (max-width: 780px) {
+      .grid { grid-template-columns: 1fr; }
+      .wrap { width: min(100% - 18px, 1160px); margin-top: 10px; }
+      .hero { padding: 20px; border-radius: 22px; }
+      .card { padding: 16px; border-radius: 22px; }
+      a, button { width: 100%; }
+      .top { display: block; }
+      .pill { margin-top: 8px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="hero">
+      <div class="badge">STEP BAKERY-8B / スマホ転送用QRリンク集</div>
+      <h1>スマホで開く用<br>QRリンク集</h1>
+      <p class="lead">
+        PCでこのページを開いて、スマホのカメラで読み取るだけです。
+        メールで自分に送ったり、長いURLをコピーする必要はありません。
+      </p>
+    </header>
+
+    <main class="grid">
+      
+      <section class="card">
+        <div class="top">
+          <div>
+            <div class="label">DPROベーカリー</div>
+            <h2>お客様会員証 wallet.html</h2>
+          </div>
+          <span class="pill">スマホで読み取り</span>
+        </div>
+        <img class="qr" src="https://api.qrserver.com/v1/create-qr-code/?size=360x360&margin=16&data=https%3A%2F%2Fdpromstk2000-lab.github.io%2Fbakery-line-system%2Fwallet.html%3Fshop_code%3Dbakery_demo%26api%3Dhttps%3A%2F%2Fdpro-bakery-wallet-api.dpromstk2000.workers.dev" alt="お客様会員証 wallet.html QR" />
+        <p class="url">https://dpromstk2000-lab.github.io/bakery-line-system/wallet.html?shop_code=bakery_demo&amp;api=https://dpro-bakery-wallet-api.dpromstk2000.workers.dev</p>
+        <div class="buttons">
+          <a href="https://dpromstk2000-lab.github.io/bakery-line-system/wallet.html?shop_code=bakery_demo&amp;api=https://dpro-bakery-wallet-api.dpromstk2000.workers.dev" target="_blank" rel="noopener">このPCで開く</a>
+          <button type="button" data-url="https://dpromstk2000-lab.github.io/bakery-line-system/wallet.html?shop_code=bakery_demo&amp;api=https://dpro-bakery-wallet-api.dpromstk2000.workers.dev">URLコピー</button>
+        </div>
+      </section>
+    
+      <section class="card">
+        <div class="top">
+          <div>
+            <div class="label">DPROベーカリー</div>
+            <h2>店員レジ cashier.html</h2>
+          </div>
+          <span class="pill">スマホで読み取り</span>
+        </div>
+        <img class="qr" src="https://api.qrserver.com/v1/create-qr-code/?size=360x360&margin=16&data=https%3A%2F%2Fdpromstk2000-lab.github.io%2Fbakery-line-system%2Fcashier.html%3Fshop_code%3Dbakery_demo%26api%3Dhttps%3A%2F%2Fdpro-bakery-wallet-api.dpromstk2000.workers.dev" alt="店員レジ cashier.html QR" />
+        <p class="url">https://dpromstk2000-lab.github.io/bakery-line-system/cashier.html?shop_code=bakery_demo&amp;api=https://dpro-bakery-wallet-api.dpromstk2000.workers.dev</p>
+        <div class="buttons">
+          <a href="https://dpromstk2000-lab.github.io/bakery-line-system/cashier.html?shop_code=bakery_demo&amp;api=https://dpro-bakery-wallet-api.dpromstk2000.workers.dev" target="_blank" rel="noopener">このPCで開く</a>
+          <button type="button" data-url="https://dpromstk2000-lab.github.io/bakery-line-system/cashier.html?shop_code=bakery_demo&amp;api=https://dpro-bakery-wallet-api.dpromstk2000.workers.dev">URLコピー</button>
+        </div>
+      </section>
+    
+      <section class="card">
+        <div class="top">
+          <div>
+            <div class="label">DPROベーカリー</div>
+            <h2>オーナー管理 owner.html</h2>
+          </div>
+          <span class="pill">スマホで読み取り</span>
+        </div>
+        <img class="qr" src="https://api.qrserver.com/v1/create-qr-code/?size=360x360&margin=16&data=https%3A%2F%2Fdpromstk2000-lab.github.io%2Fbakery-line-system%2Fowner.html%3Fshop_code%3Dbakery_demo%26api%3Dhttps%3A%2F%2Fdpro-bakery-wallet-api.dpromstk2000.workers.dev" alt="オーナー管理 owner.html QR" />
+        <p class="url">https://dpromstk2000-lab.github.io/bakery-line-system/owner.html?shop_code=bakery_demo&amp;api=https://dpro-bakery-wallet-api.dpromstk2000.workers.dev</p>
+        <div class="buttons">
+          <a href="https://dpromstk2000-lab.github.io/bakery-line-system/owner.html?shop_code=bakery_demo&amp;api=https://dpro-bakery-wallet-api.dpromstk2000.workers.dev" target="_blank" rel="noopener">このPCで開く</a>
+          <button type="button" data-url="https://dpromstk2000-lab.github.io/bakery-line-system/owner.html?shop_code=bakery_demo&amp;api=https://dpro-bakery-wallet-api.dpromstk2000.workers.dev">URLコピー</button>
+        </div>
+      </section>
+    
+      <section class="card">
+        <div class="top">
+          <div>
+            <div class="label">DPROベーカリー</div>
+            <h2>DEMO入口 index.html</h2>
+          </div>
+          <span class="pill">スマホで読み取り</span>
+        </div>
+        <img class="qr" src="https://api.qrserver.com/v1/create-qr-code/?size=360x360&margin=16&data=https%3A%2F%2Fdpromstk2000-lab.github.io%2Fbakery-line-system%2Findex.html%3Fshop_code%3Dbakery_demo%26api%3Dhttps%3A%2F%2Fdpro-bakery-wallet-api.dpromstk2000.workers.dev" alt="DEMO入口 index.html QR" />
+        <p class="url">https://dpromstk2000-lab.github.io/bakery-line-system/index.html?shop_code=bakery_demo&amp;api=https://dpro-bakery-wallet-api.dpromstk2000.workers.dev</p>
+        <div class="buttons">
+          <a href="https://dpromstk2000-lab.github.io/bakery-line-system/index.html?shop_code=bakery_demo&amp;api=https://dpro-bakery-wallet-api.dpromstk2000.workers.dev" target="_blank" rel="noopener">このPCで開く</a>
+          <button type="button" data-url="https://dpromstk2000-lab.github.io/bakery-line-system/index.html?shop_code=bakery_demo&amp;api=https://dpro-bakery-wallet-api.dpromstk2000.workers.dev">URLコピー</button>
+        </div>
+      </section>
+    
+      <section class="card">
+        <div class="top">
+          <div>
+            <div class="label">DPROベーカリー</div>
+            <h2>本番前チェック system-check.html</h2>
+          </div>
+          <span class="pill">スマホで読み取り</span>
+        </div>
+        <img class="qr" src="https://api.qrserver.com/v1/create-qr-code/?size=360x360&margin=16&data=https%3A%2F%2Fdpromstk2000-lab.github.io%2Fbakery-line-system%2Fsystem-check.html%3Fshop_code%3Dbakery_demo%26api%3Dhttps%3A%2F%2Fdpro-bakery-wallet-api.dpromstk2000.workers.dev" alt="本番前チェック system-check.html QR" />
+        <p class="url">https://dpromstk2000-lab.github.io/bakery-line-system/system-check.html?shop_code=bakery_demo&amp;api=https://dpro-bakery-wallet-api.dpromstk2000.workers.dev</p>
+        <div class="buttons">
+          <a href="https://dpromstk2000-lab.github.io/bakery-line-system/system-check.html?shop_code=bakery_demo&amp;api=https://dpro-bakery-wallet-api.dpromstk2000.workers.dev" target="_blank" rel="noopener">このPCで開く</a>
+          <button type="button" data-url="https://dpromstk2000-lab.github.io/bakery-line-system/system-check.html?shop_code=bakery_demo&amp;api=https://dpro-bakery-wallet-api.dpromstk2000.workers.dev">URLコピー</button>
+        </div>
+      </section>
+    
+    </main>
+
+    <div class="note" id="status">
+      使い方：このページをPCで開く → スマホのカメラでQRを読む → 開きたい画面をスマホで表示。
+    </div>
+  </div>
+
+  <script>
+    async function copyText(text) {
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(String(text || ""));
+        return true;
+      }
+      const temp = document.createElement("textarea");
+      temp.value = String(text || "");
+      temp.style.position = "fixed";
+      temp.style.left = "-9999px";
+      document.body.appendChild(temp);
+      temp.focus();
+      temp.select();
+      document.execCommand("copy");
+      temp.remove();
+      return true;
+    }
+
+    document.querySelectorAll("[data-url]").forEach((button) => {
+      button.addEventListener("click", async () => {
+        await copyText(button.getAttribute("data-url") || "");
+        document.getElementById("status").textContent = "URLをコピーしました。";
+      });
+    });
+  </script>
+</body>
+</html>
