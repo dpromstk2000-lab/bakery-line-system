@@ -1,0 +1,1185 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>DPROベーカリー | production-setup.html</title>
+  <style>
+    :root {
+      --bg: #fff7ed;
+      --panel: #ffffff;
+      --ink: #1c1917;
+      --muted: #78716c;
+      --line: #fed7aa;
+      --main: #b45309;
+      --main2: #ea580c;
+      --soft: #ffedd5;
+      --green: #16a34a;
+      --red: #dc2626;
+      --blue: #2563eb;
+      --shadow: 0 22px 70px rgba(120, 53, 15, .12);
+      --radius: 24px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--ink);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at 12% 0%, rgba(251, 146, 60, .20), transparent 34%),
+        radial-gradient(circle at 90% 4%, rgba(245, 158, 11, .16), transparent 30%),
+        linear-gradient(180deg, #fff7ed, #fffbeb 48%, #fef3c7);
+      line-height: 1.65;
+    }
+
+    .wrap {
+      width: min(1120px, calc(100% - 28px));
+      margin: 22px auto 56px;
+    }
+
+    .hero {
+      background: rgba(255,255,255,.94);
+      border: 1px solid var(--line);
+      border-radius: 32px;
+      box-shadow: var(--shadow);
+      padding: 28px;
+      display: grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap: 22px;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::after {
+      content: "🏪";
+      position: absolute;
+      right: 20px;
+      top: 10px;
+      font-size: 86px;
+      opacity: .10;
+      pointer-events: none;
+    }
+
+    .badge {
+      display: inline-flex;
+      border-radius: 999px;
+      background: var(--soft);
+      color: #9a3412;
+      padding: 6px 12px;
+      font-size: 12px;
+      font-weight: 950;
+    }
+
+    h1 {
+      margin: 12px 0 10px;
+      font-size: clamp(32px, 5vw, 56px);
+      line-height: 1.02;
+      letter-spacing: -.05em;
+    }
+
+    h2 {
+      margin: 0;
+      font-size: 24px;
+      letter-spacing: -.04em;
+    }
+
+    h3 {
+      margin: 3px 0 8px;
+      font-size: 18px;
+      letter-spacing: -.03em;
+    }
+
+    .lead {
+      margin: 0;
+      color: #44403c;
+      font-weight: 850;
+      font-size: 15px;
+    }
+
+    .hero-card {
+      background:
+        radial-gradient(circle at 12% 10%, rgba(251, 191, 36, .18), transparent 30%),
+        linear-gradient(135deg, #1c1917, #431407 58%, #9a3412);
+      color: #fff7ed;
+      border-radius: 28px;
+      padding: 22px;
+      box-shadow: 0 24px 70px rgba(67, 20, 7, .26);
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-card .title {
+      color: #fed7aa;
+      font-size: 12px;
+      font-weight: 950;
+    }
+
+    .hero-card .big {
+      font-size: 28px;
+      line-height: 1.12;
+      letter-spacing: -.05em;
+      font-weight: 950;
+      margin: 8px 0 10px;
+    }
+
+    .hero-card .small {
+      color: #fed7aa;
+    }
+
+    section.panel {
+      background: rgba(255,255,255,.95);
+      border: 1px solid var(--line);
+      box-shadow: 0 18px 52px rgba(120, 53, 15, .07);
+      border-radius: var(--radius);
+      padding: 22px;
+      margin: 16px 0;
+    }
+
+    .panel-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+      align-items: flex-start;
+      margin-bottom: 14px;
+    }
+
+    .small {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 850;
+    }
+
+    label {
+      display: block;
+      font-size: 12px;
+      font-weight: 950;
+      color: #57534e;
+      margin: 0 0 5px;
+    }
+
+    input, textarea, select {
+      width: 100%;
+      border: 1px solid #fdba74;
+      background: #fff;
+      border-radius: 14px;
+      padding: 12px 13px;
+      font-size: 15px;
+      color: var(--ink);
+      outline: none;
+    }
+
+    textarea {
+      min-height: 180px;
+      resize: vertical;
+      line-height: 1.65;
+    }
+
+    input:focus, textarea:focus, select:focus {
+      border-color: #f97316;
+      box-shadow: 0 0 0 4px rgba(249, 115, 22, .16);
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 12px;
+    }
+
+    .form-grid.three {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .button-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    button, .button-link {
+      appearance: none;
+      border: 0;
+      border-radius: 999px;
+      background: var(--main);
+      color: #fff;
+      font-weight: 950;
+      padding: 12px 17px;
+      cursor: pointer;
+      min-height: 44px;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 14px 28px rgba(180, 83, 9, .22);
+      font-size: 14px;
+    }
+
+    button.green, .button-link.green { background: var(--green); box-shadow: 0 14px 28px rgba(22, 163, 74, .18); }
+    button.blue, .button-link.blue { background: var(--blue); box-shadow: 0 14px 28px rgba(37, 99, 235, .18); }
+    button.red { background: var(--red); box-shadow: 0 14px 28px rgba(220, 38, 38, .16); }
+    button.dark, .button-link.dark { background: #1c1917; box-shadow: 0 14px 28px rgba(28, 25, 23, .18); }
+
+    button.ghost, .button-link.ghost {
+      background: #fff;
+      color: #9a3412;
+      border: 1px solid #fdba74;
+      box-shadow: none;
+    }
+
+    button.soft {
+      background: var(--soft);
+      color: #9a3412;
+      border: 1px solid #fed7aa;
+      box-shadow: none;
+    }
+
+    button:disabled {
+      opacity: .52;
+      cursor: not-allowed;
+    }
+
+    .status-box {
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: #fff7ed;
+      padding: 12px 14px;
+      font-size: 13px;
+      font-weight: 850;
+      white-space: pre-wrap;
+      word-break: break-word;
+      margin-top: 12px;
+    }
+
+    .status-box.ok { border-color: #bbf7d0; background: #f0fdf4; color: #166534; }
+    .status-box.warn { border-color: #fde68a; background: #fffbeb; color: #92400e; }
+    .status-box.ng { border-color: #fecaca; background: #fef2f2; color: #991b1b; }
+    .status-box.info { border-color: #bfdbfe; background: #eff6ff; color: #1e3a8a; }
+
+    .weekday-grid {
+      display: grid;
+      grid-template-columns: repeat(7, minmax(0, 1fr));
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .day-option {
+      border: 1px solid #fdba74;
+      border-radius: 14px;
+      background: #fff;
+      padding: 10px 8px;
+      font-weight: 950;
+      font-size: 13px;
+      text-align: center;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .day-option input {
+      display: none;
+    }
+
+    .day-option:has(input:checked) {
+      background: #fee2e2;
+      border-color: #ef4444;
+      color: #991b1b;
+      box-shadow: 0 0 0 4px rgba(239, 68, 68, .10);
+    }
+
+    .preview-grid {
+      display: grid;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .preview-card {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 13px;
+      font-size: 13px;
+    }
+
+    .preview-card strong {
+      display: block;
+      font-size: 15px;
+      margin-bottom: 4px;
+    }
+
+    .url-value {
+      word-break: break-all;
+      background: #fff7ed;
+      border: 1px solid #fed7aa;
+      border-radius: 12px;
+      padding: 9px;
+      color: #9a3412;
+      font-size: 12px;
+      font-weight: 850;
+      margin-top: 7px;
+    }
+
+    .code-box {
+      width: 100%;
+      min-height: 280px;
+      border: 0;
+      background: #1c1917;
+      color: #ffedd5;
+      border-radius: 18px;
+      padding: 16px;
+      font-size: 12px;
+      line-height: 1.7;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      resize: vertical;
+    }
+
+    details {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: #fff;
+      margin: 14px 0;
+      overflow: hidden;
+    }
+
+    summary {
+      cursor: pointer;
+      padding: 14px 16px;
+      font-weight: 950;
+      background: #fff7ed;
+    }
+
+    details .detail-body {
+      padding: 14px 16px;
+      border-top: 1px solid var(--line);
+    }
+
+
+    .calendar-tools {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 12px 0;
+    }
+
+    .date-grid {
+      display: grid;
+      grid-template-columns: repeat(7, minmax(0, 1fr));
+      gap: 7px;
+      margin-top: 10px;
+    }
+
+    .date-btn {
+      border: 1px solid #fdba74;
+      background: #fff;
+      color: #44403c;
+      box-shadow: none;
+      border-radius: 14px;
+      min-height: 58px;
+      padding: 6px;
+      display: block;
+      text-align: center;
+      font-size: 11px;
+      line-height: 1.2;
+    }
+
+    .date-btn .date-num {
+      display: block;
+      font-size: 16px;
+      font-weight: 950;
+      margin-bottom: 2px;
+    }
+
+    .date-btn.selected {
+      background: #fee2e2;
+      border-color: #ef4444;
+      color: #991b1b;
+      box-shadow: 0 0 0 4px rgba(239, 68, 68, .10);
+    }
+
+    .closed-list {
+      display: grid;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .closed-row {
+      display: grid;
+      grid-template-columns: 140px minmax(0, 1fr) auto;
+      gap: 8px;
+      align-items: center;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 10px;
+    }
+
+    .footer {
+      text-align: center;
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 24px;
+      font-weight: 800;
+    }
+
+    @media (max-width: 860px) {
+      .hero { grid-template-columns: 1fr; }
+      .form-grid, .form-grid.three { grid-template-columns: 1fr; }
+      .weekday-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 560px) {
+      .wrap { width: min(100% - 18px, 1120px); margin-top: 10px; }
+      .hero { padding: 20px; border-radius: 22px; }
+      section.panel { padding: 16px; }
+      button, .button-link { width: 100%; }
+      .panel-head { display: block; }
+      .weekday-grid, .date-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .closed-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <header class="hero">
+      <div>
+        <div class="badge">STEP BAKERY-12B / 本番店舗作成フォーム・臨時休業対応</div>
+        <h1>契約後すぐ作る<br>本番店舗設定</h1>
+        <p class="lead">
+          オーナーに「導入したい」と言われたら、この画面で店舗名・定休日・取り置き時間・管理コードを入力し、
+          本番用 shop_code を作成します。
+        </p>
+        <div class="button-row">
+          <button class="green" id="previewButton" type="button">本番設定をプレビュー</button>
+          <button class="blue" id="createByApiButton" type="button">Worker APIで作成</button>
+          <button class="ghost" id="copySqlButton" type="button">SQLをコピー</button>
+        </div>
+      </div>
+
+      <div class="hero-card">
+        <div class="title">本番化の重要ルール</div>
+        <div class="big">bakery_demo は使わず、店舗ごとに shop_code を分ける。</div>
+        <div class="small">
+          本番店舗ではDEMOチャージを拒否します。チャージは店頭支払い確認後の手動チャージ、またはSquare本番決済で行います。
+        </div>
+      </div>
+    </header>
+
+    <section class="panel">
+      <div class="panel-head">
+        <div>
+          <h2>API・作成権限</h2>
+          <div class="small">Worker APIで作成する場合は、Cloudflare Workerに BAKERY_SUPER_ADMIN_CODE をSecret追加しておきます。</div>
+        </div>
+      </div>
+
+      <div class="form-grid">
+        <div>
+          <label for="apiBaseInput">Worker API URL</label>
+          <input id="apiBaseInput" value="https://dpro-bakery-wallet-api.dpromstk2000.workers.dev" autocomplete="off" />
+        </div>
+        <div>
+          <label for="pagesBaseInput">GitHub Pages URL</label>
+          <input id="pagesBaseInput" value="https://dpromstk2000-lab.github.io/bakery-line-system" autocomplete="off" />
+        </div>
+        <div>
+          <label for="superCodeInput">スーパー管理コード</label>
+          <input id="superCodeInput" type="password" placeholder="BAKERY_SUPER_ADMIN_CODE" autocomplete="off" />
+        </div>
+        <div>
+          <label for="adminCodeInput">店舗用 管理コード</label>
+          <input id="adminCodeInput" placeholder="12文字以上の本番用管理コード" autocomplete="off" />
+        </div>
+      </div>
+
+      <div id="authStatus" class="status-box info">
+        スーパー管理コード未設定でも、下に生成されるSQLをSupabase SQL Editorで実行すれば本番店舗を作成できます。
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <div>
+          <h2>店舗情報</h2>
+          <div class="small">shop_code は半角小文字・数字・アンダーバーのみです。</div>
+        </div>
+        <button class="soft" id="autoCodeButton" type="button">shop_codeを自動作成</button>
+      </div>
+
+      <div class="form-grid">
+        <div>
+          <label for="shopNameInput">店舗名</label>
+          <input id="shopNameInput" value="こむぎベーカリー" autocomplete="off" />
+        </div>
+        <div>
+          <label for="shopCodeInput">本番 shop_code</label>
+          <input id="shopCodeInput" value="bakery_live_komugi_oita" autocomplete="off" />
+        </div>
+        <div>
+          <label for="ownerNameInput">オーナー名</label>
+          <input id="ownerNameInput" value="山田 太郎" autocomplete="off" />
+        </div>
+        <div>
+          <label for="ownerEmailInput">オーナーメール</label>
+          <input id="ownerEmailInput" value="owner@example.com" autocomplete="off" />
+        </div>
+        <div>
+          <label for="ownerPhoneInput">オーナー電話</label>
+          <input id="ownerPhoneInput" value="090-0000-0000" autocomplete="off" />
+        </div>
+        <div>
+          <label for="lineNameInput">LINE公式アカウント名</label>
+          <input id="lineNameInput" value="こむぎベーカリー" autocomplete="off" />
+        </div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <div>
+          <h2>LIFF・LINE設定</h2>
+          <div class="small">LIFF IDは後からでも設定できます。未設定でも本番店舗の枠だけ先に作れます。</div>
+        </div>
+      </div>
+
+      <div class="form-grid">
+        <div>
+          <label for="liffIdInput">LIFF ID</label>
+          <input id="liffIdInput" placeholder="例：2010xxxxxxxx-xxxxxxxx" autocomplete="off" />
+        </div>
+        <div>
+          <label for="bonusRateInput">チャージ上乗せ率</label>
+          <input id="bonusRateInput" type="number" step="0.01" min="0" max="0.5" value="0.05" />
+        </div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <div>
+          <h2>取り置き用の簡易営業日設定</h2>
+          <div class="small">本格予約ではなく、パン屋の取り置きに必要な最小設定です。</div>
+        </div>
+      </div>
+
+      <label>定休日</label>
+      <div class="weekday-grid">
+        <label class="day-option"><input type="checkbox" name="closedWeekday" value="0" checked />日曜</label>
+        <label class="day-option"><input type="checkbox" name="closedWeekday" value="1" />月曜</label>
+        <label class="day-option"><input type="checkbox" name="closedWeekday" value="2" />火曜</label>
+        <label class="day-option"><input type="checkbox" name="closedWeekday" value="3" />水曜</label>
+        <label class="day-option"><input type="checkbox" name="closedWeekday" value="4" />木曜</label>
+        <label class="day-option"><input type="checkbox" name="closedWeekday" value="5" />金曜</label>
+        <label class="day-option"><input type="checkbox" name="closedWeekday" value="6" />土曜</label>
+      </div>
+
+      <div class="form-grid">
+        <div>
+          <label for="pickupTimesInput">受け取り可能時間</label>
+          <input id="pickupTimesInput" value="10:00,11:00,12:00,15:00,17:30" autocomplete="off" />
+        </div>
+        <div>
+          <label for="cutoffInput">当日取り置き締切</label>
+          <input id="cutoffInput" type="time" value="10:00" />
+        </div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <div>
+          <h2>臨時休業日・特別休業日</h2>
+          <div class="small">年末年始・お盆・研修休みなど、2か月先までの取り置き不可日を登録します。定休日とは別に設定できます。</div>
+        </div>
+        <button class="soft" id="buildCalendarButton" type="button">2か月分を再表示</button>
+      </div>
+
+      <div class="calendar-tools">
+        <button class="ghost" type="button" id="selectObonButton">お盆例を選択</button>
+        <button class="ghost" type="button" id="clearClosedDaysButton">臨時休業をクリア</button>
+      </div>
+
+      <div class="small">下のカレンダーで休みにしたい日を押してください。選んだ日は赤くなります。</div>
+      <div class="date-grid" id="specialClosedCalendar"></div>
+
+      <h3 style="margin-top:16px;">選択中の臨時休業日</h3>
+      <div class="closed-list" id="specialClosedList">
+        <div class="status-box info">まだ選択していません。</div>
+      </div>
+
+      <details>
+        <summary>テキストで直接編集する</summary>
+        <div class="detail-body">
+          <div class="small">1行に1日ずつ入力します。例：2026-08-13 お盆休み</div>
+          <textarea id="specialClosedText" placeholder="2026-08-13 お盆休み&#10;2026-08-14 お盆休み"></textarea>
+          <div class="button-row">
+            <button class="ghost" id="applyClosedTextButton" type="button">テキストを反映</button>
+          </div>
+        </div>
+      </details>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <div>
+          <h2>本番設定プレビュー</h2>
+          <div class="small">作成前に、店舗コード・URL・安全設定を確認します。</div>
+        </div>
+      </div>
+
+      <div class="preview-grid" id="previewList"></div>
+      <div id="previewStatus" class="status-box info">まだプレビューしていません。</div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <div>
+          <h2>Supabase SQL Editor用</h2>
+          <div class="small">Worker APIで作成しない場合は、このSQLをコピーしてSupabaseで実行します。</div>
+        </div>
+        <button class="ghost" id="copySqlButton2" type="button">SQLをコピー</button>
+      </div>
+      <textarea id="sqlBox" class="code-box" readonly></textarea>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <div>
+          <h2>作成結果</h2>
+          <div class="small">Worker APIで作成した場合は、ここに結果とURLが表示されます。</div>
+        </div>
+      </div>
+      <div id="resultBox" class="status-box info">未実行です。</div>
+      <div class="preview-grid" id="resultUrls"></div>
+    </section>
+
+    <details>
+      <summary>契約後にオーナーから聞くこと</summary>
+      <div class="detail-body">
+        <div class="preview-grid">
+          <div class="preview-card"><strong>1. 店舗名</strong>LINE公式や会員証に表示する名前。</div>
+          <div class="preview-card"><strong>2. 定休日</strong>取り置き不可にする曜日。</div>
+          <div class="preview-card"><strong>3. 受け取り時間</strong>10:00 / 12:00 / 17:30 など。</div>
+          <div class="preview-card"><strong>4. 当日締切</strong>当日取り置きを何時で締めるか。</div>
+          <div class="preview-card"><strong>5. LINE公式情報</strong>LIFF ID、LINE公式アカウント名。</div>
+          <div class="preview-card"><strong>6. 管理コード</strong>本番用の長い管理コード。DEMOと同じものは使わない。</div>
+        </div>
+      </div>
+    </details>
+
+    <div class="footer">
+      DPRO SHOP / パン屋専用LIFF会員証 / production-setup.html<br>
+      本番店舗ではDEMOチャージを拒否し、店舗ごとの管理コードで管理します。
+    </div>
+  </div>
+
+  <script>
+    const DEFAULTS = {
+      apiBase: "https://dpro-bakery-wallet-api.dpromstk2000.workers.dev",
+      pagesBase: "https://dpromstk2000-lab.github.io/bakery-line-system"
+    };
+
+    const $ = (id) => document.getElementById(id);
+
+    let specialClosedDays = new Map();
+
+    function clean(value) {
+      return String(value ?? "").trim();
+    }
+
+    function escapeHtml(value) {
+      return String(value ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function setStatus(id, message, tone = "info") {
+      const el = $(id);
+      el.className = "status-box " + tone;
+      el.textContent = message;
+    }
+
+    function apiBase() {
+      return clean($("apiBaseInput").value || DEFAULTS.apiBase).replace(/\/+$/, "");
+    }
+
+    function pagesBase() {
+      return clean($("pagesBaseInput").value || DEFAULTS.pagesBase).replace(/\/+$/, "");
+    }
+
+    function shopCode() {
+      return clean($("shopCodeInput").value);
+    }
+
+    function getClosedWeekdays() {
+      return Array.from(document.querySelectorAll('input[name="closedWeekday"]:checked'))
+        .map((el) => Number(el.value));
+    }
+
+    function getPickupTimes() {
+      return clean($("pickupTimesInput").value)
+        .split(",")
+        .map((s) => s.trim())
+        .filter(Boolean);
+    }
+
+    function sqlString(value) {
+      return "'" + String(value ?? "").replaceAll("'", "''") + "'";
+    }
+
+    function sqlArrayNumbers(values) {
+      return "array[" + values.map((v) => Number(v)).join(",") + "]";
+    }
+
+    function sqlArrayText(values) {
+      return "array[" + values.map((v) => sqlString(v)).join(",") + "]";
+    }
+
+    function normalizeShopCode(text) {
+      return String(text || "")
+        .normalize("NFKC")
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, "_")
+        .replace(/^_+|_+$/g, "")
+        .replace(/_+/g, "_");
+    }
+
+    function autoShopCode() {
+      const name = clean($("shopNameInput").value);
+      const base = normalizeShopCode(name) || "new_shop";
+      $("shopCodeInput").value = "bakery_live_" + base;
+      renderPreview();
+    }
+
+
+    function formatDateJst(date) {
+      return new Intl.DateTimeFormat("en-CA", {
+        timeZone: "Asia/Tokyo",
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit"
+      }).format(date);
+    }
+
+    function weekdayLabel(dateString) {
+      const labels = ["日", "月", "火", "水", "木", "金", "土"];
+      const d = new Date(dateString + "T00:00:00+09:00");
+      return labels[d.getDay()] || "";
+    }
+
+    function buildSpecialClosedCalendar() {
+      const grid = $("specialClosedCalendar");
+      if (!grid) return;
+
+      const start = new Date();
+      start.setHours(0, 0, 0, 0);
+
+      const days = [];
+      for (let i = 0; i < 62; i++) {
+        const d = new Date(start.getTime());
+        d.setDate(start.getDate() + i);
+        const date = formatDateJst(d);
+        days.push({ date, day: d.getDate(), weekday: weekdayLabel(date) });
+      }
+
+      grid.innerHTML = days.map((d) => {
+        const selected = specialClosedDays.has(d.date);
+        return `
+          <button class="date-btn ${selected ? "selected" : ""}" type="button" data-special-date="${escapeHtml(d.date)}">
+            <span class="date-num">${escapeHtml(String(d.day))}</span>
+            <span>${escapeHtml(d.weekday)}</span>
+          </button>
+        `;
+      }).join("");
+
+      document.querySelectorAll("[data-special-date]").forEach((button) => {
+        button.addEventListener("click", () => {
+          const date = button.getAttribute("data-special-date");
+          if (specialClosedDays.has(date)) {
+            specialClosedDays.delete(date);
+          } else {
+            specialClosedDays.set(date, "臨時休業");
+          }
+          renderSpecialClosedDays();
+          buildSpecialClosedCalendar();
+          renderPreview();
+        });
+      });
+    }
+
+    function renderSpecialClosedDays() {
+      const list = $("specialClosedList");
+      if (!list) return;
+
+      const rows = Array.from(specialClosedDays.entries()).sort((a, b) => a[0].localeCompare(b[0]));
+
+      if (!rows.length) {
+        list.innerHTML = '<div class="status-box info">まだ選択していません。</div>';
+        $("specialClosedText").value = "";
+        return;
+      }
+
+      list.innerHTML = rows.map(([date, reason]) => `
+        <div class="closed-row">
+          <strong>${escapeHtml(date)}（${escapeHtml(weekdayLabel(date))}）</strong>
+          <input value="${escapeHtml(reason)}" data-reason-date="${escapeHtml(date)}" />
+          <button class="ghost" type="button" data-remove-date="${escapeHtml(date)}">削除</button>
+        </div>
+      `).join("");
+
+      document.querySelectorAll("[data-reason-date]").forEach((input) => {
+        input.addEventListener("input", () => {
+          specialClosedDays.set(input.getAttribute("data-reason-date"), input.value || "臨時休業");
+          syncClosedText();
+          renderPreview();
+        });
+      });
+
+      document.querySelectorAll("[data-remove-date]").forEach((button) => {
+        button.addEventListener("click", () => {
+          specialClosedDays.delete(button.getAttribute("data-remove-date"));
+          renderSpecialClosedDays();
+          buildSpecialClosedCalendar();
+          renderPreview();
+        });
+      });
+
+      syncClosedText();
+    }
+
+    function syncClosedText() {
+      const rows = Array.from(specialClosedDays.entries()).sort((a, b) => a[0].localeCompare(b[0]));
+      $("specialClosedText").value = rows.map(([date, reason]) => `${date} ${reason}`).join("\n");
+    }
+
+    function applyClosedText() {
+      const text = $("specialClosedText").value || "";
+      const next = new Map();
+
+      text.split(/\n+/).forEach((line) => {
+        const m = line.trim().match(/^(\d{4}-\d{2}-\d{2})(?:\s+(.+))?$/);
+        if (!m) return;
+        next.set(m[1], m[2] || "臨時休業");
+      });
+
+      specialClosedDays = next;
+      renderSpecialClosedDays();
+      buildSpecialClosedCalendar();
+      renderPreview();
+    }
+
+    function selectObonExample() {
+      const now = new Date();
+      const year = now.getFullYear();
+      [`${year}-08-13`, `${year}-08-14`, `${year}-08-15`].forEach((date) => {
+        specialClosedDays.set(date, "お盆休み");
+      });
+      renderSpecialClosedDays();
+      buildSpecialClosedCalendar();
+      renderPreview();
+    }
+
+    function clearSpecialClosedDays() {
+      specialClosedDays.clear();
+      renderSpecialClosedDays();
+      buildSpecialClosedCalendar();
+      renderPreview();
+    }
+
+    function getSpecialClosedDays() {
+      return Array.from(specialClosedDays.entries())
+        .sort((a, b) => a[0].localeCompare(b[0]))
+        .map(([date, reason]) => ({ date, reason: reason || "臨時休業" }));
+    }
+
+    function buildPayload() {
+      const shop = shopCode();
+      const adminCode = clean($("adminCodeInput").value);
+
+      return {
+        shop_code: shop,
+        shop_name: clean($("shopNameInput").value),
+        owner_name: clean($("ownerNameInput").value),
+        owner_email: clean($("ownerEmailInput").value),
+        owner_phone: clean($("ownerPhoneInput").value),
+        admin_code: adminCode,
+        pages_base_url: pagesBase(),
+        worker_api_url: apiBase(),
+        line_official_name: clean($("lineNameInput").value),
+        liff_id: clean($("liffIdInput").value),
+        closed_weekdays: getClosedWeekdays(),
+        pickup_times: getPickupTimes(),
+        same_day_cutoff_time: clean($("cutoffInput").value || "10:00"),
+        charge_bonus_rate: Number($("bonusRateInput").value || 0.05),
+        special_closed_days: getSpecialClosedDays()
+      };
+    }
+
+    function validatePayload(payload) {
+      const errors = [];
+
+      if (!payload.shop_code) errors.push("shop_code が未入力です。");
+      if (payload.shop_code === "bakery_demo") errors.push("bakery_demo は本番店舗に使えません。");
+      if (!/^[a-z0-9_]+$/.test(payload.shop_code)) errors.push("shop_code は半角小文字・数字・アンダーバーのみです。");
+      if (!payload.shop_name) errors.push("店舗名が未入力です。");
+      if (!payload.admin_code || payload.admin_code.length < 12) errors.push("店舗用管理コードは12文字以上にしてください。");
+      if (!payload.pages_base_url.startsWith("https://")) errors.push("GitHub Pages URL は https:// で始めてください。");
+      if (!payload.worker_api_url.startsWith("https://")) errors.push("Worker API URL は https:// で始めてください。");
+      if (!payload.pickup_times.length) errors.push("受け取り可能時間を1つ以上入れてください。");
+      payload.special_closed_days.forEach((d) => {
+        if (!/^\d{4}-\d{2}-\d{2}$/.test(d.date)) errors.push("臨時休業日の形式が不正です: " + d.date);
+      });
+
+      return errors;
+    }
+
+    function buildUrls(payload) {
+      const api = payload.worker_api_url;
+      const pages = payload.pages_base_url;
+      const shop = encodeURIComponent(payload.shop_code);
+      const apiParam = encodeURIComponent(api);
+      const liffExtra = payload.liff_id ? "&liff_id=" + encodeURIComponent(payload.liff_id) : "";
+
+      return {
+        wallet: `${pages}/wallet.html?shop_code=${shop}&api=${apiParam}${liffExtra}`,
+        cashier: `${pages}/cashier.html?shop_code=${shop}&api=${apiParam}`,
+        owner: `${pages}/owner.html?shop_code=${shop}&api=${apiParam}`,
+        system_check: `${pages}/system-check.html?shop_code=${shop}&api=${apiParam}`,
+        qr: `${pages}/qr.html`,
+        sales_demo: `${pages}/sales-demo.html`
+      };
+    }
+
+    function buildSql(payload) {
+      return `/* STEP BAKERY-12 本番店舗作成SQL
+   Supabase SQL Editorで実行してください。
+   管理コードはハッシュ保存されます。 */
+
+select public.bakery_create_production_shop(
+  p_shop_code := ${sqlString(payload.shop_code)},
+  p_shop_name := ${sqlString(payload.shop_name)},
+  p_owner_name := ${sqlString(payload.owner_name)},
+  p_owner_email := ${sqlString(payload.owner_email)},
+  p_owner_phone := ${sqlString(payload.owner_phone)},
+  p_admin_code := ${sqlString(payload.admin_code)},
+  p_pages_base_url := ${sqlString(payload.pages_base_url)},
+  p_worker_api_url := ${sqlString(payload.worker_api_url)},
+  p_line_official_name := ${sqlString(payload.line_official_name)},
+  p_liff_id := ${payload.liff_id ? sqlString(payload.liff_id) : "null"},
+  p_closed_weekdays := ${sqlArrayNumbers(payload.closed_weekdays)},
+  p_pickup_times := ${sqlArrayText(payload.pickup_times)},
+  p_same_day_cutoff_time := ${sqlString(payload.same_day_cutoff_time)},
+  p_charge_bonus_rate := ${Number(payload.charge_bonus_rate || 0.05)}
+);
+
+/* 臨時休業日の登録
+   2か月先までの予定を作成時に反映します。 */
+delete from public.bakery_special_closed_days
+where shop_code = ${sqlString(payload.shop_code)}
+  and closed_date between current_date and (current_date + interval '62 days');
+
+${payload.special_closed_days.length ? `insert into public.bakery_special_closed_days (
+  shop_code,
+  closed_date,
+  reason
+)
+values
+${payload.special_closed_days.map((d) => `  (${sqlString(payload.shop_code)}, ${sqlString(d.date)}::date, ${sqlString(d.reason)})`).join(",\n")};` : `/* 臨時休業日は未選択です。 */`}
+
+/* 作成後チェック */
+select public.bakery_production_readiness_check(${sqlString(payload.shop_code)});
+
+/* 臨時休業日確認 */
+select *
+from public.bakery_special_closed_days
+where shop_code = ${sqlString(payload.shop_code)}
+order by closed_date asc;
+`;
+    }
+
+    function renderPreview() {
+      const payload = buildPayload();
+      const errors = validatePayload(payload);
+      const urls = buildUrls(payload);
+      const sql = buildSql(payload);
+      $("sqlBox").value = sql;
+
+      const items = [
+        ["店舗コード", payload.shop_code],
+        ["店舗名", payload.shop_name],
+        ["オーナー", payload.owner_name],
+        ["LINE公式", payload.line_official_name || "未設定"],
+        ["LIFF ID", payload.liff_id || "未設定"],
+        ["定休日", payload.closed_weekdays.join(", ") || "なし"],
+        ["受け取り時間", payload.pickup_times.join(" / ")],
+        ["当日締切", payload.same_day_cutoff_time],
+        ["上乗せ率", String(Math.round(Number(payload.charge_bonus_rate || 0) * 100)) + "%"],
+        ["臨時休業日", payload.special_closed_days.length ? payload.special_closed_days.map((d) => d.date + " " + d.reason).join(" / ") : "未設定"],
+        ["本番ガード", "DEMOチャージ拒否 / 店舗別管理コード"]
+      ];
+
+      $("previewList").innerHTML = items.map(([label, value]) => `
+        <div class="preview-card">
+          <strong>${escapeHtml(label)}</strong>
+          <div>${escapeHtml(value)}</div>
+        </div>
+      `).join("") + Object.entries(urls).map(([label, value]) => `
+        <div class="preview-card">
+          <strong>${escapeHtml(label)}</strong>
+          <div class="url-value">${escapeHtml(value)}</div>
+          <div class="button-row">
+            <button class="ghost" type="button" data-copy="${escapeHtml(value)}">コピー</button>
+            <a class="button-link ghost" href="${escapeHtml(value)}" target="_blank" rel="noopener">開く</a>
+          </div>
+        </div>
+      `).join("");
+
+      bindCopyButtons();
+
+      if (errors.length) {
+        setStatus("previewStatus", errors.join("\n"), "warn");
+      } else {
+        setStatus("previewStatus", "本番店舗作成の準備OKです。Worker APIで作成、またはSQLをSupabaseで実行してください。", "ok");
+      }
+    }
+
+    async function createByApi() {
+      const payload = buildPayload();
+      const errors = validatePayload(payload);
+      if (errors.length) {
+        renderPreview();
+        return;
+      }
+
+      const superCode = clean($("superCodeInput").value);
+      if (!superCode) {
+        setStatus("resultBox", "スーパー管理コードが未入力です。Worker APIで作成する場合は BAKERY_SUPER_ADMIN_CODE が必要です。\nSQLコピーでSupabaseから作成することもできます。", "warn");
+        return;
+      }
+
+      const ok = confirm(`${payload.shop_name} の本番店舗を作成します。\nshop_code: ${payload.shop_code}\n\n実行しますか？`);
+      if (!ok) return;
+
+      try {
+        $("createByApiButton").disabled = true;
+        $("createByApiButton").textContent = "作成中...";
+
+        const res = await fetch(apiBase() + "/api/super/create-production-shop", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+            "X-DPRO-Super-Admin-Code": superCode
+          },
+          body: JSON.stringify(payload)
+        });
+
+        const text = await res.text();
+        let data = null;
+        try { data = text ? JSON.parse(text) : null; } catch { data = text; }
+
+        if (!res.ok) {
+          throw new Error(data?.message || data?.error || text || "作成に失敗しました。");
+        }
+
+        renderResult(data);
+        if (payload.special_closed_days.length) {
+          setStatus("resultBox", JSON.stringify(data, null, 2) + "\n\n注意：Worker API作成では臨時休業日の登録までは行いません。下のSQLをSupabase SQL Editorで実行して、臨時休業日も登録してください。", "warn");
+        }
+      } catch (e) {
+        setStatus("resultBox", e.message || "作成に失敗しました。", "ng");
+      } finally {
+        $("createByApiButton").disabled = false;
+        $("createByApiButton").textContent = "Worker APIで作成";
+      }
+    }
+
+    function renderResult(data) {
+      const result = data || {};
+      const urls = result.urls || buildUrls(buildPayload());
+
+      setStatus("resultBox", JSON.stringify(result, null, 2), result.ok === false ? "ng" : "ok");
+
+      $("resultUrls").innerHTML = Object.entries(urls).map(([label, value]) => `
+        <div class="preview-card">
+          <strong>${escapeHtml(label)}</strong>
+          <div class="url-value">${escapeHtml(value)}</div>
+          <div class="button-row">
+            <button class="ghost" type="button" data-copy="${escapeHtml(value)}">コピー</button>
+            <a class="button-link ghost" href="${escapeHtml(value)}" target="_blank" rel="noopener">開く</a>
+          </div>
+        </div>
+      `).join("");
+
+      bindCopyButtons();
+    }
+
+    async function copyText(text) {
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(String(text || ""));
+        return true;
+      }
+
+      const temp = document.createElement("textarea");
+      temp.value = String(text || "");
+      temp.style.position = "fixed";
+      temp.style.left = "-9999px";
+      document.body.appendChild(temp);
+      temp.focus();
+      temp.select();
+      document.execCommand("copy");
+      temp.remove();
+      return true;
+    }
+
+    function bindCopyButtons() {
+      document.querySelectorAll("[data-copy]").forEach((button) => {
+        if (button.dataset.bound === "1") return;
+        button.dataset.bound = "1";
+        button.addEventListener("click", async () => {
+          await copyText(button.getAttribute("data-copy") || "");
+          setStatus("previewStatus", "コピーしました。", "ok");
+        });
+      });
+    }
+
+    async function copySql() {
+      renderPreview();
+      await copyText($("sqlBox").value);
+      setStatus("previewStatus", "本番店舗作成SQLをコピーしました。", "ok");
+    }
+
+    function bindEvents() {
+      $("previewButton").addEventListener("click", renderPreview);
+      $("copySqlButton").addEventListener("click", copySql);
+      $("copySqlButton2").addEventListener("click", copySql);
+      $("createByApiButton").addEventListener("click", createByApi);
+      $("autoCodeButton").addEventListener("click", autoShopCode);
+      $("buildCalendarButton").addEventListener("click", buildSpecialClosedCalendar);
+      $("applyClosedTextButton").addEventListener("click", applyClosedText);
+      $("selectObonButton").addEventListener("click", selectObonExample);
+      $("clearClosedDaysButton").addEventListener("click", clearSpecialClosedDays);
+
+      document.querySelectorAll("input, select, textarea").forEach((el) => {
+        el.addEventListener("input", renderPreview);
+        el.addEventListener("change", renderPreview);
+      });
+    }
+
+    function init() {
+      bindEvents();
+      buildSpecialClosedCalendar();
+      renderSpecialClosedDays();
+      renderPreview();
+    }
+
+    init();
+  </script>
+</body>
+</html>
