@@ -1,0 +1,1229 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>DPROベーカリー | cashier.html</title>
+  <style>
+    :root {
+      --bg: #fff7ed;
+      --panel: #ffffff;
+      --ink: #1c1917;
+      --muted: #78716c;
+      --line: #fed7aa;
+      --main: #b45309;
+      --main2: #ea580c;
+      --soft: #ffedd5;
+      --green: #16a34a;
+      --red: #dc2626;
+      --yellow: #d97706;
+      --blue: #2563eb;
+      --shadow: 0 22px 70px rgba(120, 53, 15, .12);
+      --radius: 24px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--ink);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at 12% 0%, rgba(251, 146, 60, .20), transparent 34%),
+        radial-gradient(circle at 90% 4%, rgba(245, 158, 11, .16), transparent 30%),
+        linear-gradient(180deg, #fff7ed, #fffbeb 48%, #fef3c7);
+      line-height: 1.65;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .wrap {
+      width: min(920px, calc(100% - 22px));
+      margin: 12px auto 42px;
+    }
+
+    .hero {
+      background: rgba(255,255,255,.94);
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      box-shadow: var(--shadow);
+      padding: 20px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      background: var(--soft);
+      color: #9a3412;
+      padding: 6px 12px;
+      font-size: 12px;
+      font-weight: 950;
+    }
+
+    h1 {
+      margin: 10px 0 8px;
+      font-size: clamp(28px, 7vw, 46px);
+      line-height: 1.04;
+      letter-spacing: -.04em;
+    }
+
+    h2 {
+      margin: 0;
+      font-size: 22px;
+      letter-spacing: -.03em;
+    }
+
+    .lead {
+      margin: 0;
+      color: #44403c;
+      font-weight: 800;
+      font-size: 14px;
+    }
+
+    .settings-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    label {
+      display: block;
+      font-size: 12px;
+      font-weight: 950;
+      color: #57534e;
+      margin: 0 0 5px;
+    }
+
+    input, textarea, select {
+      width: 100%;
+      border: 1px solid #fdba74;
+      background: #fff;
+      border-radius: 14px;
+      padding: 12px 13px;
+      font-size: 16px;
+      color: var(--ink);
+      outline: none;
+    }
+
+    input:focus, textarea:focus, select:focus {
+      border-color: #f97316;
+      box-shadow: 0 0 0 4px rgba(249, 115, 22, .16);
+    }
+
+    .button-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    button, .button-link {
+      appearance: none;
+      border: 0;
+      border-radius: 999px;
+      background: var(--main);
+      color: #fff;
+      font-weight: 950;
+      padding: 12px 17px;
+      cursor: pointer;
+      min-height: 46px;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 14px 28px rgba(180, 83, 9, .22);
+      font-size: 14px;
+    }
+
+    button:hover, .button-link:hover { transform: translateY(-1px); }
+
+    button.green { background: var(--green); box-shadow: 0 14px 28px rgba(22, 163, 74, .18); }
+    button.blue { background: var(--blue); box-shadow: 0 14px 28px rgba(37, 99, 235, .18); }
+    button.red { background: var(--red); box-shadow: 0 14px 28px rgba(220, 38, 38, .16); }
+    button.dark { background: #1c1917; box-shadow: 0 14px 28px rgba(28, 25, 23, .18); }
+
+    button.ghost, .button-link.ghost {
+      background: #fff;
+      color: #9a3412;
+      border: 1px solid #fdba74;
+      box-shadow: none;
+    }
+
+    button.soft {
+      background: var(--soft);
+      color: #9a3412;
+      border: 1px solid #fed7aa;
+      box-shadow: none;
+    }
+
+    button:disabled {
+      opacity: .52;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    section.panel {
+      background: rgba(255,255,255,.95);
+      border: 1px solid var(--line);
+      box-shadow: 0 18px 52px rgba(120, 53, 15, .07);
+      border-radius: var(--radius);
+      padding: 18px;
+      margin: 14px 0;
+    }
+
+    .panel-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+      align-items: flex-start;
+      margin-bottom: 14px;
+    }
+
+    .small {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .status-box {
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: #fff7ed;
+      padding: 12px 14px;
+      font-size: 13px;
+      font-weight: 850;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .status-box.ok { border-color: #bbf7d0; background: #f0fdf4; color: #166534; }
+    .status-box.warn { border-color: #fde68a; background: #fffbeb; color: #92400e; }
+    .status-box.ng { border-color: #fecaca; background: #fef2f2; color: #991b1b; }
+    .status-box.info { border-color: #bfdbfe; background: #eff6ff; color: #1e3a8a; }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      margin: 14px 0;
+    }
+
+    .summary-card {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 14px;
+      box-shadow: 0 12px 36px rgba(120, 53, 15, .06);
+    }
+
+    .summary-card .label {
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: 950;
+    }
+
+    .summary-card .value {
+      font-size: 24px;
+      font-weight: 950;
+      letter-spacing: -.04em;
+      margin-top: 2px;
+    }
+
+    .scan-area {
+      background: #1c1917;
+      border-radius: 22px;
+      min-height: 260px;
+      overflow: hidden;
+      position: relative;
+      display: grid;
+      place-items: center;
+      color: #ffedd5;
+      border: 1px solid #7c2d12;
+    }
+
+    video {
+      width: 100%;
+      min-height: 260px;
+      object-fit: cover;
+      display: none;
+    }
+
+    .scan-placeholder {
+      text-align: center;
+      padding: 22px;
+      font-weight: 950;
+    }
+
+    .scan-placeholder .big {
+      font-size: 44px;
+      line-height: 1;
+      margin-bottom: 10px;
+    }
+
+    .scan-line {
+      position: absolute;
+      left: 10%;
+      right: 10%;
+      top: 50%;
+      height: 3px;
+      background: #22c55e;
+      box-shadow: 0 0 18px rgba(34,197,94,.8);
+      display: none;
+    }
+
+    .scan-area.active video { display: block; }
+    .scan-area.active .scan-placeholder { display: none; }
+    .scan-area.active .scan-line { display: block; }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .amount-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .amount-btn {
+      border-radius: 16px;
+      background: #fff;
+      color: #9a3412;
+      border: 1px solid #fdba74;
+      box-shadow: none;
+      font-size: 18px;
+      min-height: 56px;
+    }
+
+    .demo-grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .demo-btn {
+      border-radius: 16px;
+      background: #fff;
+      color: #1c1917;
+      border: 1px solid #fdba74;
+      box-shadow: none;
+      min-height: 58px;
+      font-size: 12px;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .customer-card {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 16px;
+      min-height: 170px;
+    }
+
+    .customer-name {
+      font-size: 24px;
+      font-weight: 950;
+      letter-spacing: -.03em;
+      margin-bottom: 4px;
+    }
+
+    .balance {
+      font-size: 34px;
+      font-weight: 950;
+      letter-spacing: -.05em;
+      color: #166534;
+      margin: 8px 0;
+    }
+
+    .balance.ng { color: #991b1b; }
+
+    .payment-result {
+      border-radius: 24px;
+      padding: 18px;
+      background: #fff;
+      border: 1px solid var(--line);
+      text-align: center;
+      min-height: 180px;
+      display: grid;
+      place-items: center;
+    }
+
+    .payment-result .icon {
+      font-size: 54px;
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+
+    .payment-result .title {
+      font-size: 28px;
+      font-weight: 950;
+      letter-spacing: -.05em;
+    }
+
+    .payment-result.ok {
+      background: #f0fdf4;
+      border-color: #bbf7d0;
+      color: #166534;
+    }
+
+    .payment-result.ng {
+      background: #fef2f2;
+      border-color: #fecaca;
+      color: #991b1b;
+    }
+
+    .card-list {
+      display: grid;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .data-card {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 13px;
+      font-size: 13px;
+    }
+
+    .data-card strong {
+      display: block;
+      font-size: 15px;
+      margin-bottom: 4px;
+    }
+
+    .tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 8px;
+    }
+
+    .pill {
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 999px;
+      padding: 5px 9px;
+      font-size: 11px;
+      font-weight: 950;
+      white-space: nowrap;
+      background: #e7e5e4;
+      color: #44403c;
+    }
+
+    .pill.green { background: #dcfce7; color: #166534; }
+    .pill.orange { background: #ffedd5; color: #9a3412; }
+    .pill.blue { background: #dbeafe; color: #1d4ed8; }
+    .pill.red { background: #fee2e2; color: #991b1b; }
+
+    details {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: #fff;
+      margin: 14px 0;
+      overflow: hidden;
+    }
+
+    summary {
+      cursor: pointer;
+      padding: 14px 16px;
+      font-weight: 950;
+      background: #fff7ed;
+    }
+
+    details .detail-body {
+      padding: 14px 16px;
+      border-top: 1px solid var(--line);
+    }
+
+    .footer {
+      text-align: center;
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 24px;
+      font-weight: 800;
+    }
+
+    @media (max-width: 760px) {
+      .settings-grid, .summary-grid, .two-col { grid-template-columns: 1fr; }
+      .amount-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .demo-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .panel-head { display: block; }
+      button, .button-link { width: 100%; }
+      .hero { border-radius: 22px; }
+      section.panel { padding: 15px; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <header class="hero">
+      <div>
+        <div class="badge">DPRO SHOP / Bakery Cashier / STEP BAKERY-5</div>
+        <h1>店員用<br>1秒レジ決済</h1>
+        <p class="lead">
+          お客様の会員証QRを読み取り、金額を入れて決済するだけ。
+          財布・小銭・金額手入力Payを減らし、土日のレジ待ちを短くするDEMOです。
+        </p>
+        <div class="button-row">
+          <button class="green" id="startCameraButton" type="button">カメラ起動</button>
+          <button class="ghost" id="stopCameraButton" type="button">カメラ停止</button>
+          <button class="soft" id="saveAdminButton" type="button">管理コード保存</button>
+          <button class="ghost" id="forgetAdminButton" type="button">管理コードを忘れる</button>
+        </div>
+      </div>
+
+      <div class="settings-grid">
+        <div>
+          <label for="apiBaseInput">Worker API URL</label>
+          <input id="apiBaseInput" value="https://dpro-bakery-wallet-api.dpromstk2000.workers.dev" autocomplete="off" />
+        </div>
+        <div>
+          <label for="shopCodeInput">店舗コード</label>
+          <input id="shopCodeInput" value="bakery_demo" autocomplete="off" />
+        </div>
+        <div>
+          <label for="adminCodeInput">管理コード</label>
+          <input id="adminCodeInput" type="password" placeholder="BAKERY_ADMIN_CODE" autocomplete="off" />
+        </div>
+        <div>
+          <label for="staffNameInput">スタッフ名</label>
+          <input id="staffNameInput" value="レジスタッフ" autocomplete="off" />
+        </div>
+      </div>
+    </header>
+
+    <section class="summary-grid">
+      <div class="summary-card">
+        <div class="label">選択中の会員</div>
+        <div class="value" id="summaryMember">未選択</div>
+      </div>
+      <div class="summary-card">
+        <div class="label">会計金額</div>
+        <div class="value" id="summaryAmount">0円</div>
+      </div>
+      <div class="summary-card">
+        <div class="label">残高</div>
+        <div class="value" id="summaryBalance">-</div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <div>
+          <h2>QR読み取り・会員選択</h2>
+          <div class="small">カメラが使えない端末では、会員コードを手入力できます。DEMOでは下のサンプル会員ボタンが確実です。</div>
+        </div>
+      </div>
+
+      <div class="two-col">
+        <div>
+          <div class="scan-area" id="scanArea">
+            <video id="video" playsinline muted></video>
+            <div class="scan-line"></div>
+            <div class="scan-placeholder">
+              <div class="big">📷</div>
+              <div>カメラ起動を押して<br>会員証QRを読み取ります</div>
+              <div class="small" style="margin-top:8px;color:#fed7aa;">読み取れない時は下の手入力を使ってください</div>
+            </div>
+          </div>
+          <div id="scanStatus" class="status-box info" style="margin-top:10px;">カメラは未起動です。</div>
+        </div>
+
+        <div>
+          <label for="customerKeyInput">会員コード・QR内容</label>
+          <input id="customerKeyInput" placeholder="例：DEMO-BK-001" autocomplete="off" />
+          <div class="button-row">
+            <button class="blue" id="lookupCustomerButton" type="button">会員を確認</button>
+            <button class="ghost" id="clearCustomerButton" type="button">クリア</button>
+          </div>
+
+          <div class="demo-grid">
+            <button class="demo-btn" type="button" data-demo-member="DEMO-BK-001"><b>佐藤さん</b><span>5,250円</span></button>
+            <button class="demo-btn" type="button" data-demo-member="DEMO-BK-002"><b>田中さん</b><span>3,200円</span></button>
+            <button class="demo-btn" type="button" data-demo-member="DEMO-BK-003"><b>山本さん</b><span>10,500円</span></button>
+            <button class="demo-btn" type="button" data-demo-member="DEMO-BK-004"><b>高橋さん</b><span>1,800円</span></button>
+            <button class="demo-btn" type="button" data-demo-member="DEMO-BK-005"><b>鈴木さん</b><span>0円</span></button>
+          </div>
+
+          <div class="customer-card" style="margin-top:12px;">
+            <div class="customer-name" id="customerName">会員未選択</div>
+            <div class="small" id="customerMemberCode">会員コード：-</div>
+            <div class="balance" id="customerBalance">-</div>
+            <div class="tag-row" id="customerTags">
+              <span class="pill orange">会員証を読み取ってください</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <div>
+          <h2>金額入力</h2>
+          <div class="small">パン代を入力して、残高から決済します。DEMOではプリセット金額が便利です。</div>
+        </div>
+      </div>
+
+      <label for="amountInput">会計金額</label>
+      <input id="amountInput" type="number" inputmode="numeric" min="1" placeholder="例：680" />
+
+      <div class="amount-grid">
+        <button class="amount-btn" type="button" data-amount="240">240円</button>
+        <button class="amount-btn" type="button" data-amount="420">420円</button>
+        <button class="amount-btn" type="button" data-amount="500">500円</button>
+        <button class="amount-btn" type="button" data-amount="680">680円</button>
+        <button class="amount-btn" type="button" data-amount="900">900円</button>
+        <button class="amount-btn" type="button" data-amount="1280">1,280円</button>
+      </div>
+
+      <div class="button-row">
+        <button class="green" id="paymentButton" type="button">残高から決済する</button>
+        <button class="ghost" id="clearAmountButton" type="button">金額クリア</button>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <div>
+          <h2>決済結果</h2>
+          <div class="small">成功すると残高が更新され、オーナー管理画面の決済履歴にも反映されます。</div>
+        </div>
+      </div>
+
+      <div class="payment-result" id="paymentResult">
+        <div>
+          <div class="icon">🍞</div>
+          <div class="title">決済待ち</div>
+          <div class="small">会員と金額を選んでください。</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <div>
+          <h2>直近の決済履歴</h2>
+          <div class="small">今のレジ決済が反映されているか確認できます。</div>
+        </div>
+        <button class="ghost" id="loadHistoryButton" type="button">履歴更新</button>
+      </div>
+      <div class="card-list" id="historyList">
+        <div class="status-box info">未取得です。</div>
+      </div>
+    </section>
+
+    <details>
+      <summary>確認用URL</summary>
+      <div class="detail-body">
+        <div class="card-list" id="urlList"></div>
+      </div>
+    </details>
+
+    <div class="footer">
+      DPRO SHOP / パン屋専用LIFF会員証 / cashier.html<br>
+      Supabase Service Role Key はこの画面に書きません。すべて Worker API 経由で処理します。
+    </div>
+  </div>
+
+  <script>
+    const DEFAULTS = {
+      apiBase: "https://dpro-bakery-wallet-api.dpromstk2000.workers.dev",
+      shopCode: "bakery_demo",
+      adminStorageKey: "dpro_bakery_cashier_admin_code_session",
+      staffStorageKey: "dpro_bakery_cashier_staff_name_session"
+    };
+
+    let selectedCustomer = null;
+    let stream = null;
+    let detector = null;
+    let scanTimer = null;
+    let lastScanValue = "";
+
+    const $ = (id) => document.getElementById(id);
+
+    function apiBase() {
+      return ($("apiBaseInput").value.trim() || DEFAULTS.apiBase).replace(/\/+$/, "");
+    }
+
+    function shopCode() {
+      return $("shopCodeInput").value.trim() || DEFAULTS.shopCode;
+    }
+
+    function adminCode() {
+      return $("adminCodeInput").value.trim();
+    }
+
+    function staffName() {
+      return $("staffNameInput").value.trim() || "レジスタッフ";
+    }
+
+    function yen(value) {
+      const n = Number(value || 0);
+      return n.toLocaleString("ja-JP") + "円";
+    }
+
+    function escapeHtml(value) {
+      return String(value ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function setText(id, value) {
+      const el = $(id);
+      if (el) el.textContent = value;
+    }
+
+    function setStatus(id, message, tone = "info") {
+      const el = $(id);
+      if (!el) return;
+      el.className = "status-box " + tone;
+      el.textContent = message;
+    }
+
+    function ensureAdminCode() {
+      if (!adminCode()) {
+        $("adminCodeInput").focus();
+        throw new Error("管理コードが未入力です。");
+      }
+    }
+
+    function buildApiUrl(path, params = {}) {
+      const url = new URL(apiBase() + path);
+      url.searchParams.set("shop_code", shopCode());
+      Object.entries(params).forEach(([key, value]) => {
+        if (value !== undefined && value !== null && String(value).trim() !== "") {
+          url.searchParams.set(key, String(value));
+        }
+      });
+      return url.toString();
+    }
+
+    function authHeaders() {
+      const headers = { "Accept": "application/json" };
+      const code = adminCode();
+
+      if (code) {
+        headers["X-DPRO-Admin-Code"] = code;
+        headers["X-Admin-Token"] = code;
+        headers["Authorization"] = "Bearer " + code;
+      }
+
+      return headers;
+    }
+
+    async function apiGet(path, params = {}, needsAuth = false) {
+      const res = await fetch(buildApiUrl(path, params), {
+        method: "GET",
+        headers: needsAuth ? authHeaders() : { "Accept": "application/json" },
+        cache: "no-store"
+      });
+
+      return parseResponse(res);
+    }
+
+    async function apiPost(path, body = {}, needsAuth = true) {
+      const res = await fetch(apiBase() + path, {
+        method: "POST",
+        headers: {
+          ...(needsAuth ? authHeaders() : {}),
+          "Content-Type": "application/json",
+          "Accept": "application/json"
+        },
+        body: JSON.stringify({
+          shop_code: shopCode(),
+          ...body
+        })
+      });
+
+      return parseResponse(res);
+    }
+
+    async function parseResponse(res) {
+      const text = await res.text();
+      let data = null;
+
+      try { data = text ? JSON.parse(text) : null; } catch { data = text; }
+
+      if (!res.ok) {
+        const message = data?.message || data?.error || text || "HTTP " + res.status;
+        const error = new Error(message);
+        error.status = res.status;
+        error.data = data;
+        throw error;
+      }
+
+      return data;
+    }
+
+    async function copyText(text) {
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(String(text || ""));
+        return true;
+      }
+
+      const temp = document.createElement("textarea");
+      temp.value = String(text || "");
+      temp.style.position = "fixed";
+      temp.style.left = "-9999px";
+      document.body.appendChild(temp);
+      temp.focus();
+      temp.select();
+      document.execCommand("copy");
+      temp.remove();
+      return true;
+    }
+
+    function saveAdminCode() {
+      if (!adminCode()) {
+        alert("管理コードを入力してください。");
+        $("adminCodeInput").focus();
+        return;
+      }
+
+      sessionStorage.setItem(DEFAULTS.adminStorageKey, adminCode());
+      sessionStorage.setItem(DEFAULTS.staffStorageKey, staffName());
+      setStatus("scanStatus", "管理コードをこのタブに保存しました。URLには残しません。", "ok");
+    }
+
+    function forgetAdminCode() {
+      sessionStorage.removeItem(DEFAULTS.adminStorageKey);
+      sessionStorage.removeItem(DEFAULTS.staffStorageKey);
+      $("adminCodeInput").value = "";
+      setStatus("scanStatus", "管理コードをこのタブから削除しました。", "warn");
+    }
+
+    function restoreSession() {
+      const code = sessionStorage.getItem(DEFAULTS.adminStorageKey);
+      const staff = sessionStorage.getItem(DEFAULTS.staffStorageKey);
+      if (code) $("adminCodeInput").value = code;
+      if (staff) $("staffNameInput").value = staff;
+    }
+
+    function applyQueryParams() {
+      const url = new URL(location.href);
+      const api = url.searchParams.get("api");
+      const shop = url.searchParams.get("shop_code") || url.searchParams.get("shop");
+      if (api) $("apiBaseInput").value = api;
+      if (shop) $("shopCodeInput").value = shop;
+    }
+
+    function parseQrValue(value) {
+      const raw = String(value || "").trim();
+      if (!raw) return "";
+
+      try {
+        const obj = JSON.parse(raw);
+        return obj.member_code || obj.customer_key || obj.line_user_id || obj.customer_id || raw;
+      } catch {}
+
+      try {
+        const url = new URL(raw);
+        return url.searchParams.get("member_code") ||
+          url.searchParams.get("customer_key") ||
+          url.searchParams.get("line_user_id") ||
+          url.searchParams.get("customer_id") ||
+          raw;
+      } catch {}
+
+      if (raw.includes("member_code=") || raw.includes("customer_key=")) {
+        const params = new URLSearchParams(raw.split("?").pop());
+        return params.get("member_code") || params.get("customer_key") || raw;
+      }
+
+      return raw;
+    }
+
+    async function startCamera() {
+      try {
+        if (!("BarcodeDetector" in window)) {
+          setStatus("scanStatus", "このブラウザは自動QR読み取りに未対応です。DEMO会員ボタンか手入力を使ってください。", "warn");
+          return;
+        }
+
+        detector = new BarcodeDetector({ formats: ["qr_code", "ean_13", "code_128"] });
+
+        stream = await navigator.mediaDevices.getUserMedia({
+          video: {
+            facingMode: { ideal: "environment" },
+            width: { ideal: 1280 },
+            height: { ideal: 720 }
+          },
+          audio: false
+        });
+
+        const video = $("video");
+        video.srcObject = stream;
+        await video.play();
+
+        $("scanArea").classList.add("active");
+        setStatus("scanStatus", "カメラ起動中です。会員証QRをかざしてください。", "ok");
+
+        scanTimer = setInterval(scanFrame, 650);
+      } catch (e) {
+        setStatus("scanStatus", "カメラを起動できませんでした。手入力またはDEMO会員ボタンを使ってください。\n" + (e.message || ""), "warn");
+      }
+    }
+
+    function stopCamera() {
+      if (scanTimer) {
+        clearInterval(scanTimer);
+        scanTimer = null;
+      }
+
+      if (stream) {
+        stream.getTracks().forEach((track) => track.stop());
+        stream = null;
+      }
+
+      $("video").srcObject = null;
+      $("scanArea").classList.remove("active");
+      setStatus("scanStatus", "カメラを停止しました。", "info");
+    }
+
+    async function scanFrame() {
+      try {
+        const video = $("video");
+        if (!detector || !video || video.readyState < 2) return;
+
+        const codes = await detector.detect(video);
+        if (!codes || !codes.length) return;
+
+        const raw = codes[0].rawValue || "";
+        const key = parseQrValue(raw);
+
+        if (!key || key === lastScanValue) return;
+
+        lastScanValue = key;
+        $("customerKeyInput").value = key;
+        setStatus("scanStatus", "QRを読み取りました。\n" + key, "ok");
+        stopCamera();
+        await lookupCustomer();
+      } catch (e) {
+        // 読み取り中の一時エラーは画面を止めない
+      }
+    }
+
+    async function lookupCustomer() {
+      const key = parseQrValue($("customerKeyInput").value);
+
+      if (!key) {
+        alert("会員コードを入力してください。");
+        $("customerKeyInput").focus();
+        return;
+      }
+
+      $("customerKeyInput").value = key;
+
+      try {
+        const data = await apiGet("/api/customer/me", { member_code: key }, false);
+        selectedCustomer = data.customer || null;
+        renderCustomer();
+        setStatus("scanStatus", "会員を確認しました。金額を入力してください。", "ok");
+      } catch (e) {
+        selectedCustomer = null;
+        renderCustomer();
+        setStatus("scanStatus", e.message || "会員が見つかりません。", "ng");
+      }
+    }
+
+    function clearCustomer() {
+      selectedCustomer = null;
+      $("customerKeyInput").value = "";
+      lastScanValue = "";
+      renderCustomer();
+      renderPaymentResult(null);
+    }
+
+    function setAmount(amount) {
+      $("amountInput").value = String(amount || "");
+      updateSummary();
+      renderPaymentResult(null);
+    }
+
+    function clearAmount() {
+      $("amountInput").value = "";
+      updateSummary();
+      renderPaymentResult(null);
+    }
+
+    function labelBuyingHabit(value) {
+      const map = {
+        family: "家族・おやつ",
+        daily: "ランチ・毎日",
+        weekend_reward: "週末ご褒美"
+      };
+      return map[value] || value || "-";
+    }
+
+    function labelEco(value) {
+      const map = {
+        weekday_evening: "平日夕方OK",
+        weekend_evening: "土日夕方OK",
+        none: "通知不要"
+      };
+      return map[value] || value || "-";
+    }
+
+    function renderCustomer() {
+      const c = selectedCustomer;
+
+      if (!c) {
+        setText("customerName", "会員未選択");
+        setText("customerMemberCode", "会員コード：-");
+        setText("customerBalance", "-");
+        $("customerBalance").className = "balance";
+        $("customerTags").innerHTML = '<span class="pill orange">会員証を読み取ってください</span>';
+        updateSummary();
+        return;
+      }
+
+      const amount = Number($("amountInput").value || 0);
+      const balance = Number(c.balance || 0);
+
+      setText("customerName", c.customer_name || c.line_display_name || "お客様");
+      setText("customerMemberCode", "会員コード：" + (c.member_code || "-"));
+      setText("customerBalance", yen(balance));
+      $("customerBalance").className = "balance" + (amount > balance ? " ng" : "");
+
+      $("customerTags").innerHTML = `
+        <span class="pill orange">${escapeHtml(labelBuyingHabit(c.buying_habit))}</span>
+        <span class="pill blue">${escapeHtml(labelEco(c.eco_rescue_ok))}</span>
+        <span class="pill green">${escapeHtml(c.customer_rank || "regular")}</span>
+      `;
+
+      updateSummary();
+    }
+
+    function updateSummary() {
+      const amount = Number($("amountInput").value || 0);
+
+      setText("summaryAmount", yen(amount));
+      setText("summaryMember", selectedCustomer ? (selectedCustomer.member_code || "選択中") : "未選択");
+      setText("summaryBalance", selectedCustomer ? yen(selectedCustomer.balance || 0) : "-");
+
+      if (selectedCustomer) {
+        const balance = Number(selectedCustomer.balance || 0);
+        $("summaryBalance").style.color = amount > balance ? "#991b1b" : "#166534";
+      }
+    }
+
+    function renderPaymentResult(data, errorMessage = "") {
+      const box = $("paymentResult");
+
+      if (!data && !errorMessage) {
+        box.className = "payment-result";
+        box.innerHTML = `
+          <div>
+            <div class="icon">🍞</div>
+            <div class="title">決済待ち</div>
+            <div class="small">会員と金額を選んでください。</div>
+          </div>
+        `;
+        return;
+      }
+
+      if (errorMessage) {
+        box.className = "payment-result ng";
+        box.innerHTML = `
+          <div>
+            <div class="icon">⚠️</div>
+            <div class="title">決済できません</div>
+            <div>${escapeHtml(errorMessage)}</div>
+          </div>
+        `;
+        return;
+      }
+
+      box.className = "payment-result ok";
+      box.innerHTML = `
+        <div>
+          <div class="icon">✅</div>
+          <div class="title">決済完了</div>
+          <div>${escapeHtml(data.customer_name || "お客様")} / ${yen(data.amount)}</div>
+          <div class="small">残高：${yen(data.balance_before)} → ${yen(data.balance_after)}</div>
+        </div>
+      `;
+    }
+
+    async function runPayment() {
+      try {
+        ensureAdminCode();
+
+        if (!selectedCustomer) {
+          renderPaymentResult(null, "会員を選択してください。");
+          return;
+        }
+
+        const amount = Number($("amountInput").value || 0);
+        if (!amount || amount <= 0) {
+          renderPaymentResult(null, "会計金額を入力してください。");
+          return;
+        }
+
+        const balance = Number(selectedCustomer.balance || 0);
+        if (balance < amount) {
+          renderPaymentResult(null, "残高不足です。現在残高は " + yen(balance) + " です。");
+          return;
+        }
+
+        $("paymentButton").disabled = true;
+        $("paymentButton").textContent = "決済中...";
+
+        const data = await apiPost("/api/cashier/payment", {
+          customer_key: selectedCustomer.member_code || selectedCustomer.id || selectedCustomer.line_user_id,
+          amount,
+          staff_name: staffName(),
+          memo: "店員用レジ画面から決済",
+          source: "cashier_html"
+        }, true);
+
+        if (data.ok === false) {
+          renderPaymentResult(null, data.error || data.message || "決済に失敗しました。");
+          return;
+        }
+
+        renderPaymentResult(data);
+
+        if (selectedCustomer) {
+          selectedCustomer.balance = data.balance_after;
+          selectedCustomer.total_payment_amount = Number(selectedCustomer.total_payment_amount || 0) + amount;
+        }
+
+        renderCustomer();
+        await loadHistory();
+      } catch (e) {
+        renderPaymentResult(null, e.message || "決済に失敗しました。");
+      } finally {
+        $("paymentButton").disabled = false;
+        $("paymentButton").textContent = "残高から決済する";
+      }
+    }
+
+    async function loadHistory() {
+      try {
+        ensureAdminCode();
+
+        const data = await apiGet("/api/admin/transactions", { limit: 10 }, true);
+        const rows = data.transactions || [];
+
+        $("historyList").innerHTML = rows.length ? rows.map((t) => `
+          <div class="data-card">
+            <strong>${escapeHtml(t.type || "-")} / ${yen(t.amount)}</strong>
+            <div>会員コード：${escapeHtml(t.member_code || "-")}</div>
+            <div>残高：${yen(t.balance_before)} → ${yen(t.balance_after)}</div>
+            <div class="tag-row">
+              <span class="pill orange">${escapeHtml(t.payment_provider || "-")}</span>
+              <span class="pill blue">${escapeHtml(t.staff_name || "-")}</span>
+            </div>
+            <div class="small">${escapeHtml(t.created_at || "")}</div>
+          </div>
+        `).join("") : '<div class="status-box warn">決済履歴はまだありません。</div>';
+      } catch (e) {
+        $("historyList").innerHTML = '<div class="status-box ng">' + escapeHtml(e.message || "履歴取得に失敗しました。") + '</div>';
+      }
+    }
+
+    function renderUrls() {
+      const pagesBase = "https://dpromstk2000-lab.github.io/bakery-line-system";
+      const urls = [
+        ["店員レジ", pagesBase + "/cashier.html?shop_code=" + encodeURIComponent(shopCode()) + "&api=" + encodeURIComponent(apiBase())],
+        ["オーナー管理", pagesBase + "/owner.html?shop_code=" + encodeURIComponent(shopCode()) + "&api=" + encodeURIComponent(apiBase())],
+        ["本番前チェック", pagesBase + "/system-check.html?shop_code=" + encodeURIComponent(shopCode()) + "&api=" + encodeURIComponent(apiBase())],
+        ["Worker health", apiBase() + "/api/health"]
+      ];
+
+      $("urlList").innerHTML = urls.map(([label, url]) => `
+        <div class="data-card">
+          <strong>${escapeHtml(label)}</strong>
+          <div style="word-break:break-all;">${escapeHtml(url)}</div>
+          <div class="button-row">
+            <button class="ghost" type="button" data-copy-url="${escapeHtml(url)}">コピー</button>
+            <a class="button-link ghost" href="${escapeHtml(url)}" target="_blank" rel="noopener">開く</a>
+          </div>
+        </div>
+      `).join("");
+
+      document.querySelectorAll("[data-copy-url]").forEach((button) => {
+        button.addEventListener("click", async () => {
+          await copyText(button.getAttribute("data-copy-url") || "");
+          setStatus("scanStatus", "URLをコピーしました。", "ok");
+        });
+      });
+    }
+
+    function bindEvents() {
+      $("startCameraButton").addEventListener("click", startCamera);
+      $("stopCameraButton").addEventListener("click", stopCamera);
+
+      $("lookupCustomerButton").addEventListener("click", lookupCustomer);
+      $("clearCustomerButton").addEventListener("click", clearCustomer);
+
+      $("paymentButton").addEventListener("click", runPayment);
+      $("clearAmountButton").addEventListener("click", clearAmount);
+
+      $("loadHistoryButton").addEventListener("click", loadHistory);
+
+      $("saveAdminButton").addEventListener("click", saveAdminCode);
+      $("forgetAdminButton").addEventListener("click", forgetAdminCode);
+
+      $("amountInput").addEventListener("input", () => {
+        updateSummary();
+        renderCustomer();
+        renderPaymentResult(null);
+      });
+
+      $("customerKeyInput").addEventListener("keydown", (event) => {
+        if (event.key === "Enter") lookupCustomer();
+      });
+
+      document.querySelectorAll("[data-amount]").forEach((button) => {
+        button.addEventListener("click", () => {
+          setAmount(Number(button.getAttribute("data-amount") || 0));
+        });
+      });
+
+      document.querySelectorAll("[data-demo-member]").forEach((button) => {
+        button.addEventListener("click", async () => {
+          $("customerKeyInput").value = button.getAttribute("data-demo-member") || "";
+          await lookupCustomer();
+        });
+      });
+
+      $("apiBaseInput").addEventListener("input", renderUrls);
+      $("shopCodeInput").addEventListener("input", renderUrls);
+    }
+
+    function init() {
+      applyQueryParams();
+      restoreSession();
+      bindEvents();
+      renderCustomer();
+      renderPaymentResult(null);
+      renderUrls();
+
+      if (adminCode()) {
+        setStatus("scanStatus", "管理コードはこのタブに保存済みです。DEMO会員ボタンで確認できます。", "ok");
+      } else {
+        setStatus("scanStatus", "管理コードを入力してください。DEMO会員の確認だけなら可能ですが、決済には管理コードが必要です。", "info");
+      }
+    }
+
+    window.addEventListener("beforeunload", stopCamera);
+    init();
+  </script>
+</body>
+</html>
