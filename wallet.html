@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  <title>DPROベーカリー | wallet.html 定休日・臨時休業対応</title>
+  <title>DPROベーカリー | wallet.html 休業日表示強化版</title>
   <style>
     :root {
       --bg: #fff7ed;
@@ -328,6 +328,94 @@
       max-width: 100%;
     }
 
+
+    .holiday-summary {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin: 12px 0;
+    }
+
+    .holiday-card {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 13px;
+    }
+
+    .holiday-card strong {
+      display: block;
+      font-size: 15px;
+      margin-bottom: 6px;
+      letter-spacing: -.02em;
+    }
+
+    .holiday-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 8px;
+    }
+
+    .holiday-chip {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      background: #fee2e2;
+      color: #991b1b;
+      border: 1px solid #fecaca;
+      padding: 4px 8px;
+      font-size: 11px;
+      font-weight: 950;
+    }
+
+    .holiday-chip.soft {
+      background: #fffbeb;
+      color: #92400e;
+      border-color: #fde68a;
+    }
+
+    .legend-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 8px 0 10px;
+      font-size: 12px;
+      font-weight: 900;
+      color: #57534e;
+    }
+
+    .legend-dot {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .legend-dot::before {
+      content: "";
+      width: 12px;
+      height: 12px;
+      border-radius: 4px;
+      border: 1px solid #fdba74;
+      background: #fff;
+      display: inline-block;
+    }
+
+    .legend-dot.ok::before {
+      background: #dcfce7;
+      border-color: #22c55e;
+    }
+
+    .legend-dot.closed::before {
+      background: #f5f5f4;
+      border-color: #e7e5e4;
+    }
+
+    .legend-dot.special::before {
+      background: #fee2e2;
+      border-color: #ef4444;
+    }
+
     .date-grid {
       display: grid;
       grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -379,6 +467,12 @@
       color: #a8a29e;
       box-shadow: none;
       cursor: not-allowed;
+    }
+
+    .date-btn.special-closed {
+      background: #fee2e2;
+      border-color: #ef4444;
+      color: #991b1b;
     }
 
     .date-btn.today-blocked {
@@ -534,7 +628,95 @@
       section.panel { padding: 16px; }
       .panel-head { display: block; }
       .grid, .charge-grid { grid-template-columns: 1fr; }
-      .date-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  
+    .holiday-summary {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin: 12px 0;
+    }
+
+    .holiday-card {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 13px;
+    }
+
+    .holiday-card strong {
+      display: block;
+      font-size: 15px;
+      margin-bottom: 6px;
+      letter-spacing: -.02em;
+    }
+
+    .holiday-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 8px;
+    }
+
+    .holiday-chip {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      background: #fee2e2;
+      color: #991b1b;
+      border: 1px solid #fecaca;
+      padding: 4px 8px;
+      font-size: 11px;
+      font-weight: 950;
+    }
+
+    .holiday-chip.soft {
+      background: #fffbeb;
+      color: #92400e;
+      border-color: #fde68a;
+    }
+
+    .legend-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 8px 0 10px;
+      font-size: 12px;
+      font-weight: 900;
+      color: #57534e;
+    }
+
+    .legend-dot {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .legend-dot::before {
+      content: "";
+      width: 12px;
+      height: 12px;
+      border-radius: 4px;
+      border: 1px solid #fdba74;
+      background: #fff;
+      display: inline-block;
+    }
+
+    .legend-dot.ok::before {
+      background: #dcfce7;
+      border-color: #22c55e;
+    }
+
+    .legend-dot.closed::before {
+      background: #f5f5f4;
+      border-color: #e7e5e4;
+    }
+
+    .legend-dot.special::before {
+      background: #fee2e2;
+      border-color: #ef4444;
+    }
+
+    .date-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
       button, .button-link { width: 100%; }
       .wallet-balance { font-size: 36px; }
     }
@@ -544,7 +726,7 @@
 <body>
   <div class="wrap">
     <header class="hero">
-      <div class="badge">STEP BAKERY-14 / 定休日・臨時休業反映</div>
+      <div class="badge">STEP BAKERY-14B / 休業日が先に分かる取り置き画面</div>
       <h1>デジタルお財布<br>会員証</h1>
       <p class="lead">
         レジでQRを見せるだけ。取り置き予約は、店舗の定休日・臨時休業日・受け取り時間に合わせて選べます。
@@ -669,6 +851,25 @@
           <label for="pickupTimeInput">受け取り時間</label>
           <select id="pickupTimeInput"></select>
         </div>
+      </div>
+
+      <div class="holiday-summary" id="holidaySummary">
+        <div class="holiday-card">
+          <strong>定休日</strong>
+          <div class="small" id="closedWeekdaysText">読み込み中です。</div>
+        </div>
+        <div class="holiday-card">
+          <strong>臨時休業日</strong>
+          <div class="small" id="specialClosedText">読み込み中です。</div>
+          <div class="holiday-list" id="specialClosedChips"></div>
+        </div>
+      </div>
+
+      <div class="legend-row">
+        <span class="legend-dot ok">選択中</span>
+        <span class="legend-dot">受付可</span>
+        <span class="legend-dot closed">定休日・受付終了</span>
+        <span class="legend-dot special">臨時休業</span>
       </div>
 
       <div class="date-grid" id="pickupDateGrid"></div>
@@ -953,6 +1154,7 @@
 
         renderShopStatus();
         renderChargeMode();
+        renderHolidaySummary();
         renderPickupSettings();
         renderProducts();
         renderUrls();
@@ -997,6 +1199,39 @@
         $("chargeLead").textContent = "本番店舗では、お客様側DEMOチャージは使えません。店頭で支払い確認後、オーナー管理画面から手動チャージします。";
         setStatus("chargeStatus", "本番店舗では、店頭支払い確認後に管理画面から手動チャージします。", "warn");
       }
+    }
+
+
+    function weekdayNameFromNumber(value) {
+      const labels = ["日曜", "月曜", "火曜", "水曜", "木曜", "金曜", "土曜"];
+      return labels[Number(value)] || "";
+    }
+
+    function renderHolidaySummary() {
+      const closed = Array.isArray(pickupRule?.closed_weekdays) ? pickupRule.closed_weekdays.map(Number) : [0];
+      const closedText = closed.length
+        ? closed.map(weekdayNameFromNumber).filter(Boolean).join(" / ")
+        : "定休日なし";
+      $("closedWeekdaysText").textContent = closedText;
+
+      const rows = (specialClosedDays || [])
+        .map((d) => ({
+          date: d.closed_date || d.date,
+          reason: d.reason || "臨時休業"
+        }))
+        .filter((d) => d.date)
+        .sort((a, b) => a.date.localeCompare(b.date));
+
+      if (!rows.length) {
+        $("specialClosedText").textContent = "今後2か月の臨時休業日は登録されていません。";
+        $("specialClosedChips").innerHTML = '<span class="holiday-chip soft">臨時休業なし</span>';
+        return;
+      }
+
+      $("specialClosedText").textContent = "以下の日は取り置き予約できません。";
+      $("specialClosedChips").innerHTML = rows.map((d) => `
+        <span class="holiday-chip">${escapeHtml(d.date)}（${escapeHtml(weekdayLabel(d.date))}） ${escapeHtml(d.reason)}</span>
+      `).join("");
     }
 
     function pickupTimes() {
@@ -1079,7 +1314,9 @@
         const date = formatDateJST(d);
         const st = dateStatus(date);
         const isSelected = date === selectedPickupDate;
-        const cls = st.ok ? (isSelected ? "selected" : "") : (date === todayJST() && st.reason.includes("受付終了") ? "today-blocked closed" : "closed");
+        const cls = st.ok
+          ? (isSelected ? "selected" : "")
+          : (specialClosedMap.has(date) ? "closed special-closed" : (date === todayJST() && st.reason.includes("受付終了") ? "today-blocked closed" : "closed"));
         items.push(`
           <button class="date-btn ${cls}" type="button" data-pickup-date="${escapeHtml(date)}" ${st.ok ? "" : "disabled"}>
             <span class="date-num">${d.getDate()}</span>
