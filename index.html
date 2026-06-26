@@ -1,0 +1,784 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>DPROベーカリー | index.html</title>
+  <style>
+    :root {
+      --bg: #fff7ed;
+      --panel: #ffffff;
+      --ink: #1c1917;
+      --muted: #78716c;
+      --line: #fed7aa;
+      --main: #b45309;
+      --main2: #ea580c;
+      --soft: #ffedd5;
+      --green: #16a34a;
+      --red: #dc2626;
+      --blue: #2563eb;
+      --shadow: 0 22px 70px rgba(120, 53, 15, .12);
+      --radius: 24px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--ink);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at 12% 0%, rgba(251, 146, 60, .22), transparent 34%),
+        radial-gradient(circle at 90% 4%, rgba(245, 158, 11, .18), transparent 30%),
+        linear-gradient(180deg, #fff7ed, #fffbeb 48%, #fef3c7);
+      line-height: 1.65;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .wrap {
+      width: min(1080px, calc(100% - 24px));
+      margin: 14px auto 42px;
+    }
+
+    .hero {
+      background: rgba(255,255,255,.94);
+      border: 1px solid var(--line);
+      border-radius: 30px;
+      box-shadow: var(--shadow);
+      padding: 24px;
+      overflow: hidden;
+      position: relative;
+      display: grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap: 22px;
+      align-items: center;
+    }
+
+    .hero::after {
+      content: "🥐";
+      position: absolute;
+      right: 22px;
+      top: 14px;
+      font-size: 92px;
+      opacity: .10;
+      pointer-events: none;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      background: var(--soft);
+      color: #9a3412;
+      padding: 6px 12px;
+      font-size: 12px;
+      font-weight: 950;
+    }
+
+    h1 {
+      margin: 12px 0 10px;
+      font-size: clamp(32px, 5vw, 58px);
+      line-height: 1.02;
+      letter-spacing: -.05em;
+    }
+
+    h2 {
+      margin: 0;
+      font-size: 24px;
+      letter-spacing: -.04em;
+    }
+
+    h3 {
+      margin: 0 0 8px;
+      font-size: 17px;
+    }
+
+    .lead {
+      margin: 0;
+      color: #44403c;
+      font-weight: 850;
+      font-size: 15px;
+    }
+
+    .hero-card {
+      background:
+        radial-gradient(circle at 12% 10%, rgba(251, 191, 36, .18), transparent 30%),
+        linear-gradient(135deg, #1c1917, #431407 58%, #9a3412);
+      color: #fff7ed;
+      border-radius: 28px;
+      padding: 22px;
+      box-shadow: 0 24px 70px rgba(67, 20, 7, .26);
+    }
+
+    .hero-card .title {
+      color: #fed7aa;
+      font-size: 12px;
+      font-weight: 950;
+    }
+
+    .hero-card .big {
+      font-size: 34px;
+      line-height: 1.08;
+      letter-spacing: -.05em;
+      font-weight: 950;
+      margin: 8px 0 10px;
+    }
+
+    .hero-card .small {
+      color: #fed7aa;
+    }
+
+    .button-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    button, .button-link {
+      appearance: none;
+      border: 0;
+      border-radius: 999px;
+      background: var(--main);
+      color: #fff;
+      font-weight: 950;
+      padding: 12px 17px;
+      cursor: pointer;
+      min-height: 46px;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 14px 28px rgba(180, 83, 9, .22);
+      font-size: 14px;
+    }
+
+    button:hover, .button-link:hover { transform: translateY(-1px); }
+
+    button.green, .button-link.green { background: var(--green); box-shadow: 0 14px 28px rgba(22, 163, 74, .18); }
+    button.blue, .button-link.blue { background: var(--blue); box-shadow: 0 14px 28px rgba(37, 99, 235, .18); }
+    button.dark, .button-link.dark { background: #1c1917; box-shadow: 0 14px 28px rgba(28, 25, 23, .18); }
+
+    button.ghost, .button-link.ghost {
+      background: #fff;
+      color: #9a3412;
+      border: 1px solid #fdba74;
+      box-shadow: none;
+    }
+
+    button.soft, .button-link.soft {
+      background: var(--soft);
+      color: #9a3412;
+      border: 1px solid #fed7aa;
+      box-shadow: none;
+    }
+
+    label {
+      display: block;
+      font-size: 12px;
+      font-weight: 950;
+      color: #57534e;
+      margin: 0 0 5px;
+    }
+
+    input, textarea {
+      width: 100%;
+      border: 1px solid #fdba74;
+      background: #fff;
+      border-radius: 14px;
+      padding: 12px 13px;
+      font-size: 15px;
+      color: var(--ink);
+      outline: none;
+    }
+
+    textarea {
+      min-height: 180px;
+      resize: vertical;
+      line-height: 1.65;
+    }
+
+    input:focus, textarea:focus {
+      border-color: #f97316;
+      box-shadow: 0 0 0 4px rgba(249, 115, 22, .16);
+    }
+
+    section.panel {
+      background: rgba(255,255,255,.95);
+      border: 1px solid var(--line);
+      box-shadow: 0 18px 52px rgba(120, 53, 15, .07);
+      border-radius: var(--radius);
+      padding: 20px;
+      margin: 14px 0;
+    }
+
+    .panel-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+      align-items: flex-start;
+      margin-bottom: 14px;
+    }
+
+    .small {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .rich-menu {
+      display: grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap: 10px;
+      margin-top: 14px;
+      min-height: 330px;
+    }
+
+    .rich-left, .rich-right-card {
+      border-radius: 24px;
+      border: 1px solid var(--line);
+      background: #fff;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 160px;
+      box-shadow: 0 12px 36px rgba(120, 53, 15, .06);
+      cursor: pointer;
+      text-decoration: none;
+      color: var(--ink);
+    }
+
+    .rich-left {
+      background:
+        radial-gradient(circle at 20% 10%, rgba(251, 191, 36, .20), transparent 30%),
+        linear-gradient(135deg, #fff7ed, #fff 55%, #ffedd5);
+    }
+
+    .rich-right {
+      display: grid;
+      grid-template-rows: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .rich-icon {
+      font-size: 42px;
+      line-height: 1;
+    }
+
+    .rich-title {
+      font-size: 26px;
+      font-weight: 950;
+      letter-spacing: -.05em;
+      line-height: 1.08;
+      margin-top: 10px;
+    }
+
+    .rich-sub {
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 850;
+      margin-top: 8px;
+    }
+
+    .rich-label {
+      display: inline-flex;
+      align-items: center;
+      align-self: flex-start;
+      border-radius: 999px;
+      padding: 6px 10px;
+      background: #ffedd5;
+      color: #9a3412;
+      font-size: 12px;
+      font-weight: 950;
+      margin-top: 14px;
+    }
+
+    .flow-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .flow-card, .data-card {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 14px;
+      font-size: 13px;
+      box-shadow: 0 12px 36px rgba(120, 53, 15, .05);
+    }
+
+    .flow-card strong, .data-card strong {
+      display: block;
+      font-size: 15px;
+      margin-bottom: 5px;
+    }
+
+    .flow-no {
+      display: grid;
+      place-items: center;
+      width: 34px;
+      height: 34px;
+      border-radius: 12px;
+      background: #ffedd5;
+      color: #9a3412;
+      font-weight: 950;
+      margin-bottom: 10px;
+    }
+
+    .url-list {
+      display: grid;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .url-row {
+      display: grid;
+      grid-template-columns: 150px minmax(0, 1fr) auto auto;
+      gap: 8px;
+      align-items: center;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 10px;
+    }
+
+    .url-title {
+      font-weight: 950;
+      font-size: 13px;
+    }
+
+    .url-value {
+      background: #fff7ed;
+      border: 1px solid #fed7aa;
+      border-radius: 12px;
+      padding: 9px;
+      font-size: 12px;
+      font-weight: 850;
+      color: #9a3412;
+      word-break: break-all;
+    }
+
+    .copy-box {
+      background: #1c1917;
+      color: #ffedd5;
+      border: 0;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 12px;
+    }
+
+    .status-box {
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: #fff7ed;
+      padding: 12px 14px;
+      font-size: 13px;
+      font-weight: 850;
+      white-space: pre-wrap;
+      word-break: break-word;
+      margin-top: 12px;
+    }
+
+    .status-box.ok { border-color: #bbf7d0; background: #f0fdf4; color: #166534; }
+    .status-box.info { border-color: #bfdbfe; background: #eff6ff; color: #1e3a8a; }
+
+    details {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: #fff;
+      margin: 14px 0;
+      overflow: hidden;
+    }
+
+    summary {
+      cursor: pointer;
+      padding: 14px 16px;
+      font-weight: 950;
+      background: #fff7ed;
+    }
+
+    details .detail-body {
+      padding: 14px 16px;
+      border-top: 1px solid var(--line);
+    }
+
+    .footer {
+      text-align: center;
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 24px;
+      font-weight: 800;
+    }
+
+    @media (max-width: 820px) {
+      .hero { grid-template-columns: 1fr; }
+      .rich-menu { grid-template-columns: 1fr; }
+      .flow-grid { grid-template-columns: 1fr 1fr; }
+      .url-row { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 560px) {
+      .wrap { width: min(100% - 18px, 1080px); }
+      .hero { padding: 20px; border-radius: 22px; }
+      section.panel { padding: 16px; }
+      .flow-grid { grid-template-columns: 1fr; }
+      button, .button-link { width: 100%; }
+      .rich-title { font-size: 22px; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <header class="hero">
+      <div>
+        <div class="badge">DPRO SHOP / Bakery Rich Menu Demo / STEP BAKERY-7</div>
+        <h1>LINE公式<br>パン屋DEMO入口</h1>
+        <p class="lead">
+          お客様がLINEを開いた瞬間に「会員証・取り置き・チャージ」へ迷わず進める入口です。
+          オーナーには、売上・常連化・レジ時短の未来像をそのまま見せられます。
+        </p>
+        <div class="button-row">
+          <a class="button-link green" id="openWalletHero" href="#">お客様会員証を開く</a>
+          <a class="button-link ghost" id="openOwnerHero" href="#">オーナー管理を開く</a>
+          <button class="soft" id="copyGreetingButton" type="button">あいさつ文をコピー</button>
+        </div>
+      </div>
+
+      <div class="hero-card">
+        <div class="title">オーナーへの見せ方</div>
+        <div class="big">1秒決済でレジを軽くし、夕方の余りを売上に変える。</div>
+        <div class="small">
+          チャージで未来の売上を先に確保。取り置きで売り逃しを減らし、ECOレスキューで廃棄前に常連へ届けます。
+        </div>
+      </div>
+    </header>
+
+    <section class="panel">
+      <div class="panel-head">
+        <div>
+          <h2>DEMO設定</h2>
+          <div class="small">URLはそのままコピペできる形で自動生成します。</div>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+        <div>
+          <label for="apiBaseInput">Worker API URL</label>
+          <input id="apiBaseInput" value="https://dpro-bakery-wallet-api.dpromstk2000.workers.dev" />
+        </div>
+        <div>
+          <label for="shopCodeInput">店舗コード</label>
+          <input id="shopCodeInput" value="bakery_demo" />
+        </div>
+      </div>
+      <div id="statusBox" class="status-box info">URLを生成済みです。</div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <div>
+          <h2>LINEリッチメニュー風DEMO</h2>
+          <div class="small">実際のLINE公式では、この3つをリッチメニューに設定します。</div>
+        </div>
+      </div>
+
+      <div class="rich-menu">
+        <a class="rich-left" id="richWallet" href="#">
+          <div>
+            <div class="rich-icon">📱</div>
+            <div class="rich-title">タップして1秒決済<br>デジタルお財布会員証</div>
+            <div class="rich-sub">レジで見せるだけ。決済も常連化もスムーズに。</div>
+          </div>
+          <div class="rich-label">一番目立つ左半分</div>
+        </a>
+
+        <div class="rich-right">
+          <a class="rich-right-card" id="richPreorder" href="#">
+            <div>
+              <div class="rich-icon">🧺</div>
+              <div class="rich-title">明日のパンを確保</div>
+              <div class="rich-sub">事前取り置き予約で売り逃しを減らします。</div>
+            </div>
+          </a>
+          <a class="rich-right-card" id="richCharge" href="#">
+            <div>
+              <div class="rich-icon">💰</div>
+              <div class="rich-title">お得にチャージ</div>
+              <div class="rich-sub">5%上乗せで未来の売上を先に確保。</div>
+            </div>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <div>
+          <h2>オーナーに見せるDEMO順番</h2>
+          <div class="small">営業時はこの順番で見せると、機能説明ではなく未来の店舗運営として伝わります。</div>
+        </div>
+      </div>
+
+      <div class="flow-grid">
+        <div class="flow-card">
+          <div class="flow-no">1</div>
+          <strong>お客様会員証</strong>
+          <div class="small">LINEから会員証を開き、残高とQRを見せる。</div>
+        </div>
+        <div class="flow-card">
+          <div class="flow-no">2</div>
+          <strong>店員レジ</strong>
+          <div class="small">会員コードを選び、500円などを1秒決済。</div>
+        </div>
+        <div class="flow-card">
+          <div class="flow-no">3</div>
+          <strong>オーナー管理</strong>
+          <div class="small">チャージ・決済・取り置きがすぐ反映される。</div>
+        </div>
+        <div class="flow-card">
+          <div class="flow-no">4</div>
+          <strong>ECOレスキュー</strong>
+          <div class="small">夕方の余りをLINE文面コピーで売上に変える。</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <div>
+          <h2>LINE公式 あいさつ文</h2>
+          <div class="small">友だち追加時に使う文章です。難しい専門用語は出さず、お客様向けに自然な言葉にしています。</div>
+        </div>
+        <button class="green" id="copyGreetingButton2" type="button">コピー</button>
+      </div>
+      <textarea id="greetingBox">友だち追加ありがとうございます🍞
+
+DPROベーカリーのデジタル会員証へようこそ。
+
+このLINEでは、
+・レジで見せるだけのデジタル会員証
+・人気パンの取り置き予約
+・お得な事前チャージ
+・夕方限定のECOレスキュー案内
+をご利用いただけます。
+
+まずは下のメニューから
+「デジタルお財布会員証」をタップしてください。
+
+初回だけ3つの質問に答えると、
+すぐに会員証を発行できます。</textarea>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <div>
+          <h2>コピペ用URLセット</h2>
+          <div class="small">GitHub Pagesに置いた各画面のURLです。</div>
+        </div>
+        <button class="ghost" id="copyUrlSetButton" type="button">URL一覧をコピー</button>
+      </div>
+      <div class="url-list" id="urlList"></div>
+      <details>
+        <summary>まとめてコピー用</summary>
+        <div class="detail-body">
+          <textarea id="urlCopyBox" class="copy-box" readonly></textarea>
+        </div>
+      </details>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <div>
+          <h2>営業用の一言</h2>
+          <div class="small">オーナー様に見せる時の締め言葉です。</div>
+        </div>
+        <button class="ghost" id="copySalesTalkButton" type="button">コピー</button>
+      </div>
+      <textarea id="salesTalkBox">オーナー、この仕組みは単なる会員証ではありません。
+
+お客様がチャージした時点で未来の売上を先に確保でき、
+レジでは会員証を見せるだけで会計が早くなり、
+夕方に余りそうなパンはECOレスキューとして常連様へ案内できます。
+
+つまり、
+「売上を増やす」
+「レジを楽にする」
+「廃棄を減らす」
+「常連様が戻ってくる」
+この4つをLINEの中でまとめて実現する仕組みです。</textarea>
+    </section>
+
+    <div class="footer">
+      DPRO SHOP / パン屋専用LINE公式DEMO入口 / index.html<br>
+      オーナーには技術名ではなく、売上・常連化・レジ時短・廃棄削減の未来像として見せます。
+    </div>
+  </div>
+
+  <script>
+    const DEFAULTS = {
+      apiBase: "https://dpro-bakery-wallet-api.dpromstk2000.workers.dev",
+      shopCode: "bakery_demo",
+      pagesBase: "https://dpromstk2000-lab.github.io/bakery-line-system"
+    };
+
+    const $ = (id) => document.getElementById(id);
+
+    function apiBase() {
+      return ($("apiBaseInput").value.trim() || DEFAULTS.apiBase).replace(/\/+$/, "");
+    }
+
+    function shopCode() {
+      return $("shopCodeInput").value.trim() || DEFAULTS.shopCode;
+    }
+
+    function escapeHtml(value) {
+      return String(value ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function setStatus(message, tone = "info") {
+      const el = $("statusBox");
+      el.className = "status-box " + tone;
+      el.textContent = message;
+    }
+
+    function urlFor(file, hash = "") {
+      return DEFAULTS.pagesBase + "/" + file +
+        "?shop_code=" + encodeURIComponent(shopCode()) +
+        "&api=" + encodeURIComponent(apiBase()) +
+        (hash || "");
+    }
+
+    function buildUrls() {
+      return [
+        ["DEMO入口", urlFor("index.html")],
+        ["お客様会員証", urlFor("wallet.html")],
+        ["お客様会員証：取り置き", urlFor("wallet.html", "#preorderPanel")],
+        ["お客様会員証：チャージ", urlFor("wallet.html", "#chargePanel")],
+        ["店員レジ", urlFor("cashier.html")],
+        ["オーナー管理", urlFor("owner.html")],
+        ["本番前チェック", urlFor("system-check.html")],
+        ["Worker health", apiBase() + "/api/health"],
+        ["商品API", apiBase() + "/api/public/products?shop_code=" + encodeURIComponent(shopCode())]
+      ];
+    }
+
+    function urlsToText(urls) {
+      const lines = [
+        "DPROベーカリー URLセット",
+        "店舗コード: " + shopCode(),
+        "Worker API URL: " + apiBase(),
+        ""
+      ];
+
+      urls.forEach(([label, url]) => {
+        lines.push(label);
+        lines.push(url);
+        lines.push("");
+      });
+
+      return lines.join("\n");
+    }
+
+    async function copyText(text) {
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(String(text || ""));
+        return true;
+      }
+
+      const temp = document.createElement("textarea");
+      temp.value = String(text || "");
+      temp.style.position = "fixed";
+      temp.style.left = "-9999px";
+      document.body.appendChild(temp);
+      temp.focus();
+      temp.select();
+      document.execCommand("copy");
+      temp.remove();
+      return true;
+    }
+
+    function renderUrls() {
+      const urls = buildUrls();
+
+      $("urlList").innerHTML = urls.map(([label, url]) => `
+        <div class="url-row">
+          <div class="url-title">${escapeHtml(label)}</div>
+          <div class="url-value">${escapeHtml(url)}</div>
+          <button class="ghost" type="button" data-copy="${escapeHtml(url)}">コピー</button>
+          <a class="button-link ghost" href="${escapeHtml(url)}" target="_blank" rel="noopener">開く</a>
+        </div>
+      `).join("");
+
+      $("urlCopyBox").value = urlsToText(urls);
+
+      const wallet = urlFor("wallet.html");
+      const preorder = urlFor("wallet.html", "#preorderPanel");
+      const charge = urlFor("wallet.html", "#chargePanel");
+      const owner = urlFor("owner.html");
+
+      $("openWalletHero").href = wallet;
+      $("openOwnerHero").href = owner;
+      $("richWallet").href = wallet;
+      $("richPreorder").href = preorder;
+      $("richCharge").href = charge;
+
+      document.querySelectorAll("[data-copy]").forEach((button) => {
+        button.addEventListener("click", async () => {
+          await copyText(button.getAttribute("data-copy") || "");
+          setStatus("URLをコピーしました。", "ok");
+        });
+      });
+    }
+
+    function applyQueryParams() {
+      const url = new URL(location.href);
+      const api = url.searchParams.get("api");
+      const shop = url.searchParams.get("shop_code") || url.searchParams.get("shop");
+      if (api) $("apiBaseInput").value = api;
+      if (shop) $("shopCodeInput").value = shop;
+    }
+
+    function bindEvents() {
+      $("apiBaseInput").addEventListener("input", renderUrls);
+      $("shopCodeInput").addEventListener("input", renderUrls);
+
+      $("copyGreetingButton").addEventListener("click", async () => {
+        await copyText($("greetingBox").value);
+        setStatus("あいさつ文をコピーしました。", "ok");
+      });
+
+      $("copyGreetingButton2").addEventListener("click", async () => {
+        await copyText($("greetingBox").value);
+        setStatus("あいさつ文をコピーしました。", "ok");
+      });
+
+      $("copyUrlSetButton").addEventListener("click", async () => {
+        await copyText($("urlCopyBox").value);
+        setStatus("URL一覧をコピーしました。", "ok");
+      });
+
+      $("copySalesTalkButton").addEventListener("click", async () => {
+        await copyText($("salesTalkBox").value);
+        setStatus("営業用の一言をコピーしました。", "ok");
+      });
+    }
+
+    function init() {
+      applyQueryParams();
+      bindEvents();
+      renderUrls();
+      setStatus("DEMO入口を表示しました。リッチメニュー風の3ボタンから各画面へ移動できます。", "ok");
+    }
+
+    init();
+  </script>
+</body>
+</html>
