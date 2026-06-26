@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  <title>DPROベーカリー | wallet.html 休業日表示強化版</title>
+  <title>DPROベーカリー | wallet.html DEMO会員表示修正版</title>
   <style>
     :root {
       --bg: #fff7ed;
@@ -726,7 +726,7 @@
 <body>
   <div class="wrap">
     <header class="hero">
-      <div class="badge">STEP BAKERY-14B / 休業日が先に分かる取り置き画面</div>
+      <div class="badge">STEP BAKERY-14C / DEMO会員表示修正版</div>
       <h1>デジタルお財布<br>会員証</h1>
       <p class="lead">
         レジでQRを見せるだけ。取り置き予約は、店舗の定休日・臨時休業日・受け取り時間に合わせて選べます。
@@ -1448,18 +1448,6 @@
       showPanel("ecoPanel", true);
     }
 
-
-      renderPseudoQr(c.member_code || c.line_user_id || c.id);
-    }
-
-    function labelEco(value) {
-      const map = {
-        weekday_evening: "平日夕方OK",
-        weekend_evening: "土日夕方OK",
-        none: "通知不要"
-      };
-      return map[value] || value || "-";
-    }
 
     /* =========================================================
       正式QR生成
