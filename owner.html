@@ -1,0 +1,1190 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>DPROベーカリー | owner.html</title>
+  <style>
+    :root {
+      --bg: #fff7ed;
+      --panel: #ffffff;
+      --ink: #1c1917;
+      --muted: #78716c;
+      --line: #fed7aa;
+      --main: #b45309;
+      --main2: #ea580c;
+      --soft: #ffedd5;
+      --green: #16a34a;
+      --red: #dc2626;
+      --yellow: #d97706;
+      --blue: #2563eb;
+      --shadow: 0 22px 70px rgba(120, 53, 15, .12);
+      --radius: 24px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--ink);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at 12% 0%, rgba(251, 146, 60, .20), transparent 34%),
+        radial-gradient(circle at 90% 4%, rgba(245, 158, 11, .16), transparent 30%),
+        linear-gradient(180deg, #fff7ed, #fffbeb 48%, #fef3c7);
+      line-height: 1.65;
+    }
+
+    .wrap {
+      width: min(1220px, calc(100% - 32px));
+      margin: 24px auto 56px;
+    }
+
+    .hero {
+      background: rgba(255,255,255,.92);
+      border: 1px solid var(--line);
+      border-radius: 30px;
+      box-shadow: var(--shadow);
+      padding: 26px;
+      display: grid;
+      grid-template-columns: 1.3fr .7fr;
+      gap: 22px;
+      align-items: end;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      background: var(--soft);
+      color: #9a3412;
+      padding: 6px 12px;
+      font-size: 12px;
+      font-weight: 950;
+    }
+
+    h1 {
+      margin: 12px 0 10px;
+      font-size: clamp(28px, 4vw, 48px);
+      line-height: 1.04;
+      letter-spacing: -.04em;
+    }
+
+    h2 {
+      margin: 0;
+      font-size: 22px;
+      letter-spacing: -.03em;
+    }
+
+    h3 {
+      margin: 0 0 8px;
+      font-size: 16px;
+    }
+
+    .lead {
+      margin: 0;
+      color: #44403c;
+      font-weight: 800;
+      font-size: 14px;
+    }
+
+    label {
+      display: block;
+      font-size: 12px;
+      font-weight: 950;
+      color: #57534e;
+      margin: 0 0 5px;
+    }
+
+    input, textarea, select {
+      width: 100%;
+      border: 1px solid #fdba74;
+      background: #fff;
+      border-radius: 14px;
+      padding: 11px 13px;
+      font-size: 14px;
+      color: var(--ink);
+      outline: none;
+    }
+
+    input:focus, textarea:focus, select:focus {
+      border-color: #f97316;
+      box-shadow: 0 0 0 4px rgba(249, 115, 22, .16);
+    }
+
+    .setup-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+
+    .button-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    button, .button-link {
+      appearance: none;
+      border: 0;
+      border-radius: 999px;
+      background: var(--main);
+      color: #fff;
+      font-weight: 950;
+      padding: 11px 16px;
+      cursor: pointer;
+      min-height: 42px;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 14px 28px rgba(180, 83, 9, .22);
+    }
+
+    button:hover, .button-link:hover { transform: translateY(-1px); }
+
+    button.green { background: var(--green); box-shadow: 0 14px 28px rgba(22, 163, 74, .18); }
+    button.blue { background: var(--blue); box-shadow: 0 14px 28px rgba(37, 99, 235, .18); }
+    button.red { background: var(--red); box-shadow: 0 14px 28px rgba(220, 38, 38, .16); }
+    button.dark { background: #1c1917; box-shadow: 0 14px 28px rgba(28, 25, 23, .18); }
+
+    button.ghost, .button-link.ghost {
+      background: #fff;
+      color: #9a3412;
+      border: 1px solid #fdba74;
+      box-shadow: none;
+    }
+
+    button.soft {
+      background: var(--soft);
+      color: #9a3412;
+      border: 1px solid #fed7aa;
+      box-shadow: none;
+    }
+
+    button:disabled {
+      opacity: .5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 12px;
+      margin: 18px 0;
+    }
+
+    .summary-card {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 16px;
+      box-shadow: 0 12px 36px rgba(120, 53, 15, .06);
+      min-height: 102px;
+    }
+
+    .summary-card .label {
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: 950;
+    }
+
+    .summary-card .value {
+      font-size: 25px;
+      font-weight: 950;
+      letter-spacing: -.04em;
+      margin-top: 2px;
+      word-break: break-word;
+    }
+
+    .summary-card .note {
+      font-size: 11px;
+      color: var(--muted);
+      font-weight: 800;
+      margin-top: 3px;
+    }
+
+    section.panel {
+      background: rgba(255,255,255,.95);
+      border: 1px solid var(--line);
+      box-shadow: 0 18px 52px rgba(120, 53, 15, .07);
+      border-radius: var(--radius);
+      padding: 22px;
+      margin: 16px 0;
+    }
+
+    .panel-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: flex-start;
+      margin-bottom: 14px;
+    }
+
+    .small {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .status-box {
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: #fff7ed;
+      padding: 12px 14px;
+      font-size: 13px;
+      font-weight: 850;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .status-box.ok { border-color: #bbf7d0; background: #f0fdf4; color: #166534; }
+    .status-box.warn { border-color: #fde68a; background: #fffbeb; color: #92400e; }
+    .status-box.ng { border-color: #fecaca; background: #fef2f2; color: #991b1b; }
+    .status-box.info { border-color: #bfdbfe; background: #eff6ff; color: #1e3a8a; }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .three-col {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .four-col {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .card-list {
+      display: grid;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .data-card {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 13px;
+      font-size: 13px;
+    }
+
+    .data-card strong {
+      display: block;
+      font-size: 15px;
+      margin-bottom: 4px;
+    }
+
+    .data-card .meta {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+      margin-top: 3px;
+    }
+
+    .tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 8px;
+    }
+
+    .pill {
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 999px;
+      padding: 5px 9px;
+      font-size: 11px;
+      font-weight: 950;
+      white-space: nowrap;
+      background: #e7e5e4;
+      color: #44403c;
+    }
+
+    .pill.green { background: #dcfce7; color: #166534; }
+    .pill.orange { background: #ffedd5; color: #9a3412; }
+    .pill.blue { background: #dbeafe; color: #1d4ed8; }
+    .pill.red { background: #fee2e2; color: #991b1b; }
+
+    .copy-box {
+      width: 100%;
+      min-height: 210px;
+      margin-top: 10px;
+      background: #1c1917;
+      color: #ffedd5;
+      border: 0;
+      border-radius: 16px;
+      padding: 14px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 12px;
+      line-height: 1.65;
+      resize: vertical;
+    }
+
+    .task-card {
+      display: grid;
+      grid-template-columns: 64px minmax(0, 1fr) auto;
+      gap: 12px;
+      align-items: center;
+      padding: 14px;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+    }
+
+    .task-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 18px;
+      display: grid;
+      place-items: center;
+      background: var(--soft);
+      font-size: 24px;
+    }
+
+    .task-title {
+      font-weight: 950;
+      font-size: 15px;
+    }
+
+    .task-desc {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    details {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: #fff;
+      margin: 14px 0;
+      overflow: hidden;
+    }
+
+    summary {
+      cursor: pointer;
+      padding: 14px 16px;
+      font-weight: 950;
+      background: #fff7ed;
+    }
+
+    details .detail-body {
+      padding: 14px 16px;
+      border-top: 1px solid var(--line);
+    }
+
+    .top-nav {
+      margin: 18px 0;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .top-nav a {
+      text-decoration: none;
+      color: #9a3412;
+      background: #fff;
+      border: 1px solid #fed7aa;
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-size: 12px;
+      font-weight: 950;
+    }
+
+    .footer {
+      text-align: center;
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 28px;
+      font-weight: 800;
+    }
+
+    @media (max-width: 1100px) {
+      .hero, .two-col, .three-col { grid-template-columns: 1fr; }
+      .summary-grid { grid-template-columns: 1fr 1fr; }
+      .four-col { grid-template-columns: 1fr 1fr; }
+      .task-card { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 620px) {
+      .wrap { width: min(100% - 18px, 1220px); margin-top: 10px; }
+      .hero { padding: 20px; border-radius: 22px; }
+      section.panel { padding: 16px; }
+      .summary-grid, .four-col { grid-template-columns: 1fr; }
+      button, .button-link { width: 100%; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <header class="hero">
+      <div>
+        <div class="badge">DPRO SHOP / Bakery Owner Dashboard / STEP BAKERY-4</div>
+        <h1>パン屋オーナー<br>管理ダッシュボード</h1>
+        <p class="lead">
+          今日やること、取り置き予約、チャージ残高、ECOレスキュー文面を1画面に集約。
+          オーナーが「売上になる行動」だけをすぐ実行できる管理画面です。
+        </p>
+        <div class="button-row">
+          <button class="green" id="loadAllButton" type="button">最新データを読み込み</button>
+          <button class="dark" id="demoSetupButton" type="button">営業前DEMO設定</button>
+          <button class="soft" id="saveAdminButton" type="button">管理コードを保存</button>
+          <button class="ghost" id="forgetAdminButton" type="button">管理コードを忘れる</button>
+        </div>
+      </div>
+
+      <div class="setup-grid">
+        <div>
+          <label for="apiBaseInput">Worker API URL</label>
+          <input id="apiBaseInput" value="https://dpro-bakery-wallet-api.dpromstk2000.workers.dev" autocomplete="off" />
+        </div>
+        <div>
+          <label for="shopCodeInput">店舗コード</label>
+          <input id="shopCodeInput" value="bakery_demo" autocomplete="off" />
+        </div>
+        <div>
+          <label for="adminCodeInput">管理コード</label>
+          <input id="adminCodeInput" type="password" placeholder="BAKERY_ADMIN_CODE" autocomplete="off" />
+        </div>
+        <div>
+          <label for="staffNameInput">スタッフ名</label>
+          <input id="staffNameInput" value="管理スタッフ" autocomplete="off" />
+        </div>
+      </div>
+    </header>
+
+    <nav class="top-nav">
+      <a href="#todayPanel">今日やること</a>
+      <a href="#preorderPanel">取り置き</a>
+      <a href="#ecoPanel">ECOレスキュー</a>
+      <a href="#customerPanel">顧客</a>
+      <a href="#transactionPanel">決済履歴</a>
+      <a href="#historyPanel">操作履歴</a>
+    </nav>
+
+    <section class="summary-grid">
+      <div class="summary-card">
+        <div class="label">今日のチャージ</div>
+        <div class="value" id="todayCharge">-</div>
+        <div class="note">未来の売上を先払い確保</div>
+      </div>
+      <div class="summary-card">
+        <div class="label">今日の決済</div>
+        <div class="value" id="todayPayment">-</div>
+        <div class="note">会員証レジ決済</div>
+      </div>
+      <div class="summary-card">
+        <div class="label">未使用チャージ残高</div>
+        <div class="value" id="unusedBalance">-</div>
+        <div class="note">再来店見込み金額</div>
+      </div>
+      <div class="summary-card">
+        <div class="label">今日の取り置き</div>
+        <div class="value" id="todayPreorders">-</div>
+        <div class="note">来店前に売上見込み</div>
+      </div>
+      <div class="summary-card">
+        <div class="label">ECO対象者</div>
+        <div class="value" id="ecoTargets">-</div>
+        <div class="note">夕方に案内できる常連</div>
+      </div>
+    </section>
+
+    <section class="panel" id="todayPanel">
+      <div class="panel-head">
+        <div>
+          <h2>今日やること</h2>
+          <div class="small">オーナーが今日すぐ売上につなげるための行動だけを表示します。</div>
+        </div>
+        <button class="green" id="refreshTasksButton" type="button">更新</button>
+      </div>
+
+      <div id="mainStatus" class="status-box info">まだ読み込んでいません。</div>
+      <div class="card-list" id="todayTasks"></div>
+    </section>
+
+    <section class="panel" id="preorderPanel">
+      <div class="panel-head">
+        <div>
+          <h2>今日の取り置き予約</h2>
+          <div class="small">受け取り時間順に表示します。店頭で迷わないように、お客様名・時間・金額・メモを直接表示します。</div>
+        </div>
+        <button class="ghost" id="loadPreordersButton" type="button">取り置きを更新</button>
+      </div>
+      <div class="card-list" id="preorderList">
+        <div class="status-box info">未取得です。</div>
+      </div>
+    </section>
+
+    <section class="panel" id="ecoPanel">
+      <div class="panel-head">
+        <div>
+          <h2>ECOレスキュー</h2>
+          <div class="small">夕方の売れ残りを、LINE文面コピーで即現金化します。最初は自動送信ではなく安全なコピー運用です。</div>
+        </div>
+        <button class="green" id="createEcoButton" type="button">ECO文面を作成</button>
+      </div>
+
+      <div class="two-col">
+        <div class="setup-grid">
+          <div>
+            <label for="ecoProductInput">商品名</label>
+            <input id="ecoProductInput" value="ECOパン詰め合わせ" />
+          </div>
+          <div>
+            <label for="ecoQuantityInput">数量</label>
+            <input id="ecoQuantityInput" type="number" value="5" />
+          </div>
+          <div>
+            <label for="ecoPriceInput">価格</label>
+            <input id="ecoPriceInput" type="number" value="500" />
+          </div>
+          <div>
+            <label for="ecoTargetInput">対象</label>
+            <select id="ecoTargetInput">
+              <option value="weekday_evening">平日夕方に寄れる人</option>
+              <option value="weekend_evening">土日祝の夕方に寄れる人</option>
+            </select>
+          </div>
+          <div class="button-row">
+            <button class="ghost" id="copyEcoButton" type="button">文面をコピー</button>
+          </div>
+          <div id="ecoStatus" class="status-box info">未作成です。</div>
+        </div>
+        <div>
+          <label for="ecoMessageBox">LINE公式に貼る文面</label>
+          <textarea id="ecoMessageBox" class="copy-box" readonly>まだ作成していません。</textarea>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel" id="customerPanel">
+      <div class="panel-head">
+        <div>
+          <h2>顧客一覧</h2>
+          <div class="small">会員証残高・買い方・ECO通知希望を確認します。</div>
+        </div>
+        <button class="ghost" id="loadCustomersButton" type="button">顧客を更新</button>
+      </div>
+      <div class="card-list" id="customerList">
+        <div class="status-box info">未取得です。</div>
+      </div>
+    </section>
+
+    <section class="panel" id="transactionPanel">
+      <div class="panel-head">
+        <div>
+          <h2>チャージ・決済履歴</h2>
+          <div class="small">チャージ、レジ決済、残高変動を確認します。</div>
+        </div>
+        <button class="ghost" id="loadTransactionsButton" type="button">履歴を更新</button>
+      </div>
+      <div class="card-list" id="transactionList">
+        <div class="status-box info">未取得です。</div>
+      </div>
+    </section>
+
+    <section class="panel" id="historyPanel">
+      <div class="panel-head">
+        <div>
+          <h2>操作履歴</h2>
+          <div class="small">営業前DEMO設定・ECO文面作成・レジ決済などの履歴を確認します。</div>
+        </div>
+        <button class="ghost" id="loadLogsButton" type="button">操作履歴を更新</button>
+      </div>
+      <div class="card-list" id="logList">
+        <div class="status-box info">未取得です。</div>
+      </div>
+    </section>
+
+    <details>
+      <summary>確認用URL</summary>
+      <div class="detail-body">
+        <div class="card-list" id="urlList"></div>
+      </div>
+    </details>
+
+    <div class="footer">
+      DPRO SHOP / パン屋専用LIFF会員証 / owner.html<br>
+      Supabase Service Role Key はこの画面に書きません。すべて Worker API 経由で処理します。
+    </div>
+  </div>
+
+  <script>
+    const DEFAULTS = {
+      apiBase: "https://dpro-bakery-wallet-api.dpromstk2000.workers.dev",
+      shopCode: "bakery_demo",
+      demoShopCode: "bakery_demo",
+      adminStorageKey: "dpro_bakery_owner_admin_code_session",
+      staffStorageKey: "dpro_bakery_owner_staff_name_session"
+    };
+
+    let state = {
+      summary: null,
+      customers: [],
+      transactions: [],
+      preorders: [],
+      logs: []
+    };
+
+    const $ = (id) => document.getElementById(id);
+
+    function apiBase() {
+      return ($("apiBaseInput").value.trim() || DEFAULTS.apiBase).replace(/\/+$/, "");
+    }
+
+    function shopCode() {
+      return $("shopCodeInput").value.trim() || DEFAULTS.shopCode;
+    }
+
+    function adminCode() {
+      return $("adminCodeInput").value.trim();
+    }
+
+    function staffName() {
+      return $("staffNameInput").value.trim() || "管理スタッフ";
+    }
+
+    function todayJST() {
+      return new Intl.DateTimeFormat("en-CA", {
+        timeZone: "Asia/Tokyo",
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit"
+      }).format(new Date());
+    }
+
+    function yen(value) {
+      const n = Number(value || 0);
+      return n.toLocaleString("ja-JP") + "円";
+    }
+
+    function escapeHtml(value) {
+      return String(value ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function setText(id, value) {
+      const el = $(id);
+      if (el) el.textContent = value;
+    }
+
+    function setStatus(id, message, tone = "info") {
+      const el = $(id);
+      if (!el) return;
+      el.className = "status-box " + tone;
+      el.textContent = message;
+    }
+
+    function ensureAdminCode() {
+      if (!adminCode()) {
+        $("adminCodeInput").focus();
+        throw new Error("管理コードが未入力です。");
+      }
+    }
+
+    function authHeaders() {
+      const code = adminCode();
+      const headers = {
+        "Accept": "application/json"
+      };
+
+      if (code) {
+        headers["X-DPRO-Admin-Code"] = code;
+        headers["X-Admin-Token"] = code;
+        headers["Authorization"] = "Bearer " + code;
+      }
+
+      return headers;
+    }
+
+    function buildApiUrl(path, params = {}) {
+      const url = new URL(apiBase() + path);
+      url.searchParams.set("shop_code", shopCode());
+      Object.entries(params).forEach(([key, value]) => {
+        if (value !== undefined && value !== null && String(value).trim() !== "") {
+          url.searchParams.set(key, String(value));
+        }
+      });
+      return url.toString();
+    }
+
+    async function apiGet(path, params = {}, needsAuth = true) {
+      const res = await fetch(buildApiUrl(path, params), {
+        method: "GET",
+        headers: needsAuth ? authHeaders() : { "Accept": "application/json" },
+        cache: "no-store"
+      });
+
+      return parseResponse(res);
+    }
+
+    async function apiPost(path, body = {}, needsAuth = true) {
+      const res = await fetch(apiBase() + path, {
+        method: "POST",
+        headers: {
+          ...(needsAuth ? authHeaders() : {}),
+          "Content-Type": "application/json",
+          "Accept": "application/json"
+        },
+        body: JSON.stringify({
+          shop_code: shopCode(),
+          ...body
+        })
+      });
+
+      return parseResponse(res);
+    }
+
+    async function parseResponse(res) {
+      const text = await res.text();
+      let data = null;
+      try { data = text ? JSON.parse(text) : null; } catch { data = text; }
+
+      if (!res.ok) {
+        const message = data?.message || data?.error || text || "HTTP " + res.status;
+        const error = new Error(message);
+        error.status = res.status;
+        error.data = data;
+        throw error;
+      }
+
+      return data;
+    }
+
+    async function copyText(text) {
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(String(text || ""));
+        return true;
+      }
+
+      const temp = document.createElement("textarea");
+      temp.value = String(text || "");
+      temp.style.position = "fixed";
+      temp.style.left = "-9999px";
+      document.body.appendChild(temp);
+      temp.focus();
+      temp.select();
+      document.execCommand("copy");
+      temp.remove();
+      return true;
+    }
+
+    function saveAdminCode() {
+      if (!adminCode()) {
+        alert("管理コードを入力してください。");
+        $("adminCodeInput").focus();
+        return;
+      }
+
+      sessionStorage.setItem(DEFAULTS.adminStorageKey, adminCode());
+      sessionStorage.setItem(DEFAULTS.staffStorageKey, staffName());
+      setStatus("mainStatus", "管理コードをこのタブに保存しました。URLには残しません。", "ok");
+    }
+
+    function forgetAdminCode() {
+      sessionStorage.removeItem(DEFAULTS.adminStorageKey);
+      sessionStorage.removeItem(DEFAULTS.staffStorageKey);
+      $("adminCodeInput").value = "";
+      setStatus("mainStatus", "管理コードをこのタブから削除しました。", "warn");
+    }
+
+    function restoreSession() {
+      const code = sessionStorage.getItem(DEFAULTS.adminStorageKey);
+      const staff = sessionStorage.getItem(DEFAULTS.staffStorageKey);
+      if (code) $("adminCodeInput").value = code;
+      if (staff) $("staffNameInput").value = staff;
+    }
+
+    function applyQueryParams() {
+      const url = new URL(location.href);
+      const api = url.searchParams.get("api");
+      const shop = url.searchParams.get("shop_code") || url.searchParams.get("shop");
+      if (api) $("apiBaseInput").value = api;
+      if (shop) $("shopCodeInput").value = shop;
+    }
+
+    async function loadSummary() {
+      ensureAdminCode();
+
+      const data = await apiGet("/api/admin/owner-summary", { date: todayJST() }, true);
+      state.summary = data;
+
+      const customers = data.customers || {};
+      const wallet = data.wallet || {};
+      const preorders = data.preorders || {};
+      const eco = data.eco_rescue || {};
+
+      setText("todayCharge", yen(wallet.today_charge_amount || 0));
+      setText("todayPayment", yen(wallet.today_payment_amount || 0));
+      setText("unusedBalance", yen(wallet.total_unused_balance || 0));
+      setText("todayPreorders", String(preorders.today_count || 0) + "件");
+      setText("ecoTargets", String((eco.weekday_evening_targets || 0) + (eco.weekend_evening_targets || 0)) + "人");
+
+      setStatus("mainStatus", "最新データを読み込みました。", "ok");
+      renderTodayTasks();
+      return data;
+    }
+
+    async function loadCustomers() {
+      ensureAdminCode();
+
+      const data = await apiGet("/api/admin/customers", { limit: 50 }, true);
+      state.customers = data.customers || [];
+      renderCustomers();
+      return data;
+    }
+
+    async function loadTransactions() {
+      ensureAdminCode();
+
+      const data = await apiGet("/api/admin/transactions", { limit: 40 }, true);
+      state.transactions = data.transactions || [];
+      renderTransactions();
+      return data;
+    }
+
+    async function loadPreorders() {
+      ensureAdminCode();
+
+      const data = await apiGet("/api/admin/preorders", { date: todayJST(), limit: 50 }, true);
+      state.preorders = data.preorders || [];
+      renderPreorders();
+      return data;
+    }
+
+    async function loadLogs() {
+      ensureAdminCode();
+
+      const data = await apiGet("/api/admin/audit-logs", { limit: 30 }, true);
+      state.logs = data.logs || [];
+      renderLogs();
+      return data;
+    }
+
+    async function loadAll() {
+      try {
+        setStatus("mainStatus", "読み込み中です。", "info");
+        await loadSummary();
+        await Promise.all([
+          loadCustomers(),
+          loadTransactions(),
+          loadPreorders(),
+          loadLogs()
+        ]);
+        renderTodayTasks();
+        setStatus("mainStatus", "オーナー管理データを更新しました。", "ok");
+      } catch (e) {
+        setStatus("mainStatus", e.message || "読み込みに失敗しました。", "ng");
+      }
+    }
+
+    async function runDemoSetup() {
+      try {
+        ensureAdminCode();
+
+        if (shopCode() !== DEFAULTS.demoShopCode) {
+          alert("本番店舗では営業前DEMO設定を実行できません。");
+          return;
+        }
+
+        const ok = confirm("bakery_demo の営業前DEMOデータを今日の日付で作り直します。実行しますか？");
+        if (!ok) return;
+
+        const data = await apiPost("/api/admin/demo/sales-setup", {
+          confirm_text: "BAKERY DEMO RESET",
+          staff_name: staffName()
+        }, true);
+
+        setStatus("mainStatus", data.message || "営業前DEMO設定を実行しました。", "ok");
+        await loadAll();
+      } catch (e) {
+        setStatus("mainStatus", e.message || "営業前DEMO設定に失敗しました。", "ng");
+      }
+    }
+
+    function renderTodayTasks() {
+      const summary = state.summary || {};
+      const wallet = summary.wallet || {};
+      const preorders = summary.preorders || {};
+      const eco = summary.eco_rescue || {};
+      const activeCustomers = summary.customers?.active || 0;
+      const todayPreorderCount = preorders.today_count || 0;
+      const ecoTargetTotal = (eco.weekday_evening_targets || 0) + (eco.weekend_evening_targets || 0);
+      const unused = wallet.total_unused_balance || 0;
+      const tasks = [];
+
+      if (todayPreorderCount > 0) {
+        tasks.push({
+          icon: "🧺",
+          title: "取り置き予約を準備",
+          desc: "本日の取り置きが " + todayPreorderCount + " 件あります。受け取り時間順に確認してください。",
+          action: "#preorderPanel",
+          label: "確認する"
+        });
+      } else {
+        tasks.push({
+          icon: "🧺",
+          title: "今日の取り置きはまだありません",
+          desc: "予約が入ったらここに表示されます。",
+          action: "#preorderPanel",
+          label: "一覧を見る"
+        });
+      }
+
+      if (ecoTargetTotal > 0) {
+        tasks.push({
+          icon: "🌇",
+          title: "夕方のECOレスキュー準備",
+          desc: "夕方に案内できる常連が " + ecoTargetTotal + " 人います。余りそうなら文面を作成できます。",
+          action: "#ecoPanel",
+          label: "文面作成"
+        });
+      } else {
+        tasks.push({
+          icon: "🌇",
+          title: "ECOレスキュー対象が少ないです",
+          desc: "初回アンケートでECO通知希望を集めると、夕方の売り切りに使えます。",
+          action: "#customerPanel",
+          label: "顧客確認"
+        });
+      }
+
+      tasks.push({
+        icon: "💰",
+        title: "未使用チャージ残高を確認",
+        desc: "現在の未使用チャージ残高は " + yen(unused) + " です。お客様が戻ってくる理由になります。",
+        action: "#customerPanel",
+        label: "残高確認"
+      });
+
+      if (activeCustomers < 5) {
+        tasks.push({
+          icon: "📱",
+          title: "DEMO顧客が少ないです",
+          desc: "営業前DEMO設定を実行すると、見せやすいサンプル顧客が入ります。",
+          action: "#",
+          label: "DEMO設定"
+        });
+      }
+
+      $("todayTasks").innerHTML = tasks.map((task) => `
+        <div class="task-card">
+          <div class="task-icon">${escapeHtml(task.icon)}</div>
+          <div>
+            <div class="task-title">${escapeHtml(task.title)}</div>
+            <div class="task-desc">${escapeHtml(task.desc)}</div>
+          </div>
+          <a class="button-link ghost" href="${escapeHtml(task.action)}">${escapeHtml(task.label)}</a>
+        </div>
+      `).join("");
+    }
+
+    function labelBuyingHabit(value) {
+      const map = {
+        family: "家族・おやつ",
+        daily: "ランチ・毎日",
+        weekend_reward: "週末ご褒美"
+      };
+      return map[value] || value || "-";
+    }
+
+    function labelEco(value) {
+      const map = {
+        weekday_evening: "平日夕方OK",
+        weekend_evening: "土日夕方OK",
+        none: "通知不要"
+      };
+      return map[value] || value || "-";
+    }
+
+    function renderCustomers() {
+      const rows = state.customers || [];
+      $("customerList").innerHTML = rows.length ? rows.map((c) => `
+        <div class="data-card">
+          <strong>${escapeHtml(c.customer_name || c.line_display_name || "お客様")}</strong>
+          <div>会員コード：${escapeHtml(c.member_code || "-")}</div>
+          <div>残高：${yen(c.balance)}</div>
+          <div>累計チャージ：${yen(c.total_charge_amount)} / 累計決済：${yen(c.total_payment_amount)}</div>
+          <div class="tag-row">
+            <span class="pill orange">${escapeHtml(labelBuyingHabit(c.buying_habit))}</span>
+            <span class="pill blue">${escapeHtml(labelEco(c.eco_rescue_ok))}</span>
+            <span class="pill green">${escapeHtml(c.customer_rank || "regular")}</span>
+          </div>
+        </div>
+      `).join("") : '<div class="status-box warn">顧客はまだありません。営業前DEMO設定を実行してください。</div>';
+    }
+
+    function renderTransactions() {
+      const rows = state.transactions || [];
+      $("transactionList").innerHTML = rows.length ? rows.map((t) => `
+        <div class="data-card">
+          <strong>${escapeHtml(t.type || "-")} / ${yen(t.amount)}</strong>
+          <div>会員コード：${escapeHtml(t.member_code || "-")}</div>
+          <div>残高：${yen(t.balance_before)} → ${yen(t.balance_after)}</div>
+          <div class="meta">${escapeHtml(t.created_at || "")} / ${escapeHtml(t.memo || "")}</div>
+        </div>
+      `).join("") : '<div class="status-box warn">チャージ・決済履歴はまだありません。</div>';
+    }
+
+    function parseItemsText(items) {
+      if (!Array.isArray(items)) return "";
+      return items.map((item) => {
+        const name = item.product_name || item.product_code || "商品";
+        const qty = item.qty || item.quantity || 1;
+        const price = item.price || item.unit_price || 0;
+        return name + " × " + qty + " / " + yen(price);
+      }).join("、");
+    }
+
+    function renderPreorders() {
+      const rows = state.preorders || [];
+      $("preorderList").innerHTML = rows.length ? rows.map((p) => `
+        <div class="data-card">
+          <strong>${escapeHtml(p.pickup_time || "-")} / ${escapeHtml(p.customer_name || "お客様")}</strong>
+          <div>合計：${yen(p.total_amount)} / 状態：${escapeHtml(p.status || "-")} / 支払い：${escapeHtml(p.payment_status || "-")}</div>
+          <div>${escapeHtml(parseItemsText(p.items))}</div>
+          <div class="meta">${escapeHtml(p.memo || "")}</div>
+        </div>
+      `).join("") : '<div class="status-box warn">本日の取り置きはありません。</div>';
+    }
+
+    function renderLogs() {
+      const rows = state.logs || [];
+      $("logList").innerHTML = rows.length ? rows.map((log) => `
+        <div class="data-card">
+          <strong>${escapeHtml(log.action_type || "log")}</strong>
+          <div>${escapeHtml(log.message || "")}</div>
+          <div class="meta">担当：${escapeHtml(log.actor || "-")} / ${escapeHtml(log.created_at || "")}</div>
+        </div>
+      `).join("") : '<div class="status-box warn">操作履歴はまだありません。</div>';
+    }
+
+    async function createEcoMessage() {
+      try {
+        ensureAdminCode();
+
+        const data = await apiPost("/api/admin/eco/create-message", {
+          product_name: $("ecoProductInput").value.trim() || "ECOパン詰め合わせ",
+          quantity: Number($("ecoQuantityInput").value || 5),
+          price: Number($("ecoPriceInput").value || 500),
+          target_eco: $("ecoTargetInput").value,
+          staff_name: staffName()
+        }, true);
+
+        $("ecoMessageBox").value = data.message_text || "";
+        setStatus(
+          "ecoStatus",
+          "ECOレスキュー文面を作成しました。\n対象者: " + (data.target_count ?? 0) + "人\nこの文面をLINE公式にコピーして送れます。",
+          "ok"
+        );
+
+        await loadSummary();
+        await loadLogs();
+      } catch (e) {
+        setStatus("ecoStatus", e.message || "ECO文面作成に失敗しました。", "ng");
+      }
+    }
+
+    async function copyEcoMessage() {
+      const text = $("ecoMessageBox").value.trim();
+      if (!text || text === "まだ作成していません。") {
+        alert("先にECO文面を作成してください。");
+        return;
+      }
+
+      await copyText(text);
+      setStatus("ecoStatus", "ECOレスキュー文面をコピーしました。LINE公式に貼り付けて使えます。", "ok");
+    }
+
+    function renderUrls() {
+      const pagesBase = "https://dpromstk2000-lab.github.io/bakery-line-system";
+      const urls = [
+        ["本番前チェック", pagesBase + "/system-check.html?shop_code=" + encodeURIComponent(shopCode()) + "&api=" + encodeURIComponent(apiBase())],
+        ["オーナー管理", pagesBase + "/owner.html?shop_code=" + encodeURIComponent(shopCode()) + "&api=" + encodeURIComponent(apiBase())],
+        ["Worker health", apiBase() + "/api/health"],
+        ["商品API", apiBase() + "/api/public/products?shop_code=" + encodeURIComponent(shopCode())]
+      ];
+
+      $("urlList").innerHTML = urls.map(([label, url]) => `
+        <div class="data-card">
+          <strong>${escapeHtml(label)}</strong>
+          <div style="word-break:break-all;">${escapeHtml(url)}</div>
+          <div class="button-row">
+            <button class="ghost" type="button" data-copy-url="${escapeHtml(url)}">コピー</button>
+            <a class="button-link ghost" href="${escapeHtml(url)}" target="_blank" rel="noopener">開く</a>
+          </div>
+        </div>
+      `).join("");
+
+      document.querySelectorAll("[data-copy-url]").forEach((button) => {
+        button.addEventListener("click", async () => {
+          await copyText(button.getAttribute("data-copy-url") || "");
+          setStatus("mainStatus", "URLをコピーしました。", "ok");
+        });
+      });
+    }
+
+    function bindEvents() {
+      $("loadAllButton").addEventListener("click", loadAll);
+      $("refreshTasksButton").addEventListener("click", loadSummary);
+      $("demoSetupButton").addEventListener("click", runDemoSetup);
+
+      $("saveAdminButton").addEventListener("click", saveAdminCode);
+      $("forgetAdminButton").addEventListener("click", forgetAdminCode);
+
+      $("loadCustomersButton").addEventListener("click", async () => {
+        try { await loadCustomers(); } catch (e) { setStatus("mainStatus", e.message, "ng"); }
+      });
+
+      $("loadTransactionsButton").addEventListener("click", async () => {
+        try { await loadTransactions(); } catch (e) { setStatus("mainStatus", e.message, "ng"); }
+      });
+
+      $("loadPreordersButton").addEventListener("click", async () => {
+        try { await loadPreorders(); } catch (e) { setStatus("mainStatus", e.message, "ng"); }
+      });
+
+      $("loadLogsButton").addEventListener("click", async () => {
+        try { await loadLogs(); } catch (e) { setStatus("mainStatus", e.message, "ng"); }
+      });
+
+      $("createEcoButton").addEventListener("click", createEcoMessage);
+      $("copyEcoButton").addEventListener("click", copyEcoMessage);
+
+      $("apiBaseInput").addEventListener("input", renderUrls);
+      $("shopCodeInput").addEventListener("input", renderUrls);
+    }
+
+    function init() {
+      applyQueryParams();
+      restoreSession();
+      bindEvents();
+      renderUrls();
+
+      if (adminCode()) {
+        setStatus("mainStatus", "管理コードはこのタブに保存済みです。「最新データを読み込み」を押してください。", "ok");
+      } else {
+        setStatus("mainStatus", "管理コードを入力して「最新データを読み込み」を押してください。", "info");
+      }
+    }
+
+    init();
+  </script>
+</body>
+</html>
