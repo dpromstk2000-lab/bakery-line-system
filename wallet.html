@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  <title>DPROベーカリー | wallet.html</title>
+  <title>DPROベーカリー | wallet.html 正式QR対応</title>
   <style>
     :root {
       --bg: #fff7ed;
@@ -540,7 +540,7 @@
 <body>
   <div class="wrap">
     <header class="hero">
-      <div class="badge">DPRO SHOP / Bakery LIFF Wallet / STEP BAKERY-6</div>
+      <div class="badge">DPRO SHOP / Bakery LIFF Wallet / STEP BAKERY-8</div>
       <h1>デジタル<br>お財布会員証</h1>
       <p class="lead">
         レジで1秒決済、人気パンの取り置き、夕方限定ECOレスキューまでLINEから使えるパン屋専用会員証です。
@@ -1180,58 +1180,271 @@
       return map[value] || value || "-";
     }
 
-    /* 本番DEMO用の疑似QR表示。
-       cashier.html は手入力・DEMOボタン対応済み。
-       実店舗でカメラ読取を厳密に使う段階では、QR生成ライブラリを追加する。 */
+    /* =========================================================
+      正式QR生成
+      - Version 1-L / Byte mode
+      - 会員コードのような短い文字列向け
+      - cashier.html の BarcodeDetector で読み取り可能
+      - 外部ライブラリ不要
+    ========================================================= */
+
     function renderPseudoQr(value) {
+      renderRealQr(value);
+    }
+
+    function renderRealQr(value) {
+      const text = String(value || "").trim();
       const canvas = $("qrCanvas");
       const ctx = canvas.getContext("2d");
-      const size = canvas.width;
-      const modules = 25;
-      const cell = Math.floor(size / modules);
-      const margin = Math.floor((size - cell * modules) / 2);
+
+      if (!text) {
+        drawQrFallback(canvas, "NO DATA");
+        return;
+      }
+
+      const bytes = utf8Bytes(text);
+
+      // QR Version 1-L byte mode capacity is 17 bytes.
+      // 会員コードは DEMO-BK-001 / BK-XXXXXXXXXX 程度なので対応可能。
+      if (bytes.length > 17) {
+        drawQrFallback(canvas, text);
+        return;
+      }
+
+      const modules = makeQrVersion1L(bytes);
+      drawQrModules(canvas, modules);
+    }
+
+    function drawQrFallback(canvas, text) {
+      const ctx = canvas.getContext("2d");
+      ctx.fillStyle = "#fff";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = "#111";
+      ctx.font = "bold 12px sans-serif";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      const short = String(text || "").slice(0, 18);
+      ctx.fillText(short, canvas.width / 2, canvas.height / 2);
+    }
+
+    function drawQrModules(canvas, modules) {
+      const ctx = canvas.getContext("2d");
+      const count = modules.length;
+      const quiet = 4;
+      const total = count + quiet * 2;
+      const cell = Math.floor(canvas.width / total);
+      const size = cell * total;
+      const offset = Math.floor((canvas.width - size) / 2);
 
       ctx.fillStyle = "#fff";
-      ctx.fillRect(0, 0, size, size);
-      ctx.fillStyle = "#111";
-
-      function drawFinder(x, y) {
-        ctx.fillRect(margin + x * cell, margin + y * cell, cell * 7, cell * 7);
-        ctx.fillStyle = "#fff";
-        ctx.fillRect(margin + (x + 1) * cell, margin + (y + 1) * cell, cell * 5, cell * 5);
-        ctx.fillStyle = "#111";
-        ctx.fillRect(margin + (x + 2) * cell, margin + (y + 2) * cell, cell * 3, cell * 3);
-      }
-
-      drawFinder(0, 0);
-      drawFinder(18, 0);
-      drawFinder(0, 18);
-
-      let seed = 0;
-      const text = String(value || "");
-      for (let i = 0; i < text.length; i++) {
-        seed = (seed * 31 + text.charCodeAt(i)) >>> 0;
-      }
-
-      function rnd() {
-        seed = (seed * 1664525 + 1013904223) >>> 0;
-        return seed / 4294967296;
-      }
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
 
       ctx.fillStyle = "#111";
-      for (let y = 0; y < modules; y++) {
-        for (let x = 0; x < modules; x++) {
-          const inFinder =
-            (x < 8 && y < 8) ||
-            (x > 16 && y < 8) ||
-            (x < 8 && y > 16);
-
-          if (inFinder) continue;
-          if (rnd() > .62) {
-            ctx.fillRect(margin + x * cell, margin + y * cell, cell, cell);
+      for (let y = 0; y < count; y++) {
+        for (let x = 0; x < count; x++) {
+          if (modules[y][x]) {
+            ctx.fillRect(
+              offset + (x + quiet) * cell,
+              offset + (y + quiet) * cell,
+              cell,
+              cell
+            );
           }
         }
       }
+    }
+
+    function utf8Bytes(str) {
+      return Array.from(new TextEncoder().encode(str));
+    }
+
+    function makeQrVersion1L(dataBytes) {
+      const size = 21;
+      const modules = Array.from({ length: size }, () => Array(size).fill(false));
+      const reserved = Array.from({ length: size }, () => Array(size).fill(false));
+
+      function set(x, y, dark, reserve = true) {
+        if (x < 0 || y < 0 || x >= size || y >= size) return;
+        modules[y][x] = !!dark;
+        if (reserve) reserved[y][x] = true;
+      }
+
+      function finder(x, y) {
+        for (let dy = -1; dy <= 7; dy++) {
+          for (let dx = -1; dx <= 7; dx++) {
+            const xx = x + dx;
+            const yy = y + dy;
+            if (xx < 0 || yy < 0 || xx >= size || yy >= size) continue;
+            const in7 = dx >= 0 && dx <= 6 && dy >= 0 && dy <= 6;
+            const dark = in7 && (dx === 0 || dx === 6 || dy === 0 || dy === 6 || (dx >= 2 && dx <= 4 && dy >= 2 && dy <= 4));
+            set(xx, yy, dark, true);
+          }
+        }
+      }
+
+      finder(0, 0);
+      finder(size - 7, 0);
+      finder(0, size - 7);
+
+      // Timing patterns
+      for (let i = 8; i <= size - 9; i++) {
+        set(i, 6, i % 2 === 0, true);
+        set(6, i, i % 2 === 0, true);
+      }
+
+      // Dark module for version 1
+      set(8, size - 8, true, true);
+
+      // Reserve format information areas
+      for (let i = 0; i < 9; i++) {
+        if (i !== 6) {
+          reserved[8][i] = true;
+          reserved[i][8] = true;
+        }
+      }
+      for (let i = 0; i < 8; i++) {
+        reserved[8][size - 1 - i] = true;
+        reserved[size - 1 - i][8] = true;
+      }
+
+      const dataCodewords = makeDataCodewordsVersion1L(dataBytes);
+      const eccCodewords = reedSolomonCompute(dataCodewords, 7);
+      const allCodewords = dataCodewords.concat(eccCodewords);
+      const bits = [];
+      allCodewords.forEach((cw) => {
+        for (let i = 7; i >= 0; i--) bits.push(((cw >>> i) & 1) === 1);
+      });
+
+      // Data placement
+      let bitIndex = 0;
+      let upward = true;
+      for (let right = size - 1; right >= 1; right -= 2) {
+        if (right === 6) right--;
+        for (let vert = 0; vert < size; vert++) {
+          const y = upward ? size - 1 - vert : vert;
+          for (let dx = 0; dx < 2; dx++) {
+            const x = right - dx;
+            if (reserved[y][x]) continue;
+            let dark = bitIndex < bits.length ? bits[bitIndex++] : false;
+            // Mask pattern 0: (x + y) % 2 == 0
+            if ((x + y) % 2 === 0) dark = !dark;
+            set(x, y, dark, false);
+          }
+        }
+        upward = !upward;
+      }
+
+      // Format info: ECC L + mask 0
+      const formatBits = makeFormatBits(1, 0); // L=01
+      drawFormatBits(formatBits, modules);
+
+      return modules;
+    }
+
+    function makeDataCodewordsVersion1L(dataBytes) {
+      const bits = [];
+
+      function append(value, length) {
+        for (let i = length - 1; i >= 0; i--) bits.push((value >>> i) & 1);
+      }
+
+      append(0b0100, 4); // Byte mode
+      append(dataBytes.length, 8); // Version 1 byte count length
+
+      dataBytes.forEach((b) => append(b, 8));
+
+      // Terminator
+      const maxBits = 19 * 8;
+      const remaining = maxBits - bits.length;
+      append(0, Math.min(4, remaining));
+
+      while (bits.length % 8 !== 0) bits.push(0);
+
+      const codewords = [];
+      for (let i = 0; i < bits.length; i += 8) {
+        let value = 0;
+        for (let j = 0; j < 8; j++) value = (value << 1) | bits[i + j];
+        codewords.push(value);
+      }
+
+      const pads = [0xEC, 0x11];
+      let padIndex = 0;
+      while (codewords.length < 19) {
+        codewords.push(pads[padIndex % 2]);
+        padIndex++;
+      }
+
+      return codewords;
+    }
+
+    function gfMul(x, y) {
+      let z = 0;
+      for (let i = 7; i >= 0; i--) {
+        z = (z << 1) ^ (((z >>> 7) & 1) * 0x11D);
+        if (((y >>> i) & 1) !== 0) z ^= x;
+      }
+      return z & 0xFF;
+    }
+
+    function reedSolomonGenerator(degree) {
+      let result = [1];
+      let root = 1;
+      for (let i = 0; i < degree; i++) {
+        const next = Array(result.length + 1).fill(0);
+        for (let j = 0; j < result.length; j++) {
+          next[j] ^= gfMul(result[j], root);
+          next[j + 1] ^= result[j];
+        }
+        result = next;
+        root = gfMul(root, 0x02);
+      }
+      return result;
+    }
+
+    function reedSolomonCompute(data, degree) {
+      const gen = reedSolomonGenerator(degree);
+      const result = Array(degree).fill(0);
+
+      data.forEach((b) => {
+        const factor = b ^ result.shift();
+        result.push(0);
+        for (let i = 0; i < degree; i++) {
+          result[i] ^= gfMul(gen[i], factor);
+        }
+      });
+
+      return result;
+    }
+
+    function makeFormatBits(ecl, mask) {
+      let data = (ecl << 3) | mask;
+      let bits = data << 10;
+      const generator = 0x537;
+      for (let i = 14; i >= 10; i--) {
+        if (((bits >>> i) & 1) !== 0) {
+          bits ^= generator << (i - 10);
+        }
+      }
+      return (((data << 10) | bits) ^ 0x5412) & 0x7FFF;
+    }
+
+    function drawFormatBits(format, modules) {
+      const size = modules.length;
+
+      function bit(i) {
+        return ((format >>> i) & 1) !== 0;
+      }
+
+      // Around top-left
+      for (let i = 0; i <= 5; i++) modules[8][i] = bit(i);
+      modules[8][7] = bit(6);
+      modules[8][8] = bit(7);
+      modules[7][8] = bit(8);
+      for (let i = 9; i < 15; i++) modules[14 - i][8] = bit(i);
+
+      // Other copy
+      for (let i = 0; i < 8; i++) modules[size - 1 - i][8] = bit(i);
+      for (let i = 8; i < 15; i++) modules[8][size - 15 + i] = bit(i);
     }
 
     async function demoCharge() {
