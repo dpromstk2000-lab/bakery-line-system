@@ -1,0 +1,559 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>DPROベーカリー | 営業DEMO進行ページ</title>
+  <style>
+    :root {
+      --bg: #fff7ed;
+      --panel: #ffffff;
+      --ink: #1c1917;
+      --muted: #78716c;
+      --line: #fed7aa;
+      --main: #b45309;
+      --main2: #ea580c;
+      --soft: #ffedd5;
+      --green: #16a34a;
+      --red: #dc2626;
+      --blue: #2563eb;
+      --shadow: 0 22px 70px rgba(120, 53, 15, .12);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--ink);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at 12% 0%, rgba(251, 146, 60, .20), transparent 34%),
+        radial-gradient(circle at 90% 4%, rgba(245, 158, 11, .16), transparent 30%),
+        linear-gradient(180deg, #fff7ed, #fffbeb 48%, #fef3c7);
+      line-height: 1.65;
+    }
+    .wrap {
+      width: min(1180px, calc(100% - 28px));
+      margin: 22px auto 56px;
+    }
+    .hero {
+      background: rgba(255,255,255,.94);
+      border: 1px solid var(--line);
+      border-radius: 32px;
+      box-shadow: var(--shadow);
+      padding: 28px;
+      display: grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap: 22px;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::after {
+      content: "🍞";
+      position: absolute;
+      right: 22px;
+      top: 12px;
+      font-size: 90px;
+      opacity: .10;
+      pointer-events: none;
+    }
+    .badge {
+      display: inline-flex;
+      border-radius: 999px;
+      background: var(--soft);
+      color: #9a3412;
+      padding: 6px 12px;
+      font-size: 12px;
+      font-weight: 950;
+    }
+    h1 {
+      margin: 12px 0 10px;
+      font-size: clamp(32px, 5vw, 56px);
+      line-height: 1.02;
+      letter-spacing: -.05em;
+    }
+    h2 {
+      margin: 0;
+      font-size: 24px;
+      letter-spacing: -.04em;
+    }
+    h3 {
+      margin: 3px 0 8px;
+      font-size: 18px;
+      letter-spacing: -.03em;
+    }
+    .lead {
+      margin: 0;
+      color: #44403c;
+      font-weight: 850;
+      font-size: 15px;
+    }
+    .hero-card {
+      background:
+        radial-gradient(circle at 12% 10%, rgba(251, 191, 36, .18), transparent 30%),
+        linear-gradient(135deg, #1c1917, #431407 58%, #9a3412);
+      color: #fff7ed;
+      border-radius: 28px;
+      padding: 22px;
+      box-shadow: 0 24px 70px rgba(67, 20, 7, .26);
+      position: relative;
+      z-index: 1;
+    }
+    .hero-card .title {
+      color: #fed7aa;
+      font-size: 12px;
+      font-weight: 950;
+    }
+    .hero-card .big {
+      font-size: 30px;
+      line-height: 1.12;
+      letter-spacing: -.05em;
+      font-weight: 950;
+      margin: 8px 0 10px;
+    }
+    .hero-card .small {
+      color: #fed7aa;
+    }
+    section.panel {
+      background: rgba(255,255,255,.95);
+      border: 1px solid var(--line);
+      box-shadow: 0 18px 52px rgba(120, 53, 15, .07);
+      border-radius: 26px;
+      padding: 22px;
+      margin: 16px 0;
+    }
+    .panel-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+      align-items: flex-start;
+      margin-bottom: 14px;
+    }
+    .small, .mini-label {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 850;
+    }
+    .button-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 14px;
+    }
+    button, .button-link {
+      appearance: none;
+      border: 0;
+      border-radius: 999px;
+      background: var(--main);
+      color: #fff;
+      font-weight: 950;
+      padding: 12px 17px;
+      cursor: pointer;
+      min-height: 44px;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 14px 28px rgba(180, 83, 9, .22);
+      font-size: 14px;
+    }
+    .button-link.green, button.green { background: var(--green); box-shadow: 0 14px 28px rgba(22, 163, 74, .18); }
+    .button-link.blue, button.blue { background: var(--blue); box-shadow: 0 14px 28px rgba(37, 99, 235, .18); }
+    .button-link.dark, button.dark { background: #1c1917; box-shadow: 0 14px 28px rgba(28, 25, 23, .18); }
+    button.ghost, .button-link.ghost {
+      background: #fff;
+      color: #9a3412;
+      border: 1px solid #fdba74;
+      box-shadow: none;
+    }
+    .flow {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 14px;
+    }
+    .step {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 15px;
+      box-shadow: 0 12px 36px rgba(120, 53, 15, .05);
+    }
+    .num {
+      display: grid;
+      place-items: center;
+      width: 36px;
+      height: 36px;
+      border-radius: 14px;
+      background: #ffedd5;
+      color: #9a3412;
+      font-weight: 950;
+      margin-bottom: 10px;
+    }
+    .script-box {
+      width: 100%;
+      min-height: 260px;
+      border: 0;
+      background: #1c1917;
+      color: #ffedd5;
+      border-radius: 18px;
+      padding: 16px;
+      font-size: 13px;
+      line-height: 1.75;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      resize: vertical;
+    }
+    .qr-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 14px;
+    }
+    .qr-card {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      padding: 15px;
+      box-shadow: 0 12px 36px rgba(120, 53, 15, .05);
+    }
+    .qr-card img {
+      display: block;
+      width: min(100%, 260px);
+      height: auto;
+      margin: 10px auto;
+      border: 8px solid #fff7ed;
+      border-radius: 16px;
+    }
+    .qr-card p {
+      word-break: break-all;
+      background: #fff7ed;
+      border: 1px solid #fed7aa;
+      border-radius: 12px;
+      padding: 9px;
+      color: #9a3412;
+      font-size: 11px;
+      font-weight: 850;
+    }
+    .check-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 14px;
+    }
+    .check {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 14px;
+      font-size: 13px;
+      font-weight: 850;
+    }
+    .check strong {
+      display: block;
+      font-size: 15px;
+      margin-bottom: 5px;
+    }
+    .status-box {
+      border: 1px solid #bfdbfe;
+      border-radius: 16px;
+      background: #eff6ff;
+      color: #1e3a8a;
+      padding: 12px 14px;
+      font-size: 13px;
+      font-weight: 850;
+      white-space: pre-wrap;
+      word-break: break-word;
+      margin-top: 12px;
+    }
+    .footer {
+      text-align: center;
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 24px;
+      font-weight: 800;
+    }
+    @media (max-width: 960px) {
+      .hero { grid-template-columns: 1fr; }
+      .flow { grid-template-columns: 1fr 1fr; }
+      .qr-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 640px) {
+      .wrap { width: min(100% - 18px, 1180px); margin-top: 10px; }
+      .hero { padding: 20px; border-radius: 22px; }
+      section.panel { padding: 16px; }
+      .flow, .qr-grid, .check-grid { grid-template-columns: 1fr; }
+      button, .button-link { width: 100%; }
+      .panel-head { display: block; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="hero">
+      <div>
+        <div class="badge">STEP BAKERY-9 / 営業DEMO進行ページ</div>
+        <h1>パン屋オーナーへ<br>見せる順番ページ</h1>
+        <p class="lead">
+          技術説明ではなく「売上・レジ時短・常連化・廃棄削減」を順番に見せるための営業用ページです。
+          PCでこのページを開けば、スマホ用QRも全部ここから出せます。
+        </p>
+        <div class="button-row">
+          <a class="button-link green" href="https://dpromstk2000-lab.github.io/bakery-line-system/wallet.html?shop_code=bakery_demo&amp;api=https://dpro-bakery-wallet-api.dpromstk2000.workers.dev" target="_blank" rel="noopener">お客様会員証</a>
+          <a class="button-link blue" href="https://dpromstk2000-lab.github.io/bakery-line-system/cashier.html?shop_code=bakery_demo&amp;api=https://dpro-bakery-wallet-api.dpromstk2000.workers.dev" target="_blank" rel="noopener">店員レジ</a>
+          <a class="button-link dark" href="https://dpromstk2000-lab.github.io/bakery-line-system/owner.html?shop_code=bakery_demo&amp;api=https://dpro-bakery-wallet-api.dpromstk2000.workers.dev" target="_blank" rel="noopener">オーナー管理</a>
+        </div>
+      </div>
+      <div class="hero-card">
+        <div class="title">営業で伝える結論</div>
+        <div class="big">LINEを会員証にすると、パン屋の売上導線が毎日残ります。</div>
+        <div class="small">
+          チャージで未来売上を確保し、取り置きで売り逃しを減らし、ECOレスキューで夕方の余りを現金化します。
+        </div>
+      </div>
+    </header>
+
+    <section class="panel">
+      <div class="panel-head">
+        <div>
+          <h2>営業DEMOの見せる順番</h2>
+          <div class="small">この順番だけ守れば、オーナーに価値が伝わりやすくなります。</div>
+        </div>
+        <button class="ghost" type="button" id="copyFlowButton">順番をコピー</button>
+      </div>
+
+      <div class="flow">
+        <div class="step">
+          <div class="num">1</div>
+          <h3>入口を見せる</h3>
+          <div class="small">LINEリッチメニュー風の3ボタンを見せる。</div>
+        </div>
+        <div class="step">
+          <div class="num">2</div>
+          <h3>会員証を見せる</h3>
+          <div class="small">残高・QR・5%チャージを見せる。</div>
+        </div>
+        <div class="step">
+          <div class="num">3</div>
+          <h3>レジ決済</h3>
+          <div class="small">店員画面で500円決済して時短を見せる。</div>
+        </div>
+        <div class="step">
+          <div class="num">4</div>
+          <h3>管理反映</h3>
+          <div class="small">ownerで決済履歴・残高反映を見せる。</div>
+        </div>
+        <div class="step">
+          <div class="num">5</div>
+          <h3>ECOレスキュー</h3>
+          <div class="small">夕方の余りをLINE文面コピーで売上化。</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <div>
+          <h2>そのまま読める営業トーク</h2>
+          <div class="small">オーナーに見せる時は、この流れで話すと専門用語なしで伝わります。</div>
+        </div>
+        <button class="green" type="button" id="copyScriptButton">営業トークをコピー</button>
+      </div>
+
+      <textarea class="script-box" id="scriptBox">オーナー、これは単なるLINE会員証ではありません。
+
+まずお客様は、LINEからデジタル会員証を開きます。
+ここにチャージ残高が表示されて、レジではQRを見せるだけです。
+
+次に店員さんは、レジ画面で会員証を読み取り、金額を入れて決済します。
+財布を出す、細かい小銭を探す、支払いアプリを開く、という時間を減らせます。
+
+そして決済が終わると、オーナー管理画面にすぐ反映されます。
+今日のチャージ、今日の決済、未使用残高、取り置き予約が見えるので、
+「今日どれだけ未来の売上が残っているか」が分かります。
+
+さらに夕方、売れ残りそうなパンがあれば、ECOレスキュー文面を作ってLINE公式に貼るだけです。
+廃棄する前に、夕方に寄れる常連様へ案内できます。
+
+つまりこの仕組みは、
+売上を増やす
+レジを楽にする
+常連様が戻ってくる
+廃棄を減らす
+この4つをLINEの中でまとめて実現するものです。</textarea>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <div>
+          <h2>スマホで開くQR</h2>
+          <div class="small">PCでこのページを開き、スマホのカメラで読み取ってください。</div>
+        </div>
+      </div>
+      <div class="qr-grid">
+        
+    <div class="qr-card">
+      <div>
+        <div class="mini-label">スマホ読取用</div>
+        <h3>DEMO入口</h3>
+      </div>
+      <img src="https://api.qrserver.com/v1/create-qr-code/?size=280x280&margin=14&data=https%3A%2F%2Fdpromstk2000-lab.github.io%2Fbakery-line-system%2Findex.html%3Fshop_code%3Dbakery_demo%26api%3Dhttps%3A%2F%2Fdpro-bakery-wallet-api.dpromstk2000.workers.dev" alt="DEMO入口 QR">
+      <p>https://dpromstk2000-lab.github.io/bakery-line-system/index.html?shop_code=bakery_demo&amp;api=https://dpro-bakery-wallet-api.dpromstk2000.workers.dev</p>
+      <div class="button-row">
+        <a class="button-link ghost" href="https://dpromstk2000-lab.github.io/bakery-line-system/index.html?shop_code=bakery_demo&amp;api=https://dpro-bakery-wallet-api.dpromstk2000.workers.dev" target="_blank" rel="noopener">開く</a>
+        <button class="ghost" type="button" data-copy="https://dpromstk2000-lab.github.io/bakery-line-system/index.html?shop_code=bakery_demo&amp;api=https://dpro-bakery-wallet-api.dpromstk2000.workers.dev">コピー</button>
+      </div>
+    </div>
+    
+    <div class="qr-card">
+      <div>
+        <div class="mini-label">スマホ読取用</div>
+        <h3>お客様会員証</h3>
+      </div>
+      <img src="https://api.qrserver.com/v1/create-qr-code/?size=280x280&margin=14&data=https%3A%2F%2Fdpromstk2000-lab.github.io%2Fbakery-line-system%2Fwallet.html%3Fshop_code%3Dbakery_demo%26api%3Dhttps%3A%2F%2Fdpro-bakery-wallet-api.dpromstk2000.workers.dev" alt="お客様会員証 QR">
+      <p>https://dpromstk2000-lab.github.io/bakery-line-system/wallet.html?shop_code=bakery_demo&amp;api=https://dpro-bakery-wallet-api.dpromstk2000.workers.dev</p>
+      <div class="button-row">
+        <a class="button-link ghost" href="https://dpromstk2000-lab.github.io/bakery-line-system/wallet.html?shop_code=bakery_demo&amp;api=https://dpro-bakery-wallet-api.dpromstk2000.workers.dev" target="_blank" rel="noopener">開く</a>
+        <button class="ghost" type="button" data-copy="https://dpromstk2000-lab.github.io/bakery-line-system/wallet.html?shop_code=bakery_demo&amp;api=https://dpro-bakery-wallet-api.dpromstk2000.workers.dev">コピー</button>
+      </div>
+    </div>
+    
+    <div class="qr-card">
+      <div>
+        <div class="mini-label">スマホ読取用</div>
+        <h3>店員レジ</h3>
+      </div>
+      <img src="https://api.qrserver.com/v1/create-qr-code/?size=280x280&margin=14&data=https%3A%2F%2Fdpromstk2000-lab.github.io%2Fbakery-line-system%2Fcashier.html%3Fshop_code%3Dbakery_demo%26api%3Dhttps%3A%2F%2Fdpro-bakery-wallet-api.dpromstk2000.workers.dev" alt="店員レジ QR">
+      <p>https://dpromstk2000-lab.github.io/bakery-line-system/cashier.html?shop_code=bakery_demo&amp;api=https://dpro-bakery-wallet-api.dpromstk2000.workers.dev</p>
+      <div class="button-row">
+        <a class="button-link ghost" href="https://dpromstk2000-lab.github.io/bakery-line-system/cashier.html?shop_code=bakery_demo&amp;api=https://dpro-bakery-wallet-api.dpromstk2000.workers.dev" target="_blank" rel="noopener">開く</a>
+        <button class="ghost" type="button" data-copy="https://dpromstk2000-lab.github.io/bakery-line-system/cashier.html?shop_code=bakery_demo&amp;api=https://dpro-bakery-wallet-api.dpromstk2000.workers.dev">コピー</button>
+      </div>
+    </div>
+    
+    <div class="qr-card">
+      <div>
+        <div class="mini-label">スマホ読取用</div>
+        <h3>オーナー管理</h3>
+      </div>
+      <img src="https://api.qrserver.com/v1/create-qr-code/?size=280x280&margin=14&data=https%3A%2F%2Fdpromstk2000-lab.github.io%2Fbakery-line-system%2Fowner.html%3Fshop_code%3Dbakery_demo%26api%3Dhttps%3A%2F%2Fdpro-bakery-wallet-api.dpromstk2000.workers.dev" alt="オーナー管理 QR">
+      <p>https://dpromstk2000-lab.github.io/bakery-line-system/owner.html?shop_code=bakery_demo&amp;api=https://dpro-bakery-wallet-api.dpromstk2000.workers.dev</p>
+      <div class="button-row">
+        <a class="button-link ghost" href="https://dpromstk2000-lab.github.io/bakery-line-system/owner.html?shop_code=bakery_demo&amp;api=https://dpro-bakery-wallet-api.dpromstk2000.workers.dev" target="_blank" rel="noopener">開く</a>
+        <button class="ghost" type="button" data-copy="https://dpromstk2000-lab.github.io/bakery-line-system/owner.html?shop_code=bakery_demo&amp;api=https://dpro-bakery-wallet-api.dpromstk2000.workers.dev">コピー</button>
+      </div>
+    </div>
+    
+    <div class="qr-card">
+      <div>
+        <div class="mini-label">スマホ読取用</div>
+        <h3>QRリンク集</h3>
+      </div>
+      <img src="https://api.qrserver.com/v1/create-qr-code/?size=280x280&margin=14&data=https%3A%2F%2Fdpromstk2000-lab.github.io%2Fbakery-line-system%2Fqr.html" alt="QRリンク集 QR">
+      <p>https://dpromstk2000-lab.github.io/bakery-line-system/qr.html</p>
+      <div class="button-row">
+        <a class="button-link ghost" href="https://dpromstk2000-lab.github.io/bakery-line-system/qr.html" target="_blank" rel="noopener">開く</a>
+        <button class="ghost" type="button" data-copy="https://dpromstk2000-lab.github.io/bakery-line-system/qr.html">コピー</button>
+      </div>
+    </div>
+    
+    <div class="qr-card">
+      <div>
+        <div class="mini-label">スマホ読取用</div>
+        <h3>本番前チェック</h3>
+      </div>
+      <img src="https://api.qrserver.com/v1/create-qr-code/?size=280x280&margin=14&data=https%3A%2F%2Fdpromstk2000-lab.github.io%2Fbakery-line-system%2Fsystem-check.html%3Fshop_code%3Dbakery_demo%26api%3Dhttps%3A%2F%2Fdpro-bakery-wallet-api.dpromstk2000.workers.dev" alt="本番前チェック QR">
+      <p>https://dpromstk2000-lab.github.io/bakery-line-system/system-check.html?shop_code=bakery_demo&amp;api=https://dpro-bakery-wallet-api.dpromstk2000.workers.dev</p>
+      <div class="button-row">
+        <a class="button-link ghost" href="https://dpromstk2000-lab.github.io/bakery-line-system/system-check.html?shop_code=bakery_demo&amp;api=https://dpro-bakery-wallet-api.dpromstk2000.workers.dev" target="_blank" rel="noopener">開く</a>
+        <button class="ghost" type="button" data-copy="https://dpromstk2000-lab.github.io/bakery-line-system/system-check.html?shop_code=bakery_demo&amp;api=https://dpro-bakery-wallet-api.dpromstk2000.workers.dev">コピー</button>
+      </div>
+    </div>
+    
+    <div class="qr-card">
+      <div>
+        <div class="mini-label">スマホ読取用</div>
+        <h3>Worker確認</h3>
+      </div>
+      <img src="https://api.qrserver.com/v1/create-qr-code/?size=280x280&margin=14&data=https%3A%2F%2Fdpro-bakery-wallet-api.dpromstk2000.workers.dev%2Fapi%2Fhealth" alt="Worker確認 QR">
+      <p>https://dpro-bakery-wallet-api.dpromstk2000.workers.dev/api/health</p>
+      <div class="button-row">
+        <a class="button-link ghost" href="https://dpro-bakery-wallet-api.dpromstk2000.workers.dev/api/health" target="_blank" rel="noopener">開く</a>
+        <button class="ghost" type="button" data-copy="https://dpro-bakery-wallet-api.dpromstk2000.workers.dev/api/health">コピー</button>
+      </div>
+    </div>
+    
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <div>
+          <h2>営業前チェック</h2>
+          <div class="small">営業先で見せる前に、この順番で確認します。</div>
+        </div>
+        <button class="ghost" type="button" id="copyCheckButton">チェック項目をコピー</button>
+      </div>
+
+      <div class="check-grid" id="checkGrid">
+        <div class="check"><strong>1. system-check</strong>Worker・商品・管理コードがOK。</div>
+        <div class="check"><strong>2. 営業前DEMO設定</strong>顧客5、取り置き2、決済履歴あり。</div>
+        <div class="check"><strong>3. wallet</strong>DEMO-BK-001で会員証とQRが表示。</div>
+        <div class="check"><strong>4. cashier</strong>500円決済が成功し、残高が減る。</div>
+        <div class="check"><strong>5. owner</strong>決済履歴と未使用残高が更新。</div>
+        <div class="check"><strong>6. ECOレスキュー</strong>文面作成とコピーができる。</div>
+      </div>
+      <div class="status-box" id="statusBox">営業DEMO進行ページを表示しました。</div>
+    </section>
+
+    <div class="footer">
+      DPRO SHOP / パン屋専用LIFF会員証 / sales-demo.html<br>
+      営業では GitHub・Supabase・Worker などの技術名を出さず、売上・レジ時短・常連化・廃棄削減として伝えます。
+    </div>
+  </div>
+
+  <script>
+    async function copyText(text) {
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(String(text || ""));
+        return true;
+      }
+      const temp = document.createElement("textarea");
+      temp.value = String(text || "");
+      temp.style.position = "fixed";
+      temp.style.left = "-9999px";
+      document.body.appendChild(temp);
+      temp.focus();
+      temp.select();
+      document.execCommand("copy");
+      temp.remove();
+      return true;
+    }
+
+    function setStatus(text) {
+      document.getElementById("statusBox").textContent = text;
+    }
+
+    document.getElementById("copyScriptButton").addEventListener("click", async () => {
+      await copyText(document.getElementById("scriptBox").value);
+      setStatus("営業トークをコピーしました。");
+    });
+
+    document.getElementById("copyFlowButton").addEventListener("click", async () => {
+      await copyText("1. LINE入口を見せる\n2. お客様会員証を見せる\n3. 店員レジで決済する\n4. オーナー管理画面への反映を見せる\n5. ECOレスキュー文面作成を見せる");
+      setStatus("DEMO順番をコピーしました。");
+    });
+
+    document.getElementById("copyCheckButton").addEventListener("click", async () => {
+      await copyText("営業前チェック\n1. system-check OK\n2. 営業前DEMO設定 OK\n3. wallet 会員証表示 OK\n4. cashier 500円決済 OK\n5. owner 反映 OK\n6. ECOレスキュー文面コピー OK");
+      setStatus("チェック項目をコピーしました。");
+    });
+
+    document.querySelectorAll("[data-copy]").forEach((button) => {
+      button.addEventListener("click", async () => {
+        await copyText(button.getAttribute("data-copy") || "");
+        setStatus("URLをコピーしました。");
+      });
+    });
+  </script>
+</body>
+</html>
