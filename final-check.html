@@ -1,0 +1,1158 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>DPROベーカリー | final-check.html</title>
+  <style>
+    :root {
+      --bg: #fff7ed;
+      --panel: #ffffff;
+      --ink: #1c1917;
+      --muted: #78716c;
+      --line: #fed7aa;
+      --main: #b45309;
+      --soft: #ffedd5;
+      --green: #16a34a;
+      --red: #dc2626;
+      --blue: #2563eb;
+      --yellow: #d97706;
+      --shadow: 0 22px 70px rgba(120, 53, 15, .12);
+      --radius: 24px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--ink);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at 12% 0%, rgba(251, 146, 60, .20), transparent 34%),
+        radial-gradient(circle at 90% 4%, rgba(245, 158, 11, .16), transparent 30%),
+        linear-gradient(180deg, #fff7ed, #fffbeb 48%, #fef3c7);
+      line-height: 1.65;
+    }
+
+    .wrap {
+      width: min(1180px, calc(100% - 28px));
+      margin: 22px auto 56px;
+    }
+
+    .hero {
+      background: rgba(255,255,255,.94);
+      border: 1px solid var(--line);
+      border-radius: 32px;
+      box-shadow: var(--shadow);
+      padding: 28px;
+      display: grid;
+      grid-template-columns: 1.25fr .75fr;
+      gap: 22px;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::after {
+      content: "✅";
+      position: absolute;
+      right: 20px;
+      top: 10px;
+      font-size: 86px;
+      opacity: .10;
+      pointer-events: none;
+    }
+
+    .badge {
+      display: inline-flex;
+      border-radius: 999px;
+      background: var(--soft);
+      color: #9a3412;
+      padding: 6px 12px;
+      font-size: 12px;
+      font-weight: 950;
+    }
+
+    .badge.ok { background: #dcfce7; color: #166534; }
+    .badge.warn { background: #fef3c7; color: #92400e; }
+    .badge.ng { background: #fee2e2; color: #991b1b; }
+    .badge.info { background: #dbeafe; color: #1d4ed8; }
+
+    h1 {
+      margin: 12px 0 10px;
+      font-size: clamp(32px, 5vw, 56px);
+      line-height: 1.02;
+      letter-spacing: -.05em;
+    }
+
+    h2 {
+      margin: 0;
+      font-size: 24px;
+      letter-spacing: -.04em;
+    }
+
+    h3 {
+      margin: 3px 0 8px;
+      font-size: 18px;
+      letter-spacing: -.03em;
+    }
+
+    .lead {
+      margin: 0;
+      color: #44403c;
+      font-weight: 850;
+      font-size: 15px;
+    }
+
+    .hero-card {
+      background:
+        radial-gradient(circle at 12% 10%, rgba(251, 191, 36, .18), transparent 30%),
+        linear-gradient(135deg, #1c1917, #431407 58%, #9a3412);
+      color: #fff7ed;
+      border-radius: 28px;
+      padding: 22px;
+      box-shadow: 0 24px 70px rgba(67, 20, 7, .26);
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-card .title {
+      color: #fed7aa;
+      font-size: 12px;
+      font-weight: 950;
+    }
+
+    .hero-card .big {
+      font-size: 28px;
+      line-height: 1.12;
+      letter-spacing: -.05em;
+      font-weight: 950;
+      margin: 8px 0 10px;
+    }
+
+    .hero-card .small { color: #fed7aa; }
+
+    section.panel {
+      background: rgba(255,255,255,.95);
+      border: 1px solid var(--line);
+      box-shadow: 0 18px 52px rgba(120, 53, 15, .07);
+      border-radius: var(--radius);
+      padding: 22px;
+      margin: 16px 0;
+    }
+
+    .panel-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+      align-items: flex-start;
+      margin-bottom: 14px;
+    }
+
+    .small {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 850;
+    }
+
+    label {
+      display: block;
+      font-size: 12px;
+      font-weight: 950;
+      color: #57534e;
+      margin: 0 0 5px;
+    }
+
+    input, textarea, select {
+      width: 100%;
+      border: 1px solid #fdba74;
+      background: #fff;
+      border-radius: 14px;
+      padding: 12px 13px;
+      font-size: 15px;
+      color: var(--ink);
+      outline: none;
+    }
+
+    textarea {
+      min-height: 220px;
+      resize: vertical;
+      line-height: 1.65;
+    }
+
+    input:focus, textarea:focus, select:focus {
+      border-color: #f97316;
+      box-shadow: 0 0 0 4px rgba(249, 115, 22, .16);
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 12px;
+    }
+
+    .button-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    button, .button-link {
+      appearance: none;
+      border: 0;
+      border-radius: 999px;
+      background: var(--main);
+      color: #fff;
+      font-weight: 950;
+      padding: 12px 17px;
+      cursor: pointer;
+      min-height: 44px;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 14px 28px rgba(180, 83, 9, .22);
+      font-size: 14px;
+    }
+
+    button.green, .button-link.green { background: var(--green); box-shadow: 0 14px 28px rgba(22, 163, 74, .18); }
+    button.blue, .button-link.blue { background: var(--blue); box-shadow: 0 14px 28px rgba(37, 99, 235, .18); }
+    button.red { background: var(--red); box-shadow: 0 14px 28px rgba(220, 38, 38, .16); }
+    button.dark, .button-link.dark { background: #1c1917; box-shadow: 0 14px 28px rgba(28, 25, 23, .18); }
+
+    button.ghost, .button-link.ghost {
+      background: #fff;
+      color: #9a3412;
+      border: 1px solid #fdba74;
+      box-shadow: none;
+    }
+
+    button:disabled {
+      opacity: .52;
+      cursor: not-allowed;
+    }
+
+    .status-box {
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: #fff7ed;
+      padding: 12px 14px;
+      font-size: 13px;
+      font-weight: 850;
+      white-space: pre-wrap;
+      word-break: break-word;
+      margin-top: 12px;
+    }
+
+    .status-box.ok { border-color: #bbf7d0; background: #f0fdf4; color: #166534; }
+    .status-box.warn { border-color: #fde68a; background: #fffbeb; color: #92400e; }
+    .status-box.ng { border-color: #fecaca; background: #fef2f2; color: #991b1b; }
+    .status-box.info { border-color: #bfdbfe; background: #eff6ff; color: #1e3a8a; }
+
+    .score-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .score-card {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 15px;
+      box-shadow: 0 12px 36px rgba(120, 53, 15, .05);
+    }
+
+    .score-card .label {
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: 950;
+    }
+
+    .score-card .value {
+      font-size: 30px;
+      line-height: 1.1;
+      letter-spacing: -.04em;
+      font-weight: 950;
+      margin-top: 5px;
+    }
+
+    .check-list {
+      display: grid;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .check-row {
+      display: grid;
+      grid-template-columns: 88px minmax(0, 1fr) auto;
+      gap: 10px;
+      align-items: center;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 13px;
+    }
+
+    .check-row.ok { border-color: #bbf7d0; background: #f0fdf4; }
+    .check-row.warn { border-color: #fde68a; background: #fffbeb; }
+    .check-row.ng { border-color: #fecaca; background: #fef2f2; }
+    .check-row.info { border-color: #bfdbfe; background: #eff6ff; }
+
+    .result-pill {
+      border-radius: 999px;
+      padding: 6px 10px;
+      font-size: 12px;
+      font-weight: 950;
+      text-align: center;
+      white-space: nowrap;
+    }
+
+    .result-pill.ok { background: #dcfce7; color: #166534; }
+    .result-pill.warn { background: #fef3c7; color: #92400e; }
+    .result-pill.ng { background: #fee2e2; color: #991b1b; }
+    .result-pill.info { background: #dbeafe; color: #1d4ed8; }
+
+    .check-title {
+      font-weight: 950;
+      font-size: 15px;
+    }
+
+    .check-detail {
+      color: #57534e;
+      font-size: 12px;
+      font-weight: 850;
+      margin-top: 2px;
+      word-break: break-word;
+    }
+
+    .manual-grid {
+      display: grid;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .manual-row {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr);
+      gap: 12px;
+      align-items: start;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 13px;
+      cursor: pointer;
+    }
+
+    .manual-row input {
+      width: auto;
+      margin-top: 4px;
+    }
+
+    .manual-row strong {
+      display: block;
+      font-size: 15px;
+      margin-bottom: 2px;
+    }
+
+    .url-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 12px;
+    }
+
+    .url-card {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 13px;
+    }
+
+    .url-card strong {
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    .url-value {
+      word-break: break-all;
+      background: #fff7ed;
+      border: 1px solid #fed7aa;
+      border-radius: 12px;
+      padding: 9px;
+      color: #9a3412;
+      font-size: 12px;
+      font-weight: 850;
+    }
+
+    .code-box {
+      width: 100%;
+      min-height: 260px;
+      border: 0;
+      background: #1c1917;
+      color: #ffedd5;
+      border-radius: 18px;
+      padding: 16px;
+      font-size: 12px;
+      line-height: 1.7;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      resize: vertical;
+    }
+
+    details {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: #fff;
+      margin: 14px 0;
+      overflow: hidden;
+    }
+
+    summary {
+      cursor: pointer;
+      padding: 14px 16px;
+      font-weight: 950;
+      background: #fff7ed;
+    }
+
+    details .detail-body {
+      padding: 14px 16px;
+      border-top: 1px solid var(--line);
+    }
+
+    .footer {
+      text-align: center;
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 24px;
+      font-weight: 800;
+    }
+
+    @media (max-width: 900px) {
+      .hero { grid-template-columns: 1fr; }
+      .form-grid, .url-grid { grid-template-columns: 1fr; }
+      .score-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .check-row { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 560px) {
+      .wrap { width: min(100% - 18px, 1180px); margin-top: 10px; }
+      .hero { padding: 20px; border-radius: 22px; }
+      section.panel { padding: 16px; }
+      button, .button-link { width: 100%; }
+      .panel-head { display: block; }
+      .score-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <header class="hero">
+      <div>
+        <div class="badge">STEP BAKERY-15 / 総合チェック・完了判定</div>
+        <h1>パン屋システム<br>最終チェック</h1>
+        <p class="lead">
+          営業DEMOとして完成しているか、本番導入前に何が残っているかを1ページで確認します。
+          このページはデータを変更しない読込中心のチェックです。
+        </p>
+        <div class="button-row">
+          <button class="green" type="button" id="runAllButton">一括チェック</button>
+          <button class="blue" type="button" id="copyReportButton">結果レポートコピー</button>
+          <button class="dark" type="button" id="openOwnerButton">ownerを開く</button>
+        </div>
+      </div>
+
+      <div class="hero-card">
+        <div class="title">完了判定の考え方</div>
+        <div class="big">営業DEMOはOK。本番導入は店舗別設定と実機テストで完成。</div>
+        <div class="small">
+          wallet → cashier → owner の流れ、定休日・臨時休業反映、手動チャージ、本番ガードを確認します。
+        </div>
+      </div>
+    </header>
+
+    <section class="panel">
+      <div class="panel-head">
+        <div>
+          <h2>接続設定</h2>
+          <div class="small">管理コードはsessionStorage保存です。URLには残しません。</div>
+        </div>
+        <div id="finalBadge" class="badge info">未判定</div>
+      </div>
+
+      <div class="form-grid">
+        <div>
+          <label for="apiBaseInput">Worker API URL</label>
+          <input id="apiBaseInput" value="https://dpro-bakery-wallet-api.dpromstk2000.workers.dev" autocomplete="off" />
+        </div>
+        <div>
+          <label for="pagesBaseInput">GitHub Pages URL</label>
+          <input id="pagesBaseInput" value="https://dpromstk2000-lab.github.io/bakery-line-system" autocomplete="off" />
+        </div>
+        <div>
+          <label for="shopCodeInput">店舗コード shop_code</label>
+          <input id="shopCodeInput" value="bakery_demo" autocomplete="off" />
+        </div>
+        <div>
+          <label for="adminCodeInput">管理コード</label>
+          <input id="adminCodeInput" type="password" placeholder="管理コードを入力" autocomplete="off" />
+        </div>
+      </div>
+
+      <div class="button-row">
+        <button class="green" type="button" id="saveAdminButton">管理コード保存</button>
+        <button class="ghost" type="button" id="loadSavedButton">保存コード読込</button>
+        <button class="ghost" type="button" id="clearReportButton">結果クリア</button>
+      </div>
+
+      <div id="connectStatus" class="status-box info">一括チェックを押してください。</div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <div>
+          <h2>総合判定</h2>
+          <div class="small">NGが0で、主要チェックがOKなら営業DEMOとして完成扱いです。</div>
+        </div>
+      </div>
+
+      <div class="score-grid">
+        <div class="score-card">
+          <div class="label">OK</div>
+          <div class="value" id="okCount">0</div>
+        </div>
+        <div class="score-card">
+          <div class="label">WARN</div>
+          <div class="value" id="warnCount">0</div>
+        </div>
+        <div class="score-card">
+          <div class="label">NG</div>
+          <div class="value" id="ngCount">0</div>
+        </div>
+        <div class="score-card">
+          <div class="label">判定</div>
+          <div class="value" id="finalResult" style="font-size:22px;">未判定</div>
+        </div>
+      </div>
+
+      <div id="finalMessage" class="status-box info">未チェックです。</div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <div>
+          <h2>自動チェック結果</h2>
+          <div class="small">API・DB・本番ガード・休業日設定の読込確認です。</div>
+        </div>
+      </div>
+
+      <div class="check-list" id="checkList"></div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <div>
+          <h2>手動テストチェック</h2>
+          <div class="small">ここは実際に画面を操作して確認します。チェックはこのブラウザに保存されます。</div>
+        </div>
+        <button class="ghost" type="button" id="resetManualButton">手動チェックをリセット</button>
+      </div>
+
+      <div class="manual-grid" id="manualList"></div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <div>
+          <h2>確認用URL</h2>
+          <div class="small">営業前や本番導入直前に開く画面です。</div>
+        </div>
+        <button class="ghost" type="button" id="copyUrlsButton">URL一覧コピー</button>
+      </div>
+
+      <div class="url-grid" id="urlGrid"></div>
+    </section>
+
+    <details>
+      <summary>契約後の本番導入に必要な情報</summary>
+      <div class="detail-body">
+        <div class="check-list">
+          <div class="check-row info">
+            <div class="result-pill info">INFO</div>
+            <div>
+              <div class="check-title">店舗情報</div>
+              <div class="check-detail">店舗名、オーナー名、電話番号、メール、LINE公式アカウント名。</div>
+            </div>
+          </div>
+          <div class="check-row info">
+            <div class="result-pill info">INFO</div>
+            <div>
+              <div class="check-title">取り置き設定</div>
+              <div class="check-detail">定休日、2か月先までの臨時休業日、受け取り時間、当日締切。</div>
+            </div>
+          </div>
+          <div class="check-row info">
+            <div class="result-pill info">INFO</div>
+            <div>
+              <div class="check-title">LINE / LIFF</div>
+              <div class="check-detail">オーナー側LINE DevelopersでLIFF ID作成、LINE公式リッチメニュー設定。</div>
+            </div>
+          </div>
+          <div class="check-row info">
+            <div class="result-pill info">INFO</div>
+            <div>
+              <div class="check-title">決済</div>
+              <div class="check-detail">最初は店頭支払い確認後の手動チャージ。本格化する時にSquare本番連携。</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </details>
+
+    <section class="panel">
+      <div class="panel-head">
+        <div>
+          <h2>結果レポート</h2>
+          <div class="small">コピーして引き継ぎや記録に使えます。</div>
+        </div>
+      </div>
+
+      <textarea id="reportBox" class="code-box" readonly></textarea>
+    </section>
+
+    <div class="footer">
+      DPRO SHOP / パン屋専用LIFF会員証 / final-check.html<br>
+      このページは読込中心です。DEMOデータの作成やチャージ実行などの変更操作は行いません。
+    </div>
+  </div>
+
+  <script>
+    const DEFAULT_API = "https://dpro-bakery-wallet-api.dpromstk2000.workers.dev";
+    const DEFAULT_PAGES = "https://dpromstk2000-lab.github.io/bakery-line-system";
+
+    const $ = (id) => document.getElementById(id);
+
+    let checks = [];
+    let lastReport = "";
+
+    const manualItems = [
+      {
+        key: "wallet_demo_member",
+        title: "wallet：DEMO会員で表示",
+        detail: "DEMO-BK-001で会員証・残高・QRが表示される。"
+      },
+      {
+        key: "wallet_holiday",
+        title: "wallet：定休日・臨時休業表示",
+        detail: "取り置き予約の前に、定休日と臨時休業日が見える。休業日は選べない。"
+      },
+      {
+        key: "wallet_preorder",
+        title: "wallet：取り置き予約",
+        detail: "受付可能日・受け取り時間を選び、取り置き予約を作成できる。"
+      },
+      {
+        key: "cashier_payment",
+        title: "cashier：会員証決済",
+        detail: "QRまたはDEMO会員ボタンで500円決済し、残高が減る。"
+      },
+      {
+        key: "owner_reflect",
+        title: "owner：履歴反映",
+        detail: "walletの取り置き、cashierの決済、手動チャージがownerに反映される。"
+      },
+      {
+        key: "owner_pickup",
+        title: "owner：休業日保存",
+        detail: "定休日・受け取り時間・臨時休業日を保存でき、walletに反映される。"
+      },
+      {
+        key: "owner_manual_charge",
+        title: "owner：本番用手動チャージ",
+        detail: "DEMO-BK-001に手動チャージでき、顧客残高と履歴が更新される。"
+      },
+      {
+        key: "production_guard",
+        title: "本番ガード確認",
+        detail: "本番shop_codeではお客様側DEMOチャージが非表示または拒否される。"
+      }
+    ];
+
+    function clean(value) {
+      return String(value ?? "").trim();
+    }
+
+    function apiBase() {
+      return clean($("apiBaseInput").value || DEFAULT_API).replace(/\/+$/, "");
+    }
+
+    function pagesBase() {
+      return clean($("pagesBaseInput").value || DEFAULT_PAGES).replace(/\/+$/, "");
+    }
+
+    function shopCode() {
+      return clean($("shopCodeInput").value || "bakery_demo");
+    }
+
+    function adminCode() {
+      return clean($("adminCodeInput").value);
+    }
+
+    function adminStorageKey() {
+      return "DPRO_BAKERY_FINAL_ADMIN_CODE_" + shopCode();
+    }
+
+    function setStatus(id, message, tone = "info") {
+      const el = $(id);
+      el.className = "status-box " + tone;
+      el.textContent = message;
+    }
+
+    function escapeHtml(value) {
+      return String(value ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function yen(v) {
+      return Number(v || 0).toLocaleString("ja-JP") + "円";
+    }
+
+    function addCheck(level, title, detail, data) {
+      checks.push({
+        level,
+        title,
+        detail,
+        data: data || null,
+        time: new Date().toLocaleString("ja-JP")
+      });
+      renderChecks();
+      renderScore();
+      renderReport();
+    }
+
+    function clearChecks() {
+      checks = [];
+      renderChecks();
+      renderScore();
+      renderReport();
+      setStatus("connectStatus", "結果をクリアしました。", "info");
+    }
+
+    function renderChecks() {
+      const list = $("checkList");
+      if (!checks.length) {
+        list.innerHTML = '<div class="status-box info">まだチェックしていません。</div>';
+        return;
+      }
+
+      list.innerHTML = checks.map((c) => `
+        <div class="check-row ${escapeHtml(c.level)}">
+          <div class="result-pill ${escapeHtml(c.level)}">${escapeHtml(c.level.toUpperCase())}</div>
+          <div>
+            <div class="check-title">${escapeHtml(c.title)}</div>
+            <div class="check-detail">${escapeHtml(c.detail || "")}</div>
+          </div>
+          <button class="ghost" type="button" data-copy-check="${escapeHtml(JSON.stringify(c, null, 2))}">詳細コピー</button>
+        </div>
+      `).join("");
+
+      document.querySelectorAll("[data-copy-check]").forEach((button) => {
+        button.addEventListener("click", async () => {
+          await copyText(button.getAttribute("data-copy-check"));
+          setStatus("connectStatus", "詳細をコピーしました。", "ok");
+        });
+      });
+    }
+
+    function renderScore() {
+      const ok = checks.filter((c) => c.level === "ok").length;
+      const warn = checks.filter((c) => c.level === "warn").length;
+      const ng = checks.filter((c) => c.level === "ng").length;
+
+      $("okCount").textContent = ok;
+      $("warnCount").textContent = warn;
+      $("ngCount").textContent = ng;
+
+      let result = "未判定";
+      let tone = "info";
+      let message = "未チェックです。";
+
+      if (checks.length) {
+        if (ng > 0) {
+          result = "要修正";
+          tone = "ng";
+          message = "NGがあります。営業前に原因を修正してください。";
+        } else if (warn > 0) {
+          result = "営業DEMO可";
+          tone = "warn";
+          message = "WARNはありますが、NGがないため営業DEMOは可能です。本番導入前にWARN内容を確認してください。";
+        } else {
+          result = "完成";
+          tone = "ok";
+          message = "主要チェックはすべてOKです。営業DEMOとして完成扱いで大丈夫です。";
+        }
+      }
+
+      $("finalResult").textContent = result;
+      $("finalBadge").className = "badge " + tone;
+      $("finalBadge").textContent = result;
+      setStatus("finalMessage", message, tone);
+    }
+
+    function buildUrls() {
+      const api = encodeURIComponent(apiBase());
+      const shop = encodeURIComponent(shopCode());
+      const pages = pagesBase();
+      return {
+        "final-check": `${pages}/final-check.html?shop_code=${shop}&api=${api}`,
+        "wallet": `${pages}/wallet.html?shop_code=${shop}&api=${api}&v=14c`,
+        "cashier": `${pages}/cashier.html?shop_code=${shop}&api=${api}`,
+        "owner": `${pages}/owner.html?shop_code=${shop}&api=${api}`,
+        "system-check": `${pages}/system-check.html?shop_code=${shop}&api=${api}`,
+        "production-setup": `${pages}/production-setup.html`,
+        "qr": `${pages}/qr.html`,
+        "sales-demo": `${pages}/sales-demo.html`,
+        "Worker health": `${apiBase()}/api/health`
+      };
+    }
+
+    function renderUrls() {
+      const urls = buildUrls();
+      $("urlGrid").innerHTML = Object.entries(urls).map(([label, url]) => `
+        <div class="url-card">
+          <strong>${escapeHtml(label)}</strong>
+          <div class="url-value">${escapeHtml(url)}</div>
+          <div class="button-row">
+            <a class="button-link ghost" href="${escapeHtml(url)}" target="_blank" rel="noopener">開く</a>
+            <button class="ghost" type="button" data-copy-url="${escapeHtml(url)}">コピー</button>
+          </div>
+        </div>
+      `).join("");
+
+      document.querySelectorAll("[data-copy-url]").forEach((button) => {
+        button.addEventListener("click", async () => {
+          await copyText(button.getAttribute("data-copy-url"));
+          setStatus("connectStatus", "URLをコピーしました。", "ok");
+        });
+      });
+    }
+
+    function manualStorageKey(key) {
+      return "DPRO_BAKERY_FINAL_MANUAL_" + shopCode() + "_" + key;
+    }
+
+    function renderManualList() {
+      $("manualList").innerHTML = manualItems.map((item) => {
+        const checked = localStorage.getItem(manualStorageKey(item.key)) === "1";
+        return `
+          <label class="manual-row">
+            <input type="checkbox" data-manual-key="${escapeHtml(item.key)}" ${checked ? "checked" : ""}>
+            <div>
+              <strong>${escapeHtml(item.title)}</strong>
+              <div class="small">${escapeHtml(item.detail)}</div>
+            </div>
+          </label>
+        `;
+      }).join("");
+
+      document.querySelectorAll("[data-manual-key]").forEach((input) => {
+        input.addEventListener("change", () => {
+          localStorage.setItem(manualStorageKey(input.getAttribute("data-manual-key")), input.checked ? "1" : "0");
+          renderReport();
+        });
+      });
+    }
+
+    function resetManual() {
+      manualItems.forEach((item) => localStorage.removeItem(manualStorageKey(item.key)));
+      renderManualList();
+      renderReport();
+    }
+
+    function manualDoneCount() {
+      return manualItems.filter((item) => localStorage.getItem(manualStorageKey(item.key)) === "1").length;
+    }
+
+    async function copyText(text) {
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(String(text || ""));
+        return true;
+      }
+      const temp = document.createElement("textarea");
+      temp.value = String(text || "");
+      temp.style.position = "fixed";
+      temp.style.left = "-9999px";
+      document.body.appendChild(temp);
+      temp.focus();
+      temp.select();
+      document.execCommand("copy");
+      temp.remove();
+      return true;
+    }
+
+    async function apiFetch(path, options = {}) {
+      const url = apiBase() + path;
+      const res = await fetch(url, {
+        ...options,
+        headers: {
+          "Accept": "application/json",
+          ...(options.body ? { "Content-Type": "application/json" } : {}),
+          ...(options.auth ? { "X-DPRO-Admin-Code": adminCode() } : {}),
+          ...(options.headers || {})
+        }
+      });
+
+      const text = await res.text();
+      let data = null;
+      try { data = text ? JSON.parse(text) : null; } catch { data = text; }
+
+      if (!res.ok || data?.ok === false) {
+        throw new Error(data?.message || data?.error || text || "APIエラーです。");
+      }
+
+      return data;
+    }
+
+    function withShop(path) {
+      const connector = path.includes("?") ? "&" : "?";
+      return path + connector + "shop_code=" + encodeURIComponent(shopCode());
+    }
+
+    async function runCheck(title, fn, required = true) {
+      try {
+        const result = await fn();
+        addCheck("ok", title, result.message || "OK", result.data || result);
+        return { ok: true, data: result.data || result };
+      } catch (e) {
+        addCheck(required ? "ng" : "warn", title, e.message || "エラー", { error: e.message });
+        return { ok: false, error: e.message };
+      }
+    }
+
+    async function runAll() {
+      checks = [];
+      renderChecks();
+      renderScore();
+      setStatus("connectStatus", "チェック中です...", "info");
+      $("runAllButton").disabled = true;
+      $("runAllButton").textContent = "チェック中...";
+
+      if (!adminCode()) {
+        addCheck("warn", "管理コード", "管理コード未入力です。管理系チェックは失敗します。", null);
+      }
+
+      let health = null;
+      let settings = null;
+      let products = null;
+      let pickup = null;
+      let safety = null;
+      let summary = null;
+
+      await runCheck("Worker health", async () => {
+        health = await apiFetch("/api/health");
+        const version = health.version || "";
+        if (!version.includes("BAKERY-13")) {
+          throw new Error("Worker version が STEP BAKERY-13 ではありません: " + version);
+        }
+        return { message: "Worker STEP BAKERY-13 稼働中: " + version, data: health };
+      });
+
+      await runCheck("public settings", async () => {
+        settings = await apiFetch(withShop("/api/public/settings"));
+        return {
+          message: `${settings.shop_name || shopCode()} / ${settings.is_demo ? "DEMO" : "本番"} / charge_mode: ${settings.charge_mode || "-"}`,
+          data: settings
+        };
+      });
+
+      await runCheck("public products", async () => {
+        products = await apiFetch(withShop("/api/public/products"));
+        const count = products.count ?? (products.products || []).length;
+        if (count < 1) throw new Error("商品がありません。");
+        return { message: `商品数: ${count}`, data: products };
+      });
+
+      await runCheck("pickup rules", async () => {
+        pickup = await apiFetch(withShop("/api/public/pickup-rules"));
+        if (!pickup.rule) throw new Error("取り置き設定がありません。owner.htmlで保存してください。");
+        const closed = Array.isArray(pickup.rule.closed_weekdays) ? pickup.rule.closed_weekdays.join(",") : "-";
+        const times = Array.isArray(pickup.rule.pickup_times) ? pickup.rule.pickup_times.join(" / ") : "-";
+        const specialCount = (pickup.special_closed_days || []).length;
+        return { message: `定休日コード: ${closed} / 受け取り時間: ${times} / 臨時休業: ${specialCount}件`, data: pickup };
+      });
+
+      await runCheck("admin safety-check", async () => {
+        safety = await apiFetch(withShop("/api/admin/safety-check"), { auth: true });
+        return {
+          message: safety.is_demo
+            ? "DEMO店舗です。DEMOチャージ許可。"
+            : "本番店舗です。DEMOチャージ拒否。",
+          data: safety
+        };
+      });
+
+      await runCheck("production-readiness", async () => {
+        const data = await apiFetch(withShop("/api/admin/production-readiness-check"), { auth: true });
+        const fail = Number(data.fail || 0);
+        if (fail > 0) throw new Error(`FAILがあります: ${fail}件`);
+        return { message: `result: ${data.result || "-"} / PASS ${data.pass || 0} / WARN ${data.warn || 0} / FAIL ${data.fail || 0}`, data };
+      }, false);
+
+      await runCheck("owner-summary", async () => {
+        summary = await apiFetch(withShop("/api/admin/owner-summary"), { auth: true });
+        return {
+          message: `会員 ${summary.customers?.active ?? "-"} / 今日チャージ ${yen(summary.wallet?.today_charge_amount)} / 今日決済 ${yen(summary.wallet?.today_payment_amount)} / 取り置き ${summary.preorders?.today_count ?? "-"}`,
+          data: summary
+        };
+      });
+
+      await runCheck("admin customers", async () => {
+        const data = await apiFetch(withShop("/api/admin/customers?limit=10"), { auth: true });
+        const count = data.count ?? (data.customers || []).length;
+        if (shopCode() === "bakery_demo" && count < 1) throw new Error("DEMO顧客がありません。営業前DEMO設定を実行してください。");
+        return { message: `顧客取得OK: ${count}件`, data };
+      });
+
+      await runCheck("admin transactions", async () => {
+        const data = await apiFetch(withShop("/api/admin/transactions?limit=10"), { auth: true });
+        const count = data.count ?? (data.transactions || []).length;
+        return { message: `履歴取得OK: ${count}件`, data };
+      });
+
+      await runCheck("admin preorders", async () => {
+        const data = await apiFetch(withShop("/api/admin/preorders?limit=10"), { auth: true });
+        const count = data.count ?? (data.preorders || []).length;
+        return { message: `取り置き取得OK: ${count}件`, data };
+      });
+
+      if (settings && settings.is_demo) {
+        addCheck("ok", "DEMO店舗ガード", "bakery_demo ではDEMOチャージが許可されています。", settings);
+      } else if (settings) {
+        addCheck("ok", "本番店舗ガード", "本番店舗ではDEMOチャージ拒否設計です。", settings);
+      }
+
+      renderUrls();
+      renderReport();
+      setStatus("connectStatus", "一括チェック完了です。", "ok");
+      $("runAllButton").disabled = false;
+      $("runAllButton").textContent = "一括チェック";
+    }
+
+    function saveAdmin() {
+      sessionStorage.setItem(adminStorageKey(), adminCode());
+      setStatus("connectStatus", "管理コードを保存しました。", "ok");
+    }
+
+    function loadSavedAdmin() {
+      const code = sessionStorage.getItem(adminStorageKey());
+      if (code) {
+        $("adminCodeInput").value = code;
+        setStatus("connectStatus", "保存済み管理コードを読み込みました。", "ok");
+      } else {
+        setStatus("connectStatus", "保存済み管理コードはありません。", "warn");
+      }
+    }
+
+    function applyQueryParams() {
+      const url = new URL(location.href);
+      const api = url.searchParams.get("api");
+      const shop = url.searchParams.get("shop_code");
+      if (api) $("apiBaseInput").value = api;
+      if (shop) $("shopCodeInput").value = shop;
+      loadSavedAdmin();
+    }
+
+    function renderReport() {
+      const ok = checks.filter((c) => c.level === "ok").length;
+      const warn = checks.filter((c) => c.level === "warn").length;
+      const ng = checks.filter((c) => c.level === "ng").length;
+      const manualDone = manualDoneCount();
+
+      const urls = buildUrls();
+      lastReport =
+`# DPROベーカリー STEP BAKERY-15 総合チェック結果
+
+日時: ${new Date().toLocaleString("ja-JP")}
+shop_code: ${shopCode()}
+Worker API: ${apiBase()}
+
+## 自動チェック
+OK: ${ok}
+WARN: ${warn}
+NG: ${ng}
+判定: ${ng > 0 ? "要修正" : warn > 0 ? "営業DEMO可 / 本番前WARN確認" : checks.length ? "完成" : "未判定"}
+
+${checks.map((c, i) => `${i + 1}. [${c.level.toUpperCase()}] ${c.title}
+   ${c.detail}`).join("\n")}
+
+## 手動チェック
+${manualDone} / ${manualItems.length} 完了
+
+${manualItems.map((item, i) => {
+  const done = localStorage.getItem(manualStorageKey(item.key)) === "1" ? "OK" : "未確認";
+  return `${i + 1}. [${done}] ${item.title} - ${item.detail}`;
+}).join("\n")}
+
+## 主要URL
+${Object.entries(urls).map(([k, v]) => `${k}: ${v}`).join("\n")}
+
+## 完了判断
+営業DEMOとしては、NGが0で、手動チェックの wallet / cashier / owner の主要導線が確認できれば完成扱い。
+本番導入時は、production-setup.htmlで本番shop_codeを作成し、LIFF IDとLINEリッチメニューを店舗側LINE公式に設定する。
+`;
+      $("reportBox").value = lastReport;
+    }
+
+    async function copyReport() {
+      renderReport();
+      await copyText(lastReport);
+      setStatus("connectStatus", "結果レポートをコピーしました。", "ok");
+    }
+
+    async function copyUrls() {
+      const urls = buildUrls();
+      await copyText(Object.entries(urls).map(([k, v]) => `${k}: ${v}`).join("\n"));
+      setStatus("connectStatus", "URL一覧をコピーしました。", "ok");
+    }
+
+    function bindEvents() {
+      $("runAllButton").addEventListener("click", runAll);
+      $("saveAdminButton").addEventListener("click", saveAdmin);
+      $("loadSavedButton").addEventListener("click", loadSavedAdmin);
+      $("clearReportButton").addEventListener("click", clearChecks);
+      $("copyReportButton").addEventListener("click", copyReport);
+      $("copyUrlsButton").addEventListener("click", copyUrls);
+      $("resetManualButton").addEventListener("click", resetManual);
+      $("openOwnerButton").addEventListener("click", () => window.open(buildUrls().owner, "_blank"));
+
+      ["apiBaseInput", "pagesBaseInput", "shopCodeInput"].forEach((id) => {
+        $(id).addEventListener("change", () => {
+          renderUrls();
+          renderManualList();
+          renderReport();
+        });
+      });
+    }
+
+    function init() {
+      applyQueryParams();
+      bindEvents();
+      renderChecks();
+      renderScore();
+      renderUrls();
+      renderManualList();
+      renderReport();
+    }
+
+    init();
+  </script>
+</body>
+</html>
