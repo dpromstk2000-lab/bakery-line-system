@@ -674,10 +674,10 @@
   <div class="wrap">
     <header class="hero">
       <div>
-        <div class="badge">STEP BAKERY-22 / staff導線追加</div>
+        <div class="badge">STEP BAKERY-25 / 管理系安定通信版</div>
         <h1>パン屋オーナー<br>管理画面</h1>
         <p class="lead">
-          最初に見るのは今日やることです。店頭スタッフ用の取り置き画面もすぐ開けます。
+          最初に見るのは今日やることです。管理系の読込・取り置き更新・商品保存を安定版APIに寄せました。
           チャージは希望店舗向けの上位オプションとして下部にまとめています。
         </p>
         <div class="button-row">
@@ -1879,6 +1879,216 @@
         loadProducts(),
         loadPickupSettings()
       ]);
+    }
+
+    // =========================================================
+    // STEP25 安定通信版 overrides
+    // 既存の管理コードヘッダー方式ではなく、simple endpoint を使う
+    // =========================================================
+
+    async function loadSummary() {
+      try {
+        const data = await loadStableAdminData(true);
+
+        $("cardCustomers").textContent = data.summary?.customers?.active ?? "-";
+        $("cardCharge").textContent = yen(data.summary?.wallet?.today_charge_amount);
+        $("cardPayment").textContent = yen(data.summary?.wallet?.today_payment_amount);
+        $("cardBalance").textContent = yen(data.summary?.wallet?.total_unused_balance);
+        $("cardPreorders").textContent = data.summary?.preorders?.today_count ?? "-";
+
+        setStatus("summaryStatus", "今日の状況を読み込みました。", "ok");
+        logDiag("サマリー読込OK STEP25", data.summary);
+      } catch (e) {
+        setStatus("summaryStatus", e.message, "ng");
+        logDiag("サマリー読込NG STEP25", { error: e.message });
+      }
+    }
+
+    async function loadCustomers() {
+      try {
+        const data = await loadStableAdminData(false);
+        const rows = data.customers?.sample || [];
+
+        $("customersTbody").innerHTML = rows.length ? rows.map((c) => `
+          <tr>
+            <td>${escapeHtml(c.customer_name || c.line_display_name || "お客様")}</td>
+            <td class="mono">${escapeHtml(c.member_code || "")}</td>
+            <td>${yen(c.balance)}</td>
+            <td>${escapeHtml(c.eco_rescue_ok || "")}</td>
+            <td>
+              <button class="ghost" type="button" data-member-copy="${escapeHtml(c.member_code || "")}">会員コードコピー</button>
+              <button class="ghost" type="button" data-member-charge="${escapeHtml(c.member_code || "")}">チャージに使う</button>
+            </td>
+          </tr>
+        `).join("") : `<tr><td colspan="5">顧客がありません。</td></tr>`;
+
+        document.querySelectorAll("[data-member-copy]").forEach((button) => {
+          button.addEventListener("click", async () => {
+            await copyText(button.getAttribute("data-member-copy"));
+            setStatus("connectionStatus", "会員コードをコピーしました。", "ok");
+          });
+        });
+
+        document.querySelectorAll("[data-member-charge]").forEach((button) => {
+          button.addEventListener("click", () => {
+            $("chargeMemberInput").value = button.getAttribute("data-member-charge") || "";
+            setStatus("manualChargeStatus", "手動チャージ欄に会員コードを入れました。", "ok");
+            window.scrollTo({ top: $("manualChargeSection").offsetTop - 20, behavior: "smooth" });
+          });
+        });
+
+        logDiag("顧客一覧読込OK STEP25", { count: rows.length });
+      } catch (e) {
+        $("customersTbody").innerHTML = `<tr><td colspan="5">${escapeHtml(e.message)}</td></tr>`;
+        logDiag("顧客一覧読込NG STEP25", { error: e.message });
+      }
+    }
+
+    async function loadTransactions() {
+      try {
+        const data = await loadStableAdminData(false);
+        const rows = data.transactions?.rows || [];
+
+        $("transactionsTbody").innerHTML = rows.length ? rows.map((t) => `
+          <tr>
+            <td>${escapeHtml(formatDateTime(t.created_at))}</td>
+            <td><span class="pill">${escapeHtml(t.type || t.transaction_type || "")}</span></td>
+            <td>${escapeHtml(t.customer_name || t.member_code || "")}</td>
+            <td>${yen(t.amount)}</td>
+            <td>${yen(t.balance_after)}</td>
+            <td>${escapeHtml(t.memo || t.source || "")}</td>
+          </tr>
+        `).join("") : `<tr><td colspan="6">履歴がありません。</td></tr>`;
+
+        logDiag("決済履歴読込OK STEP25", { count: rows.length });
+      } catch (e) {
+        $("transactionsTbody").innerHTML = `<tr><td colspan="6">${escapeHtml(e.message)}</td></tr>`;
+        logDiag("決済履歴読込NG STEP25", { error: e.message });
+      }
+    }
+
+    async function loadProducts() {
+      try {
+        const data = await loadStableAdminData(false);
+        const rows = data.products?.rows || [];
+
+        $("productsTbody").innerHTML = rows.length ? rows.map((p) => {
+          const key = p.product_code || p.id;
+          return `
+            <tr>
+              <td><input style="min-width:76px;" id="prod_order_${escapeHtml(key)}" type="number" value="${escapeHtml(p.display_order ?? 100)}"></td>
+              <td>
+                <strong>${escapeHtml(p.product_name || "-")}</strong>
+                <div class="small">${escapeHtml(p.product_code || "")}</div>
+                <div class="small">${escapeHtml(p.description || "")}</div>
+              </td>
+              <td>
+                <input style="min-width:110px;" id="prod_price_${escapeHtml(key)}" type="number" min="0" value="${escapeHtml(p.preorder_price || p.price || 0)}">
+              </td>
+              <td>
+                <label class="day-option" style="display:inline-flex;">
+                  <input id="prod_preorder_${escapeHtml(key)}" type="checkbox" ${p.is_preorder_available !== false ? "checked" : ""}>
+                  受付する
+                </label>
+              </td>
+              <td>
+                <input style="min-width:100px;" id="prod_limit_${escapeHtml(key)}" type="number" min="0" placeholder="無制限" value="${escapeHtml(p.daily_preorder_limit ?? "")}">
+              </td>
+              <td>
+                <input style="min-width:180px;" id="prod_note_${escapeHtml(key)}" value="${escapeHtml(p.preorder_admin_note || "")}">
+              </td>
+              <td>
+                <button class="green" type="button" data-product-save="${escapeHtml(key)}">保存</button>
+              </td>
+            </tr>
+          `;
+        }).join("") : `<tr><td colspan="7">商品がありません。</td></tr>`;
+
+        document.querySelectorAll("[data-product-save]").forEach((button) => {
+          button.addEventListener("click", () => saveProduct(button.getAttribute("data-product-save")));
+        });
+
+        setStatus("productsStatus", `商品を${rows.length}件読み込みました。`, "ok");
+        logDiag("商品一覧読込OK STEP25", { count: rows.length });
+      } catch (e) {
+        $("productsTbody").innerHTML = `<tr><td colspan="7">${escapeHtml(e.message)}</td></tr>`;
+        setStatus("productsStatus", e.message, "ng");
+        logDiag("商品一覧読込NG STEP25", { error: e.message });
+      }
+    }
+
+    async function saveProduct(key) {
+      try {
+        const data = await stableAdminPost("/api/simple/product-update", {
+          product_code: key,
+          preorder_price: Number($("prod_price_" + key)?.value || 0),
+          is_preorder_available: $("prod_preorder_" + key)?.checked === true,
+          daily_preorder_limit: $("prod_limit_" + key)?.value || "",
+          display_order: Number($("prod_order_" + key)?.value || 100),
+          preorder_admin_note: $("prod_note_" + key)?.value || "",
+          staff_name: "管理スタッフ"
+        });
+
+        stableAdminCache = null;
+        setStatus("productsStatus", data.message || "商品設定を保存しました。", "ok");
+        await loadProducts();
+      } catch (e) {
+        setStatus("productsStatus", e.message || "商品設定の保存に失敗しました。", "ng");
+      }
+    }
+
+    async function changePreorderStatus(preorderId, status) {
+      try {
+        const label = statusLabel(status);
+        if (!confirm(`取り置きステータスを「${label}」に変更しますか？`)) return;
+
+        const data = await stableAdminPost("/api/simple/preorder-status", {
+          preorder_id: preorderId,
+          status,
+          staff_name: "管理スタッフ",
+          memo: "owner.html STEP BAKERY-25から更新"
+        });
+
+        stableAdminCache = null;
+        setStatus("summaryStatus", data.message || "取り置きステータスを更新しました。", "ok");
+        await Promise.allSettled([loadPreorders(), loadSummary()]);
+      } catch (e) {
+        setStatus("summaryStatus", e.message || "ステータス更新に失敗しました。", "ng");
+      }
+    }
+
+    async function loadPreorders() {
+      try {
+        const data = await loadStableAdminData(true);
+        const rows = data.preorders?.rows || [];
+
+        $("preordersTbody").innerHTML = rows.length ? rows.map((p) => {
+          const itemText = Array.isArray(p.items)
+            ? p.items.map((i) => `${i.product_name || i.name || i.product_code || "商品"} × ${i.quantity || i.qty || 1}`).join(" / ")
+            : JSON.stringify(p.items || "");
+
+          const status = p.status || "pending";
+          const isDone = ["picked_up", "cancelled", "no_show"].includes(status);
+
+          return `
+            <tr style="${isDone ? "opacity:.62;" : ""}">
+              <td>${escapeHtml(p.pickup_date || "")}</td>
+              <td>${escapeHtml(p.pickup_time || "")}</td>
+              <td>${escapeHtml(p.customer_name || p.member_code || "")}</td>
+              <td>${escapeHtml(itemText)}</td>
+              <td>${yen(p.total_amount)}</td>
+              <td><span class="pill">${escapeHtml(statusLabel(status))}</span></td>
+              <td><div class="button-row" style="margin-top:0;">${preorderActionButtons(p)}</div></td>
+            </tr>
+          `;
+        }).join("") : `<tr><td colspan="7">取り置き予約がありません。</td></tr>`;
+
+        bindPreorderActionButtons();
+        logDiag("取り置き一覧読込OK STEP25", { count: rows.length });
+      } catch (e) {
+        $("preordersTbody").innerHTML = `<tr><td colspan="7">${escapeHtml(e.message)}</td></tr>`;
+        logDiag("取り置き一覧読込NG STEP25", { error: e.message });
+      }
     }
 
     function bindEvents() {
