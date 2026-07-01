@@ -419,10 +419,10 @@
   <div class="wrap">
     <header class="hero">
       <div>
-        <div class="badge">STEP BAKERY-24EB / 管理系API CORS回避チェック</div>
+        <div class="badge">STEP BAKERY-24FB / 管理系API CORS回避チェック</div>
         <h1>管理画面・スタッフ画面<br>本番前チェック</h1>
         <p class="lead">
-          Cloudflare側の管理コードは正しいため、Worker内の照合をtrim対応に修正しました。
+          Cloudflare側の管理コードは正しいため、入力欄側の古い保存コード・入力ミスを切り分けます。
           ここが通れば、チャージなしライト版の本番候補としてかなり安心です。
         </p>
         <div class="button-row">
@@ -436,7 +436,7 @@
         <div class="title">本番OKの判断基準</div>
         <div class="big">owner.html と staff.html が読む・更新するAPIが通ること。</div>
         <div class="small">
-          今回のエラーは endpoint まで届いています。管理コード照合で前後空白などに強くしました。
+          今回のエラーは endpoint まで届いています。管理コードの文字数・保存コード・入力内容を安全に確認します。
         </div>
       </div>
     </header>
@@ -465,7 +465,15 @@
         </div>
       </div>
 
-      <div id="overallStatus" class="status-box info">管理コード欄は一度全削除して、dpro-bakery-demo-2026 を入れ直してから実行してください。</div>
+      <div class="button-row" style="margin-top:12px;">
+        <button class="blue" type="button" id="fillDemoCodeButton">DEMO管理コードを自動入力</button>
+        <button class="ghost" type="button" id="toggleAdminCodeButton">管理コードを表示/非表示</button>
+        <button class="red" type="button" id="clearStoredCodeButton">保存コードを削除</button>
+      </div>
+
+      <div id="codeDebugBox" class="status-box info">管理コード欄は一度全削除して、DEMO管理コードを自動入力してから実行してください。</div>
+
+      <div id="overallStatus" class="status-box info">まだ確認していません。</div>
 
       <div class="score-grid">
         <div class="score-card ok">
@@ -539,7 +547,7 @@
     </details>
 
     <div class="footer">
-      DPRO SHOP / Bakery admin-check.html / STEP BAKERY-24EB<br>
+      DPRO SHOP / Bakery admin-check.html / STEP BAKERY-24FB<br>
       本番前に、管理系APIが実際に使えるかを確認するための専用チェック画面です。
     </div>
   </div>
@@ -727,12 +735,14 @@
 
       const text = await res.text();
       let data = null;
-      try { data = text ? JSON.parse(text) : null; } catch { data = text; }
+      try { data = text ? JSON.parse(text) : null; } catch { data = { ok:false, message:text || "APIエラーです。" }; }
 
-      if (!res.ok || data?.ok === false) {
-        throw new Error(data?.message || data?.error || text || "APIエラーです。");
+      if (!data || typeof data !== "object") {
+        data = { ok:false, message:String(text || "APIエラーです。") };
       }
 
+      data.__http_ok = res.ok;
+      data.__http_status = res.status;
       return data;
     }
 
@@ -786,6 +796,23 @@
       try {
         const data = await simpleAdminGet({});
 
+        if (!data.__http_ok || data.ok === false) {
+          const debug = data.auth_debug || data.steps?.find((s) => s.name === "admin_auth")?.detail || {};
+          const debugText = [
+            `message: ${data.message || data.error || "管理コード認証に失敗しました。"}`,
+            `http_status: ${data.__http_status}`,
+            `input_length: ${debug.input_length ?? "-"}`,
+            `env_admin_code_exists: ${debug.env_admin_code_exists ?? "-"}`,
+            `env_admin_code_length: ${debug.env_admin_code_length ?? "-"}`,
+            `shop_code: ${debug.shop_code || data.shop_code || shopCode()}`
+          ].join(" / ");
+
+          addCheck("admin", "FAIL", "管理コード認証", debugText);
+          setStatus("codeDebugBox", "管理コード認証NGです。入力欄の保存コードを削除し、DEMO管理コードを自動入力してください。\n" + debugText, "ng");
+          log("GET admin direct-check AUTH NG", data);
+          return;
+        }
+
         addCheck("admin", data.safety?.production_guard ? "PASS" : "FAIL", "安全チェック", data.safety?.message || "安全チェックOK");
         addCheck("admin", "PASS", "DEMOチャージ制御", data.safety?.is_demo ? "DEMO店舗のみ許可" : "本番店舗では拒否");
         addCheck("admin", "PASS", "オーナーサマリー", `会員 ${data.summary?.customers?.active ?? "-"} / 今日の取り置き ${data.summary?.preorders?.today_count ?? "-"}`);
@@ -803,6 +830,7 @@
           }
         }
 
+        setStatus("codeDebugBox", `管理コード認証OKです。入力文字数: ${adminCode().length}`, "ok");
         lastPreorders = data.preorders?.rows || [];
         log("GET admin direct-check OK", {
           customers: data.customers?.count,
@@ -861,9 +889,9 @@
 
     function buildLinks() {
       return [
-        ["owner.html", pageUrl("owner.html", "&v=24e"), "オーナー管理画面"],
-        ["staff.html", pageUrl("staff.html", "&v=24e"), "スタッフ取り置き画面"],
-        ["wallet.html", pageUrl("wallet.html", "&v=24e"), "お客様会員証"],
+        ["owner.html", pageUrl("owner.html", "&v=24f"), "オーナー管理画面"],
+        ["staff.html", pageUrl("staff.html", "&v=24f"), "スタッフ取り置き画面"],
+        ["wallet.html", pageUrl("wallet.html", "&v=24f"), "お客様会員証"],
         ["final-check.html", pageUrl("final-check.html", "&v=23e"), "総合チェック"],
         ["qr.html", `${DEFAULT_PAGES}/qr.html?v=22`, "QRリンク集"],
         ["sales-demo.html", `${DEFAULT_PAGES}/sales-demo.html?v=22`, "営業DEMO進行"]
@@ -923,6 +951,17 @@
       return lines.join("\n");
     }
 
+    function updateCodeDebug() {
+      const len = adminCode().length;
+      const expected = "dpro-bakery-demo-2026".length;
+      const match = adminCode() === "dpro-bakery-demo-2026";
+      setStatus(
+        "codeDebugBox",
+        `入力中の管理コード文字数: ${len}\nDEMO管理コードの正しい文字数: ${expected}\n完全一致: ${match ? "はい" : "いいえ"}`,
+        match ? "ok" : "warn"
+      );
+    }
+
     function bindEvents() {
       $("runReadButton").addEventListener("click", runReadChecks);
       $("runStatusButton").addEventListener("click", runStatusUpdateTest);
@@ -931,9 +970,29 @@
         setStatus("overallStatus", "チェック結果をコピーしました。", "ok");
       });
 
+      $("fillDemoCodeButton").addEventListener("click", () => {
+        $("adminCodeInput").value = "dpro-bakery-demo-2026";
+        sessionStorage.setItem(storageKey(), $("adminCodeInput").value);
+        updateCodeDebug();
+      });
+
+      $("toggleAdminCodeButton").addEventListener("click", () => {
+        $("adminCodeInput").type = $("adminCodeInput").type === "password" ? "text" : "password";
+      });
+
+      $("clearStoredCodeButton").addEventListener("click", () => {
+        sessionStorage.removeItem(storageKey());
+        $("adminCodeInput").value = "";
+        updateCodeDebug();
+        setStatus("overallStatus", "保存コードを削除しました。DEMO管理コードを自動入力してください。", "info");
+      });
+
+      $("adminCodeInput").addEventListener("input", updateCodeDebug);
+
       $("shopCodeInput").addEventListener("change", () => {
         const stored = sessionStorage.getItem(storageKey());
         $("adminCodeInput").value = stored || "";
+        updateCodeDebug();
         renderLinks();
       });
     }
@@ -948,6 +1007,7 @@
       const stored = sessionStorage.getItem(storageKey());
       if (stored) $("adminCodeInput").value = stored;
 
+      updateCodeDebug();
       renderAll();
       renderLinks();
       bindEvents();
