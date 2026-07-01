@@ -1,0 +1,1006 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>DPROベーカリー | admin-check.html</title>
+  <style>
+    :root {
+      --bg:#fff7ed;
+      --panel:#ffffff;
+      --ink:#1c1917;
+      --muted:#78716c;
+      --line:#fed7aa;
+      --main:#ea580c;
+      --brown:#7c2d12;
+      --green:#16a34a;
+      --red:#dc2626;
+      --blue:#2563eb;
+      --yellow:#d97706;
+      --dark:#292524;
+      --shadow:0 22px 70px rgba(120,53,15,.12);
+      --radius:24px;
+    }
+
+    * { box-sizing:border-box; }
+
+    body {
+      margin:0;
+      min-height:100vh;
+      color:var(--ink);
+      font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      background:
+        radial-gradient(circle at 10% 0%, rgba(251,146,60,.18), transparent 34%),
+        radial-gradient(circle at 92% 8%, rgba(245,158,11,.16), transparent 30%),
+        linear-gradient(180deg,#fff7ed,#fffbeb 54%,#fef3c7);
+      line-height:1.6;
+    }
+
+    .wrap {
+      width:min(100% - 24px,1220px);
+      margin:0 auto;
+      padding:22px 0 58px;
+    }
+
+    .hero {
+      display:grid;
+      grid-template-columns:1.05fr .95fr;
+      gap:18px;
+      align-items:center;
+      background:rgba(255,255,255,.95);
+      border:1px solid var(--line);
+      border-radius:32px;
+      padding:26px;
+      box-shadow:var(--shadow);
+      margin-bottom:16px;
+    }
+
+    .badge {
+      display:inline-flex;
+      width:fit-content;
+      align-items:center;
+      gap:6px;
+      border-radius:999px;
+      padding:6px 11px;
+      border:1px solid #fed7aa;
+      background:#ffedd5;
+      color:#9a3412;
+      font-weight:950;
+      font-size:12px;
+    }
+
+    .badge.green { background:#dcfce7; color:#166534; border-color:#bbf7d0; }
+    .badge.blue { background:#dbeafe; color:#1d4ed8; border-color:#bfdbfe; }
+    .badge.red { background:#fee2e2; color:#991b1b; border-color:#fecaca; }
+    .badge.dark { background:#292524; color:#fff; border-color:#292524; }
+
+    h1 {
+      margin:12px 0 10px;
+      font-size:clamp(34px,5vw,64px);
+      line-height:1.02;
+      letter-spacing:-.08em;
+    }
+
+    h2 {
+      margin:0;
+      font-size:clamp(22px,2.4vw,32px);
+      line-height:1.18;
+      letter-spacing:-.06em;
+    }
+
+    h3 {
+      margin:0 0 10px;
+      font-size:18px;
+      letter-spacing:-.04em;
+    }
+
+    .lead {
+      margin:0;
+      color:var(--muted);
+      font-weight:850;
+      line-height:1.8;
+    }
+
+    .hero-card {
+      border-radius:26px;
+      padding:22px;
+      background:linear-gradient(135deg,#7c2d12,#9a3412);
+      color:#fff;
+      box-shadow:0 20px 44px rgba(124,45,18,.24);
+    }
+
+    .hero-card .title {
+      opacity:.82;
+      font-size:13px;
+      font-weight:950;
+    }
+
+    .hero-card .big {
+      margin:8px 0;
+      font-size:28px;
+      line-height:1.24;
+      letter-spacing:-.06em;
+      font-weight:950;
+    }
+
+    .hero-card .small {
+      color:rgba(255,255,255,.84);
+    }
+
+    .panel {
+      background:rgba(255,255,255,.96);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow:0 16px 42px rgba(120,53,15,.07);
+      padding:18px;
+      margin:14px 0;
+    }
+
+    .panel-head {
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap:14px;
+      margin-bottom:14px;
+    }
+
+    .small {
+      color:var(--muted);
+      font-size:12px;
+      font-weight:850;
+      line-height:1.55;
+    }
+
+    .form-grid {
+      display:grid;
+      grid-template-columns:2fr 1fr 1fr;
+      gap:10px;
+      align-items:end;
+    }
+
+    label {
+      display:block;
+      color:var(--muted);
+      font-size:12px;
+      font-weight:950;
+      margin-bottom:6px;
+    }
+
+    input {
+      width:100%;
+      border:1px solid #fdba74;
+      background:#fff;
+      border-radius:13px;
+      padding:12px;
+      color:var(--ink);
+      outline:none;
+      font:inherit;
+      font-weight:850;
+    }
+
+    input:focus {
+      border-color:#f97316;
+      box-shadow:0 0 0 3px rgba(249,115,22,.14);
+    }
+
+    button, .button-link {
+      border:none;
+      border-radius:999px;
+      padding:11px 15px;
+      cursor:pointer;
+      color:#fff;
+      background:var(--main);
+      font-weight:950;
+      text-decoration:none;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:7px;
+      box-shadow:0 12px 24px rgba(234,88,12,.14);
+      white-space:nowrap;
+    }
+
+    button.green,.button-link.green { background:var(--green); box-shadow:0 12px 24px rgba(22,163,74,.14); }
+    button.blue,.button-link.blue { background:var(--blue); box-shadow:0 12px 24px rgba(37,99,235,.14); }
+    button.red,.button-link.red { background:var(--red); box-shadow:0 12px 24px rgba(220,38,38,.14); }
+    button.dark,.button-link.dark { background:var(--dark); box-shadow:0 12px 24px rgba(41,37,36,.14); }
+    button.ghost,.button-link.ghost {
+      background:#fff;
+      color:#9a3412;
+      border:1px solid #fdba74;
+      box-shadow:none;
+    }
+
+    button:disabled {
+      opacity:.55;
+      cursor:not-allowed;
+    }
+
+    .button-row {
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      align-items:center;
+    }
+
+    .score-grid {
+      display:grid;
+      grid-template-columns:repeat(4,minmax(0,1fr));
+      gap:12px;
+      margin-top:14px;
+    }
+
+    .score-card {
+      border:1px solid var(--line);
+      border-radius:20px;
+      background:#fff7ed;
+      padding:16px;
+    }
+
+    .score-card .label {
+      color:var(--muted);
+      font-size:12px;
+      font-weight:950;
+    }
+
+    .score-card .value {
+      font-size:36px;
+      font-weight:950;
+      line-height:1;
+      letter-spacing:-.08em;
+      margin-top:7px;
+    }
+
+    .score-card.ok { background:#ecfdf5; border-color:#bbf7d0; color:#166534; }
+    .score-card.warn { background:#fffbeb; border-color:#fde68a; color:#92400e; }
+    .score-card.ng { background:#fef2f2; border-color:#fecaca; color:#991b1b; }
+    .score-card.info { background:#eff6ff; border-color:#bfdbfe; color:#1d4ed8; }
+
+    .status-box {
+      border-radius:16px;
+      padding:12px 14px;
+      font-weight:850;
+      font-size:13px;
+      line-height:1.65;
+      margin-top:12px;
+      white-space:pre-wrap;
+      border:1px solid transparent;
+    }
+
+    .status-box.info { background:#eff6ff; color:#1e3a8a; border-color:#bfdbfe; }
+    .status-box.ok { background:#ecfdf5; color:#166534; border-color:#bbf7d0; }
+    .status-box.warn { background:#fffbeb; color:#92400e; border-color:#fde68a; }
+    .status-box.ng { background:#fef2f2; color:#991b1b; border-color:#fecaca; }
+
+    .section-grid {
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:14px;
+    }
+
+    .check-list {
+      display:grid;
+      gap:8px;
+    }
+
+    .check-item {
+      display:grid;
+      grid-template-columns:auto 1fr auto;
+      gap:10px;
+      align-items:center;
+      border:1px solid var(--line);
+      background:#fff;
+      border-radius:16px;
+      padding:12px;
+    }
+
+    .mark {
+      width:28px;
+      height:28px;
+      border-radius:999px;
+      display:grid;
+      place-items:center;
+      font-size:14px;
+      font-weight:950;
+      background:#eff6ff;
+      color:#1d4ed8;
+      border:1px solid #bfdbfe;
+    }
+
+    .mark.pass { background:#dcfce7; color:#166534; border-color:#bbf7d0; }
+    .mark.warn { background:#fef3c7; color:#92400e; border-color:#fde68a; }
+    .mark.fail { background:#fee2e2; color:#991b1b; border-color:#fecaca; }
+
+    .check-title {
+      font-weight:950;
+      line-height:1.35;
+    }
+
+    .check-detail {
+      color:var(--muted);
+      font-size:12px;
+      font-weight:800;
+      line-height:1.55;
+      margin-top:3px;
+      word-break:break-all;
+    }
+
+    .link-grid {
+      display:grid;
+      grid-template-columns:repeat(3,minmax(0,1fr));
+      gap:10px;
+    }
+
+    .link-card {
+      display:block;
+      text-decoration:none;
+      color:var(--ink);
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:14px;
+    }
+
+    .link-card strong {
+      display:block;
+      font-size:15px;
+      font-weight:950;
+      letter-spacing:-.03em;
+    }
+
+    .link-card span {
+      display:block;
+      margin-top:4px;
+      color:var(--muted);
+      font-size:12px;
+      font-weight:800;
+      word-break:break-all;
+    }
+
+    details {
+      border:1px solid var(--line);
+      border-radius:18px;
+      background:#fff;
+      overflow:hidden;
+      margin:14px 0;
+    }
+
+    summary {
+      cursor:pointer;
+      padding:14px 16px;
+      font-weight:950;
+      background:#fff7ed;
+    }
+
+    details .detail-body {
+      border-top:1px solid var(--line);
+      padding:14px 16px;
+    }
+
+    pre {
+      margin:0;
+      white-space:pre-wrap;
+      word-break:break-all;
+      font-size:12px;
+      line-height:1.55;
+      color:#44403c;
+    }
+
+    .footer {
+      text-align:center;
+      color:var(--muted);
+      font-size:12px;
+      font-weight:800;
+      line-height:1.7;
+      margin-top:24px;
+    }
+
+    @media(max-width:980px) {
+      .hero { grid-template-columns:1fr; }
+      .form-grid { grid-template-columns:1fr; }
+      .score-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+      .section-grid { grid-template-columns:1fr; }
+      .link-grid { grid-template-columns:1fr 1fr; }
+    }
+
+    @media(max-width:640px) {
+      .wrap { width:min(100% - 14px,1220px); padding-top:8px; }
+      .hero,.panel { border-radius:22px; padding:16px; }
+      .score-grid,.link-grid { grid-template-columns:1fr; }
+      .panel-head { display:block; }
+      .button-row button,.button-row a { width:100%; }
+      .check-item { grid-template-columns:auto 1fr; }
+      .check-item .badge { grid-column:2; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <header class="hero">
+      <div>
+        <div class="badge">STEP BAKERY-24 / 管理系API実画面チェック</div>
+        <h1>管理画面・スタッフ画面<br>本番前チェック</h1>
+        <p class="lead">
+          final-check.html の見た目判定ではなく、owner.html / staff.html が実際に使う管理系APIを直接テストします。
+          ここが通れば、チャージなしライト版の本番候補としてかなり安心です。
+        </p>
+        <div class="button-row">
+          <button class="green" type="button" id="runReadButton">読込チェック実行</button>
+          <button class="blue" type="button" id="runStatusButton">DEMOステータス更新テスト</button>
+          <button class="ghost" type="button" id="copyReportButton">結果コピー</button>
+        </div>
+      </div>
+
+      <div class="hero-card">
+        <div class="title">本番OKの判断基準</div>
+        <div class="big">owner.html と staff.html が読む・更新するAPIが通ること。</div>
+        <div class="small">
+          final-check専用診断APIではなく、実際の管理画面と同じヘッダー認証で確認します。
+        </div>
+      </div>
+    </header>
+
+    <section class="panel">
+      <div class="panel-head">
+        <div>
+          <h2>チェック設定</h2>
+          <div class="small">管理コードはこの端末の sessionStorage に保存します。URLには残しません。</div>
+        </div>
+        <div id="mainBadge" class="badge blue">未チェック</div>
+      </div>
+
+      <div class="form-grid">
+        <div>
+          <label for="apiBaseInput">Worker API URL</label>
+          <input id="apiBaseInput" value="https://dpro-bakery-wallet-api.dpromstk2000.workers.dev" autocomplete="off" />
+        </div>
+        <div>
+          <label for="shopCodeInput">店舗コード</label>
+          <input id="shopCodeInput" value="bakery_demo" autocomplete="off" />
+        </div>
+        <div>
+          <label for="adminCodeInput">管理コード</label>
+          <input id="adminCodeInput" type="password" placeholder="管理コードを入力" autocomplete="off" />
+        </div>
+      </div>
+
+      <div id="overallStatus" class="status-box info">まず「読込チェック実行」を押してください。</div>
+
+      <div class="score-grid">
+        <div class="score-card ok">
+          <div class="label">PASS</div>
+          <div class="value" id="passCount">0</div>
+        </div>
+        <div class="score-card warn">
+          <div class="label">WARN</div>
+          <div class="value" id="warnCount">0</div>
+        </div>
+        <div class="score-card ng">
+          <div class="label">NG</div>
+          <div class="value" id="failCount">0</div>
+        </div>
+        <div class="score-card info">
+          <div class="label">総合判定</div>
+          <div class="value" id="resultText">-</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <div>
+          <h2>読込チェック</h2>
+          <div class="small">owner.html / staff.html と同じ管理コードヘッダーで、管理系APIを確認します。</div>
+        </div>
+      </div>
+
+      <div class="section-grid">
+        <div>
+          <h3>公開API・基本接続</h3>
+          <div class="check-list" id="publicChecks"></div>
+        </div>
+        <div>
+          <h3>管理系API</h3>
+          <div class="check-list" id="adminChecks"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <div>
+          <h2>ステータス更新テスト</h2>
+          <div class="small">DEMO店舗 bakery_demo の時だけ、取り置きステータス更新APIを安全に確認します。</div>
+        </div>
+        <div id="statusTestBadge" class="badge blue">未実行</div>
+      </div>
+
+      <div id="statusTestBox" class="status-box info">読込チェック後、DEMO店舗で取り置きデータがある場合だけ実行してください。</div>
+      <div class="check-list" id="statusChecks"></div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <div>
+          <h2>実画面URL</h2>
+          <div class="small">チェック後に、実際の画面でも同じ操作を確認します。</div>
+        </div>
+      </div>
+
+      <div class="link-grid" id="linkGrid"></div>
+    </section>
+
+    <details open>
+      <summary>診断ログ</summary>
+      <div class="detail-body">
+        <pre id="logBox">まだ診断していません。</pre>
+      </div>
+    </details>
+
+    <div class="footer">
+      DPRO SHOP / Bakery admin-check.html / STEP BAKERY-24<br>
+      本番前に、管理系APIが実際に使えるかを確認するための専用チェック画面です。
+    </div>
+  </div>
+
+  <script>
+    const DEFAULT_PAGES = "https://dpromstk2000-lab.github.io/bakery-line-system";
+    const DEFAULT_API = "https://dpro-bakery-wallet-api.dpromstk2000.workers.dev";
+    const DEFAULT_SHOP = "bakery_demo";
+
+    let checks = [];
+    let logs = [];
+    let lastPreorders = [];
+    let lastSettings = null;
+
+    const $ = (id) => document.getElementById(id);
+
+    function clean(value) {
+      return String(value ?? "").trim();
+    }
+
+    function apiBase() {
+      return clean($("apiBaseInput").value || DEFAULT_API).replace(/\/+$/, "");
+    }
+
+    function shopCode() {
+      return clean($("shopCodeInput").value || DEFAULT_SHOP);
+    }
+
+    function adminCode() {
+      return clean($("adminCodeInput").value);
+    }
+
+    function todayJst() {
+      return new Intl.DateTimeFormat("en-CA", {
+        timeZone: "Asia/Tokyo",
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit"
+      }).format(new Date());
+    }
+
+    function storageKey() {
+      return "DPRO_BAKERY_ADMIN_CODE_" + shopCode();
+    }
+
+    function pageUrl(file, extra = "") {
+      return `${DEFAULT_PAGES}/${file}?shop_code=${encodeURIComponent(shopCode())}&api=${encodeURIComponent(apiBase())}${extra}`;
+    }
+
+    function authHeaders() {
+      return {
+        "X-DPRO-Admin-Code": adminCode()
+      };
+    }
+
+    function escapeHtml(value) {
+      return String(value ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function setStatus(id, message, tone = "info") {
+      const el = $(id);
+      el.className = "status-box " + tone;
+      el.textContent = message;
+    }
+
+    function log(title, detail = {}) {
+      logs.push({
+        time: new Date().toISOString(),
+        title,
+        detail
+      });
+      $("logBox").textContent = JSON.stringify(logs, null, 2);
+    }
+
+    function addCheck(group, level, title, detail) {
+      const item = { group, level, title, detail };
+      checks.push(item);
+      return item;
+    }
+
+    function mark(level) {
+      if (level === "PASS") return "✓";
+      if (level === "WARN") return "!";
+      if (level === "FAIL") return "×";
+      return "?";
+    }
+
+    function markClass(level) {
+      if (level === "PASS") return "pass";
+      if (level === "WARN") return "warn";
+      if (level === "FAIL") return "fail";
+      return "";
+    }
+
+    function renderCheckList(id, group) {
+      const rows = checks.filter((c) => c.group === group);
+      $(id).innerHTML = rows.length ? rows.map((c) => `
+        <div class="check-item">
+          <div class="mark ${markClass(c.level)}">${mark(c.level)}</div>
+          <div>
+            <div class="check-title">${escapeHtml(c.title)}</div>
+            <div class="check-detail">${escapeHtml(c.detail || "")}</div>
+          </div>
+          <span class="badge ${c.level === "PASS" ? "green" : c.level === "FAIL" ? "red" : ""}">${escapeHtml(c.level)}</span>
+        </div>
+      `).join("") : `<div class="status-box info">まだチェックしていません。</div>`;
+    }
+
+    function renderAll() {
+      renderCheckList("publicChecks", "public");
+      renderCheckList("adminChecks", "admin");
+      renderCheckList("statusChecks", "status");
+
+      const pass = checks.filter((c) => c.level === "PASS").length;
+      const warn = checks.filter((c) => c.level === "WARN").length;
+      const fail = checks.filter((c) => c.level === "FAIL").length;
+
+      $("passCount").textContent = pass;
+      $("warnCount").textContent = warn;
+      $("failCount").textContent = fail;
+
+      let result = "OK";
+      let tone = "green";
+      let message = "管理系APIの読込は通っています。実画面確認へ進めます。";
+
+      if (fail > 0) {
+        result = "NG";
+        tone = "red";
+        message = "NGがあります。この状態では本番OKとは言えません。";
+      } else if (warn > 0) {
+        result = "WARN";
+        tone = "blue";
+        message = "大きなNGはありません。WARNは手動確認してください。";
+      }
+
+      $("resultText").textContent = result;
+      $("mainBadge").className = "badge " + tone;
+      $("mainBadge").textContent = result;
+      setStatus("overallStatus", message, fail > 0 ? "ng" : warn > 0 ? "warn" : "ok");
+    }
+
+    async function apiFetch(path, options = {}) {
+      const connector = path.includes("?") ? "&" : "?";
+      const url = apiBase() + path + connector + "shop_code=" + encodeURIComponent(shopCode());
+
+      const res = await fetch(url, {
+        ...options,
+        cache: "no-store",
+        headers: {
+          ...(options.headers || {}),
+          ...(options.auth ? authHeaders() : {})
+        }
+      });
+
+      const text = await res.text();
+      let data = null;
+      try { data = text ? JSON.parse(text) : null; } catch { data = text; }
+
+      if (!res.ok || data?.ok === false) {
+        throw new Error(data?.message || data?.error || text || "APIエラーです。");
+      }
+
+      return data;
+    }
+
+    async function runPublicChecks() {
+      try {
+        const health = await fetch(apiBase() + "/api/health", { cache: "no-store" }).then((r) => r.json());
+        addCheck("public", health.ok ? "PASS" : "FAIL", "Worker health", `version: ${health.version || "-"}`);
+        log("Worker health", health);
+      } catch (e) {
+        addCheck("public", "FAIL", "Worker health", e.message);
+      }
+
+      try {
+        const settings = await apiFetch("/api/public/settings");
+        lastSettings = settings;
+        addCheck("public", "PASS", "店舗設定", `${settings.shop_name || shopCode()} / ${settings.is_demo ? "DEMO" : "本番"}`);
+      } catch (e) {
+        addCheck("public", "FAIL", "店舗設定", e.message);
+      }
+
+      try {
+        const products = await apiFetch("/api/public/products");
+        addCheck("public", (products.products || []).length ? "PASS" : "WARN", "商品API", `商品 ${(products.products || []).length} 件`);
+      } catch (e) {
+        addCheck("public", "FAIL", "商品API", e.message);
+      }
+
+      try {
+        const pickup = await apiFetch("/api/public/pickup-rules");
+        addCheck("public", pickup.rule ? "PASS" : "WARN", "営業日・臨時休業API", pickup.rule ? "取得OK" : "ルール未設定");
+      } catch (e) {
+        addCheck("public", "FAIL", "営業日・臨時休業API", e.message);
+      }
+
+      try {
+        const av = await apiFetch("/api/public/preorder-availability?pickup_date=" + encodeURIComponent(todayJst()));
+        addCheck("public", "PASS", "商品別取り置き上限API", `商品 ${(av.products || []).length} 件`);
+      } catch (e) {
+        addCheck("public", "FAIL", "商品別取り置き上限API", e.message);
+      }
+    }
+
+    async function runAdminChecks() {
+      if (!adminCode()) {
+        addCheck("admin", "FAIL", "管理コード", "管理コードを入力してください。");
+        return;
+      }
+
+      sessionStorage.setItem(storageKey(), adminCode());
+
+      try {
+        const safety = await apiFetch("/api/admin/safety-check", { auth: true });
+        addCheck("admin", safety.production_guard ? "PASS" : "FAIL", "安全チェック", safety.message || "安全チェックOK");
+        addCheck("admin", "PASS", "DEMOチャージ制御", safety.is_demo ? "DEMO店舗のみ許可" : "本番店舗では拒否");
+      } catch (e) {
+        addCheck("admin", "FAIL", "安全チェック", e.message);
+      }
+
+      try {
+        const summary = await apiFetch("/api/admin/owner-summary", { auth: true });
+        addCheck("admin", "PASS", "オーナーサマリー", `会員 ${summary.customers?.active ?? "-"} / 今日の取り置き ${summary.preorders?.today_count ?? "-"}`);
+      } catch (e) {
+        addCheck("admin", "FAIL", "オーナーサマリー", e.message);
+      }
+
+      try {
+        const customers = await apiFetch("/api/admin/customers?limit=10", { auth: true });
+        addCheck("admin", "PASS", "顧客一覧API", `顧客 ${(customers.customers || []).length} 件取得`);
+      } catch (e) {
+        addCheck("admin", "FAIL", "顧客一覧API", e.message);
+      }
+
+      try {
+        const products = await apiFetch("/api/admin/products", { auth: true });
+        addCheck("admin", "PASS", "商品管理API", `商品 ${(products.products || []).length} 件取得`);
+      } catch (e) {
+        addCheck("admin", "FAIL", "商品管理API", e.message);
+      }
+
+      try {
+        const preorders = await apiFetch("/api/admin/preorders?date=" + encodeURIComponent(todayJst()) + "&limit=50", { auth: true });
+        lastPreorders = preorders.preorders || [];
+        addCheck("admin", "PASS", "取り置き一覧API", `本日 ${lastPreorders.length} 件取得`);
+      } catch (e) {
+        addCheck("admin", "FAIL", "取り置き一覧API", e.message);
+      }
+
+      try {
+        const transactions = await apiFetch("/api/admin/transactions?limit=10", { auth: true });
+        addCheck("admin", "PASS", "決済・履歴API", `履歴 ${(transactions.transactions || []).length} 件取得`);
+      } catch (e) {
+        addCheck("admin", "WARN", "決済・履歴API", e.message);
+      }
+    }
+
+    async function runReadChecks() {
+      checks = [];
+      logs = [];
+      lastPreorders = [];
+      $("logBox").textContent = "チェック中...";
+      setStatus("overallStatus", "読込チェック中です。", "info");
+      $("mainBadge").className = "badge blue";
+      $("mainBadge").textContent = "チェック中";
+
+      await runPublicChecks();
+      await runAdminChecks();
+
+      renderAll();
+      renderLinks();
+      log("読込チェック完了", {
+        pass: checks.filter((c) => c.level === "PASS").length,
+        warn: checks.filter((c) => c.level === "WARN").length,
+        fail: checks.filter((c) => c.level === "FAIL").length
+      });
+    }
+
+    function statusLabel(status) {
+      const map = {
+        pending: "受付済み",
+        preparing: "準備中",
+        ready: "準備完了",
+        picked_up: "受け渡し済み",
+        cancelled: "キャンセル",
+        no_show: "未受取"
+      };
+      return map[status] || status || "-";
+    }
+
+    async function runStatusUpdateTest() {
+      if (!adminCode()) {
+        addCheck("status", "FAIL", "ステータス更新テスト", "管理コードを入力してください。");
+        renderAll();
+        return;
+      }
+
+      if (shopCode() !== "bakery_demo") {
+        addCheck("status", "WARN", "ステータス更新テスト", "本番店舗では自動更新テストは行いません。staff.html実画面で手動確認してください。");
+        $("statusTestBadge").className = "badge blue";
+        $("statusTestBadge").textContent = "本番は手動確認";
+        renderAll();
+        return;
+      }
+
+      if (!lastPreorders.length) {
+        try {
+          const preorders = await apiFetch("/api/admin/preorders?limit=50", { auth: true });
+          lastPreorders = preorders.preorders || [];
+        } catch (e) {
+          addCheck("status", "FAIL", "ステータス更新用データ取得", e.message);
+          renderAll();
+          return;
+        }
+      }
+
+      const target = lastPreorders.find((p) => p.id && !["cancelled", "no_show"].includes(p.status || "pending")) || lastPreorders[0];
+
+      if (!target) {
+        addCheck("status", "WARN", "ステータス更新テスト", "取り置きデータがありません。営業前DEMO設定を実行してから再確認してください。");
+        $("statusTestBadge").className = "badge blue";
+        $("statusTestBadge").textContent = "データなし";
+        renderAll();
+        return;
+      }
+
+      const current = target.status || "pending";
+
+      if (!confirm(`DEMOデータの取り置き1件を同じステータス「${statusLabel(current)}」で更新テストします。実行しますか？`)) {
+        addCheck("status", "WARN", "ステータス更新テスト", "ユーザーがキャンセルしました。");
+        renderAll();
+        return;
+      }
+
+      try {
+        const result = await apiFetch("/api/admin/preorders/status", {
+          method: "POST",
+          auth: true,
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            preorder_id: target.id,
+            status: current,
+            staff_name: "STEP24チェック",
+            memo: "admin-check.html STEP BAKERY-24 ステータス更新テスト"
+          })
+        });
+
+        addCheck("status", "PASS", "ステータス更新API", result.message || `同じステータス「${statusLabel(current)}」で更新できました。`);
+        $("statusTestBadge").className = "badge green";
+        $("statusTestBadge").textContent = "PASS";
+        setStatus("statusTestBox", "DEMOステータス更新テストが通りました。staff.html の更新APIも使える可能性が高いです。", "ok");
+      } catch (e) {
+        addCheck("status", "FAIL", "ステータス更新API", e.message);
+        $("statusTestBadge").className = "badge red";
+        $("statusTestBadge").textContent = "NG";
+        setStatus("statusTestBox", "ステータス更新APIが失敗しました。本番前に修正が必要です。", "ng");
+      }
+
+      renderAll();
+    }
+
+    function buildLinks() {
+      return [
+        ["owner.html", pageUrl("owner.html", "&v=24"), "オーナー管理画面"],
+        ["staff.html", pageUrl("staff.html", "&v=24"), "スタッフ取り置き画面"],
+        ["wallet.html", pageUrl("wallet.html", "&v=24"), "お客様会員証"],
+        ["final-check.html", pageUrl("final-check.html", "&v=23e"), "総合チェック"],
+        ["qr.html", `${DEFAULT_PAGES}/qr.html?v=22`, "QRリンク集"],
+        ["sales-demo.html", `${DEFAULT_PAGES}/sales-demo.html?v=22`, "営業DEMO進行"]
+      ];
+    }
+
+    function renderLinks() {
+      $("linkGrid").innerHTML = buildLinks().map(([label, url, desc]) => `
+        <a class="link-card" href="${escapeHtml(url)}" target="_blank" rel="noopener">
+          <strong>${escapeHtml(label)}</strong>
+          <span>${escapeHtml(desc)}</span>
+          <span>${escapeHtml(url)}</span>
+        </a>
+      `).join("");
+    }
+
+    async function copyText(text) {
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(String(text || ""));
+        return true;
+      }
+      const temp = document.createElement("textarea");
+      temp.value = String(text || "");
+      temp.style.position = "fixed";
+      temp.style.left = "-9999px";
+      document.body.appendChild(temp);
+      temp.focus();
+      temp.select();
+      document.execCommand("copy");
+      temp.remove();
+      return true;
+    }
+
+    function reportText() {
+      const lines = [];
+      lines.push("DPROベーカリー STEP24 管理系API実画面チェック");
+      lines.push("日時: " + new Date().toLocaleString("ja-JP"));
+      lines.push("店舗コード: " + shopCode());
+      lines.push("Worker API: " + apiBase());
+      lines.push("");
+      lines.push("判定: " + $("resultText").textContent);
+      lines.push("PASS: " + $("passCount").textContent);
+      lines.push("WARN: " + $("warnCount").textContent);
+      lines.push("NG: " + $("failCount").textContent);
+      lines.push("");
+      checks.forEach((c) => {
+        lines.push(`[${c.level}] ${c.title}`);
+        lines.push(c.detail || "");
+        lines.push("");
+      });
+      lines.push("主要URL");
+      buildLinks().forEach(([label, url, desc]) => {
+        lines.push(label + " / " + desc);
+        lines.push(url);
+        lines.push("");
+      });
+      return lines.join("\n");
+    }
+
+    function bindEvents() {
+      $("runReadButton").addEventListener("click", runReadChecks);
+      $("runStatusButton").addEventListener("click", runStatusUpdateTest);
+      $("copyReportButton").addEventListener("click", async () => {
+        await copyText(reportText());
+        setStatus("overallStatus", "チェック結果をコピーしました。", "ok");
+      });
+
+      $("shopCodeInput").addEventListener("change", () => {
+        const stored = sessionStorage.getItem(storageKey());
+        $("adminCodeInput").value = stored || "";
+        renderLinks();
+      });
+    }
+
+    function init() {
+      const params = new URLSearchParams(location.search);
+      const api = params.get("api");
+      const shop = params.get("shop_code");
+      if (api) $("apiBaseInput").value = api;
+      if (shop) $("shopCodeInput").value = shop;
+
+      const stored = sessionStorage.getItem(storageKey());
+      if (stored) $("adminCodeInput").value = stored;
+
+      renderAll();
+      renderLinks();
+      bindEvents();
+    }
+
+    init();
+  </script>
+</body>
+</html>
