@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>DPROベーカリー | 使い方マニュアル</title>
+  <style>
+:root {
+  --ink:#1c1917; --muted:#78716c; --line:#fed7aa; --main:#ea580c;
+  --green:#16a34a; --blue:#2563eb; --red:#dc2626; --brown:#7c2d12;
+  --shadow:0 20px 60px rgba(120,53,15,.10);
+}
+* { box-sizing:border-box; }
+body {
+  margin:0; font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; color:var(--ink);
+  background:linear-gradient(135deg,#fff7ed,#fffaf0 55%,#fef3c7); min-height:100vh;
+}
+.wrap { width:min(100% - 24px,1180px); margin:0 auto; padding:22px 0 54px; }
+.hero { background:rgba(255,255,255,.95); border:1px solid var(--line); border-radius:30px; padding:26px; box-shadow:var(--shadow); display:grid; grid-template-columns:1.08fr .92fr; gap:18px; align-items:center; margin-bottom:16px; }
+.hero-card { background:linear-gradient(135deg,#7c2d12,#9a3412); color:#fff; border-radius:24px; padding:20px; box-shadow:0 20px 44px rgba(124,45,18,.24); }
+.badge,.pill { display:inline-flex; width:fit-content; padding:6px 11px; border-radius:999px; font-size:12px; font-weight:950; border:1px solid #fed7aa; background:#ffedd5; color:#9a3412; }
+.pill.green { background:#ecfdf5; color:#166534; border-color:#bbf7d0; }
+.pill.blue { background:#dbeafe; color:#1d4ed8; border-color:#bfdbfe; }
+h1 { margin:12px 0 10px; font-size:clamp(34px,5vw,64px); line-height:1.02; letter-spacing:-.08em; }
+h2 { margin:0; font-size:clamp(24px,3vw,34px); letter-spacing:-.06em; line-height:1.16; }
+h3 { margin:0 0 8px; font-size:20px; letter-spacing:-.04em; }
+p,.small { color:var(--muted); line-height:1.75; font-weight:850; }
+.hero-card p,.hero-card .small { color:rgba(255,255,255,.82); }
+.panel { background:rgba(255,255,255,.96); border:1px solid var(--line); border-radius:24px; padding:18px; margin-top:16px; box-shadow:0 14px 38px rgba(120,53,15,.07); }
+.panel-head { display:flex; justify-content:space-between; align-items:flex-start; gap:12px; margin-bottom:12px; }
+.grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px; }
+.grid3 { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:14px; }
+.card { background:#fff; border:1px solid var(--line); border-radius:20px; padding:16px; }
+.card.ok { background:#ecfdf5; border-color:#bbf7d0; }
+.card.info { background:#eff6ff; border-color:#bfdbfe; }
+.card.warn { background:#fffbeb; border-color:#fde68a; }
+.form-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; }
+.form-grid.three { grid-template-columns:repeat(3,minmax(0,1fr)); }
+label { display:block; color:var(--muted); font-size:12px; font-weight:950; margin-bottom:6px; }
+input, textarea, select {
+  width:100%; border:1px solid #fdba74; background:#fff; border-radius:13px; padding:12px;
+  color:var(--ink); outline:none; font:inherit; font-weight:850;
+}
+textarea { min-height:150px; resize:vertical; }
+button,a.btn {
+  border:none; border-radius:999px; padding:11px 14px; background:var(--main); color:#fff; font-weight:950;
+  text-decoration:none; cursor:pointer; display:inline-flex; align-items:center; justify-content:center; gap:7px;
+}
+button.green,a.green { background:var(--green); }
+button.blue,a.blue { background:var(--blue); }
+button.red,a.red { background:var(--red); }
+button.ghost,a.ghost { background:#fff; color:#9a3412; border:1px solid #fdba74; }
+.buttons { display:flex; flex-wrap:wrap; gap:8px; margin-top:12px; }
+.step { display:grid; grid-template-columns:54px 1fr; gap:12px; border:1px solid var(--line); background:#fff7ed; border-radius:20px; padding:14px; margin-top:10px; }
+.num { width:44px; height:44px; display:grid; place-items:center; border-radius:999px; background:#ea580c; color:#fff; font-weight:950; }
+.url-box { font-size:12px; word-break:break-all; background:#fff7ed; border:1px solid #fed7aa; border-radius:14px; padding:10px; color:#57534e; font-weight:800; }
+.status { margin-top:12px; border-radius:16px; padding:12px; background:#ecfdf5; border:1px solid #bbf7d0; color:#166534; font-weight:900; }
+.footer { text-align:center; color:var(--muted); font-size:12px; font-weight:800; line-height:1.7; margin-top:24px; }
+@media(max-width:860px) { .hero,.grid,.grid3,.form-grid,.form-grid.three { grid-template-columns:1fr; } .panel-head { display:block; } button,a.btn { width:100%; } }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="hero">
+      <div>
+        <div class="badge">STEP BAKERY-27 / オーナー・スタッフ用かんたんマニュアル</div>
+        <h1>パン屋LINE会員証<br>かんたん使い方</h1>
+        <p>
+          オーナー・スタッフに渡す説明ページです。
+          難しい技術用語を使わず、「毎日どの画面で何をするか」だけに絞っています。
+        </p>
+        <div class="buttons">
+          <a class="btn green" href="https://dpromstk2000-lab.github.io/bakery-line-system/staff.html?shop_code=bakery_demo&api=https%3A%2F%2Fdpro-bakery-wallet-api.dpromstk2000.workers.dev&v=25" target="_blank">スタッフ画面</a>
+          <a class="btn blue" href="https://dpromstk2000-lab.github.io/bakery-line-system/owner.html?shop_code=bakery_demo&api=https%3A%2F%2Fdpro-bakery-wallet-api.dpromstk2000.workers.dev&v=25" target="_blank">オーナー管理</a>
+          <a class="btn ghost" href="https://dpromstk2000-lab.github.io/bakery-line-system/wallet.html?shop_code=bakery_demo&api=https%3A%2F%2Fdpro-bakery-wallet-api.dpromstk2000.workers.dev&v=25" target="_blank">お客様会員証</a>
+        </div>
+      </div>
+      <div class="hero-card">
+        <h2>毎日の使い方</h2>
+        <p>スタッフは staff.html、オーナーは owner.html、お客様はLINE会員証。役割ごとに画面を分けています。</p>
+      </div>
+    </header>
+
+    <section class="panel">
+      <h2>スタッフが毎日やること</h2>
+      <div class="step"><div class="num">1</div><div><h3>staff.htmlを開く</h3><p class="small">iPadまたはスマホでスタッフ取り置き画面を開きます。</p></div></div>
+      <div class="step"><div class="num">2</div><div><h3>今日の取り置きを読む</h3><p class="small">誰が、何時に、何を取りに来るかを確認します。</p></div></div>
+      <div class="step"><div class="num">3</div><div><h3>準備中にする</h3><p class="small">作り始めた注文は「準備中」にします。</p></div></div>
+      <div class="step"><div class="num">4</div><div><h3>準備完了にする</h3><p class="small">袋詰めまで終わったら「準備完了」にします。</p></div></div>
+      <div class="step"><div class="num">5</div><div><h3>受け渡し済みにする</h3><p class="small">お客様に渡したら「受け渡し済み」にします。</p></div></div>
+    </section>
+
+    <section class="panel">
+      <h2>オーナーが見るところ</h2>
+      <div class="grid">
+        <div class="card ok"><h3>今日の状況</h3><p>今日の取り置き、顧客数、履歴を確認します。</p></div>
+        <div class="card ok"><h3>商品管理・上限</h3><p>人気パンの取り置きON/OFF、1日上限、表示順を調整します。</p></div>
+        <div class="card ok"><h3>ECOレスキュー</h3><p>夕方に余りそうなパンをLINE文面にして案内します。</p></div>
+        <div class="card info"><h3>チャージ</h3><p>希望店舗だけのオプションです。通常運用では主役にしません。</p></div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>お客様が使うところ</h2>
+      <div class="grid">
+        <div class="card"><h3>LINE会員証</h3><p>レジで見せる会員証です。</p></div>
+        <div class="card"><h3>取り置き予約</h3><p>人気パンをLINEから予約できます。</p></div>
+        <div class="card"><h3>ECOレスキュー通知</h3><p>夕方のお得な案内を受け取る設定です。</p></div>
+        <div class="card warn"><h3>チャージ</h3><p>基本版では使いません。導入する場合は別途説明します。</p></div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>困ったとき</h2>
+      <div class="grid">
+        <div class="card"><h3>取り置きが出ない</h3><p>admin-check.htmlで読込チェックを行い、管理コードが正しいか確認します。</p></div>
+        <div class="card"><h3>ステータス変更できない</h3><p>admin-check.htmlで更新テストを行います。NGなら本番前に修正が必要です。</p></div>
+        <div class="card"><h3>休業日に予約できる</h3><p>owner.htmlの営業日・臨時休業設定を確認します。</p></div>
+        <div class="card"><h3>商品が売り切れそう</h3><p>owner.htmlの商品管理で取り置き受付をOFF、または上限を下げます。</p></div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>主要URL</h2>
+      <div class="grid3">
+        <div class="card"><h3>本番前チェック</h3><div class="url-box">https://dpromstk2000-lab.github.io/bakery-line-system/admin-check.html?shop_code=bakery_demo&api=https%3A%2F%2Fdpro-bakery-wallet-api.dpromstk2000.workers.dev&v=25</div></div>
+        <div class="card"><h3>スタッフ画面</h3><div class="url-box">https://dpromstk2000-lab.github.io/bakery-line-system/staff.html?shop_code=bakery_demo&api=https%3A%2F%2Fdpro-bakery-wallet-api.dpromstk2000.workers.dev&v=25</div></div>
+        <div class="card"><h3>オーナー管理</h3><div class="url-box">https://dpromstk2000-lab.github.io/bakery-line-system/owner.html?shop_code=bakery_demo&api=https%3A%2F%2Fdpro-bakery-wallet-api.dpromstk2000.workers.dev&v=25</div></div>
+        <div class="card"><h3>お客様会員証</h3><div class="url-box">https://dpromstk2000-lab.github.io/bakery-line-system/wallet.html?shop_code=bakery_demo&api=https%3A%2F%2Fdpro-bakery-wallet-api.dpromstk2000.workers.dev&v=25</div></div>
+        <div class="card"><h3>QRリンク集</h3><div class="url-box">https://dpromstk2000-lab.github.io/bakery-line-system/qr.html?v=26</div></div>
+        <div class="card"><h3>営業DEMO</h3><div class="url-box">https://dpromstk2000-lab.github.io/bakery-line-system/sales-demo.html?v=26</div></div>
+      </div>
+    </section>
+
+    <div class="footer">DPRO SHOP / Bakery manual.html / STEP BAKERY-27</div>
+  </div>
+</body>
+</html>
