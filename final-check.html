@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ja">a
+<html lang="ja">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
@@ -414,10 +414,10 @@
   <div class="wrap">
     <header class="hero">
       <div>
-        <div class="badge">STEP BAKERY-23C / 管理APIチェック再修正版</div>
+        <div class="badge">STEP BAKERY-23D / final-check専用診断API版</div>
         <h1>営業DEMO・本番前<br>総合チェック</h1>
         <p class="lead">
-          管理系APIチェック時だけ管理コードをAPIクエリに付け、CORS preflightを避ける再修正版です。
+          管理系APIを個別に叩かず、Worker内でまとめて診断する専用APIに変更しました。
           本番前に「何がOKで、何を後回しにするか」を一画面で見ます。
         </p>
         <div class="button-row">
@@ -431,7 +431,7 @@
         <div class="title">判定方針</div>
         <div class="big">ライト版は取り置き・ECO・顧客管理が主役。チャージはオプション。</div>
         <div class="small">
-          Worker側もSTEP23C版にすると、final-checkの管理系API自動チェックが通りやすくなります。
+          final-check専用診断APIを使うため、管理系APIのCORS問題を避けやすくしています。
         </div>
       </div>
     </header>
@@ -460,7 +460,7 @@
         </div>
       </div>
 
-      <div id="overallStatus" class="status-box info">総合チェックを実行してください。管理系APIだけ Failed to fetch になる場合は、Workerを STEP23C版に更新してください。</div>
+      <div id="overallStatus" class="status-box info">総合チェックを実行してください。管理系APIは専用診断APIでまとめて確認します。</div>
 
       <div class="score-grid">
         <div class="score-card ok">
@@ -542,7 +542,7 @@
     </details>
 
     <div class="footer">
-      DPRO SHOP / Bakery final-check.html / STEP BAKERY-23C<br>
+      DPRO SHOP / Bakery final-check.html / STEP BAKERY-23D<br>
       ライト版営業DEMO・スタッフ運用・チャージオプション方針の総合チェックページです。
     </div>
   </div>
@@ -745,7 +745,7 @@
           `version: ${version || "-"}`
         );
 
-        if (version.includes("BAKERY-19") || version.includes("BAKERY-18") || version.includes("BAKERY-20") || version.includes("BAKERY-21") || version.includes("BAKERY-22")) {
+        if (version.includes("BAKERY-19") || version.includes("BAKERY-18") || version.includes("BAKERY-20") || version.includes("BAKERY-21") || version.includes("BAKERY-22") || version.includes("BAKERY-23")) {
           addCheck("api", "PASS", "取り置きステータスAPI前提", "STEP18以降のWorkerが反映されている可能性が高いです。");
         } else {
           addCheck("api", "WARN", "Worker version確認", "STEP18/19以降のWorkerか確認してください。");
@@ -796,32 +796,16 @@
       sessionStorage.setItem(storageKey(), adminCode());
 
       try {
-        const safety = await apiGet("/api/admin/safety-check", true);
-        addCheck("api", safety.production_guard ? "PASS" : "FAIL", "本番ガード", safety.message || "安全チェックOK");
-        addCheck("api", safety.demo_charge_allowed && shopCode() === "bakery_demo" ? "PASS" : "PASS", "DEMOチャージ制御", safety.is_demo ? "DEMO店舗のみ許可" : "本番店舗では拒否");
-      } catch (e) {
-        addCheck("api", "FAIL", "安全チェック", e.message);
-      }
+        const adminCheck = await apiGet("/api/public/final-check-admin?date=" + encodeURIComponent(todayJst()), true);
 
-      try {
-        const summary = await apiGet("/api/admin/owner-summary", true);
-        addCheck("api", "PASS", "オーナーサマリー", `会員 ${summary.customers?.active ?? "-"} / 今日の取り置き ${summary.preorders?.today_count ?? "-"}`);
+        addCheck("api", adminCheck.safety?.production_guard ? "PASS" : "FAIL", "安全チェック", adminCheck.safety?.message || "安全チェックOK");
+        addCheck("api", "PASS", "オーナーサマリー", `会員 ${adminCheck.summary?.customers?.active ?? "-"} / 今日の取り置き ${adminCheck.summary?.preorders?.today_count ?? "-"}`);
+        addCheck("api", "PASS", "取り置き一覧API", `本日 ${adminCheck.preorders?.count ?? "-"} 件`);
+        addCheck("api", "PASS", "商品管理API", `商品管理 ${adminCheck.products?.count ?? "-"} 件 / 受付中 ${adminCheck.products?.preorder_available_count ?? "-"} 件`);
+        addCheck("api", "PASS", "DEMOチャージ制御", adminCheck.safety?.is_demo ? "DEMO店舗のみ許可" : "本番店舗では拒否");
       } catch (e) {
-        addCheck("api", "FAIL", "オーナーサマリー", e.message);
-      }
-
-      try {
-        const preorders = await apiGet("/api/admin/preorders?date=" + encodeURIComponent(todayJst()) + "&limit=5", true);
-        addCheck("api", "PASS", "取り置き一覧API", `本日 ${preorders.count ?? (preorders.preorders || []).length} 件`);
-      } catch (e) {
-        addCheck("api", "FAIL", "取り置き一覧API", e.message);
-      }
-
-      try {
-        const adminProducts = await apiGet("/api/admin/products", true);
-        addCheck("api", "PASS", "商品管理API", `商品管理 ${adminProducts.count ?? (adminProducts.products || []).length} 件`);
-      } catch (e) {
-        addCheck("api", "FAIL", "商品管理API", e.message);
+        addCheck("api", "FAIL", "管理系まとめ診断API", e.message);
+        addCheck("api", "WARN", "管理コード確認", "管理コードが正しいか、WorkerがSTEP23D版か確認してください。");
       }
     }
 
