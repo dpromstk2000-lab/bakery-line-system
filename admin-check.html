@@ -419,15 +419,15 @@
   <div class="wrap">
     <header class="hero">
       <div>
-        <div class="badge">STEP BAKERY-24BB / 管理系API CORS回避チェック</div>
+        <div class="badge">STEP BAKERY-24CB / 管理系API CORS回避チェック</div>
         <h1>管理画面・スタッフ画面<br>本番前チェック</h1>
         <p class="lead">
-          管理コード付きヘッダーのCORS問題を避けるため、text/plain POSTの専用診断APIで管理系APIを直接テストします。
+          POSTでもFailed to fetchになったため、GETだけで管理系の読込処理を切り分け診断します。
           ここが通れば、チャージなしライト版の本番候補としてかなり安心です。
         </p>
         <div class="button-row">
           <button class="green" type="button" id="runReadButton">読込チェック実行</button>
-          <button class="blue" type="button" id="runStatusButton">DEMOステータス更新テスト</button>
+          <button class="blue" type="button" id="runStatusButton">更新テストは次STEP</button>
           <button class="ghost" type="button" id="copyReportButton">結果コピー</button>
         </div>
       </div>
@@ -436,7 +436,7 @@
         <div class="title">本番OKの判断基準</div>
         <div class="big">owner.html と staff.html が読む・更新するAPIが通ること。</div>
         <div class="small">
-          まずはCORSに詰まらない診断APIで、WorkerとSupabaseの管理系処理そのものが通るか確認します。
+          GET診断が通れば、管理系処理そのものはOKで、POST/ヘッダー/CORS側が原因と判断できます。
         </div>
       </div>
     </header>
@@ -491,7 +491,7 @@
       <div class="panel-head">
         <div>
           <h2>読込チェック</h2>
-          <div class="small">専用診断APIで、安全チェック・サマリー・顧客・商品・取り置き・履歴をまとめて確認します。</div>
+          <div class="small">GET方式の診断APIで、安全チェック・サマリー・顧客・商品・取り置き・履歴をまとめて確認します。</div>
         </div>
       </div>
 
@@ -511,12 +511,12 @@
       <div class="panel-head">
         <div>
           <h2>ステータス更新テスト</h2>
-          <div class="small">DEMO店舗 bakery_demo の時だけ、専用診断API経由で取り置きステータス更新を確認します。</div>
+          <div class="small">STEP24Cではまず読込だけ確認します。更新テストはGET診断が通ってから次STEPで確認します。</div>
         </div>
         <div id="statusTestBadge" class="badge blue">未実行</div>
       </div>
 
-      <div id="statusTestBox" class="status-box info">読込チェック後、DEMO店舗で取り置きデータがある場合だけ実行してください。</div>
+      <div id="statusTestBox" class="status-box info">STEP24Cでは更新テストは実行しません。まず管理系GET診断を通します。</div>
       <div class="check-list" id="statusChecks"></div>
     </section>
 
@@ -539,7 +539,7 @@
     </details>
 
     <div class="footer">
-      DPRO SHOP / Bakery admin-check.html / STEP BAKERY-24BB<br>
+      DPRO SHOP / Bakery admin-check.html / STEP BAKERY-24CB<br>
       本番前に、管理系APIが実際に使えるかを確認するための専用チェック画面です。
     </div>
   </div>
@@ -650,7 +650,7 @@
           </div>
           <span class="badge ${c.level === "PASS" ? "green" : c.level === "FAIL" ? "red" : ""}">${escapeHtml(c.level)}</span>
         </div>
-      `).join("") : `<div class="status-box info">まだチェックしていません。</div>`;
+      `).join("") : `<div class="status-box info">STEP24Cでは更新テストはまだ行いません。</div>`;
     }
 
     function renderAll() {
@@ -710,18 +710,19 @@
       return data;
     }
 
-    async function simpleAdminPost(payload) {
-      const url = apiBase() + "/api/simple/admin-check";
+    async function simpleAdminGet(payload) {
+      const params = new URLSearchParams({
+        shop_code: shopCode(),
+        admin_code: adminCode(),
+        date: todayJst(),
+        ...payload
+      });
+
+      const url = apiBase() + "/api/public/admin-check-direct?" + params.toString();
 
       const res = await fetch(url, {
-        method: "POST",
-        cache: "no-store",
-        // headersを付けない。ブラウザは text/plain として送り、CORS preflightを避ける。
-        body: JSON.stringify({
-          shop_code: shopCode(),
-          admin_code: adminCode(),
-          ...payload
-        })
+        method: "GET",
+        cache: "no-store"
       });
 
       const text = await res.text();
@@ -783,10 +784,7 @@
       sessionStorage.setItem(storageKey(), adminCode());
 
       try {
-        const data = await simpleAdminPost({
-          action: "read-check",
-          date: todayJst()
-        });
+        const data = await simpleAdminGet({});
 
         addCheck("admin", data.safety?.production_guard ? "PASS" : "FAIL", "安全チェック", data.safety?.message || "安全チェックOK");
         addCheck("admin", "PASS", "DEMOチャージ制御", data.safety?.is_demo ? "DEMO店舗のみ許可" : "本番店舗では拒否");
@@ -796,17 +794,27 @@
         addCheck("admin", "PASS", "取り置き一覧API", `本日 ${data.preorders?.count ?? "-"} 件`);
         addCheck("admin", "PASS", "決済・履歴API", `本日履歴 ${data.transactions?.count ?? "-"} 件`);
 
+        if (Array.isArray(data.steps)) {
+          const failed = data.steps.filter((s) => !s.ok);
+          if (failed.length) {
+            addCheck("admin", "WARN", "詳細ステップ", `一部ステップに失敗があります: ${failed.map((s) => s.name).join(", ")}`);
+          } else {
+            addCheck("admin", "PASS", "詳細ステップ", "管理系GET診断の全ステップが通りました。");
+          }
+        }
+
         lastPreorders = data.preorders?.rows || [];
-        log("Simple admin read-check OK", {
+        log("GET admin direct-check OK", {
           customers: data.customers?.count,
           preorders: data.preorders?.count,
           products: data.products?.count,
           transactions: data.transactions?.count,
-          auth_mode: data.auth_mode
+          auth_mode: data.auth_mode,
+          steps: data.steps
         });
       } catch (e) {
-        addCheck("admin", "FAIL", "管理系シンプル診断API", e.message);
-        log("Simple admin read-check NG", { error: e.message });
+        addCheck("admin", "FAIL", "管理系GET診断API", e.message);
+        log("GET admin direct-check NG", { error: e.message });
       }
     }
 
@@ -844,77 +852,18 @@
     }
 
     async function runStatusUpdateTest() {
-      if (!adminCode()) {
-        addCheck("status", "FAIL", "ステータス更新テスト", "管理コードを入力してください。");
-        renderAll();
-        return;
-      }
-
-      if (shopCode() !== "bakery_demo") {
-        addCheck("status", "WARN", "ステータス更新テスト", "本番店舗では自動更新テストは行いません。staff.html実画面で手動確認してください。");
-        $("statusTestBadge").className = "badge blue";
-        $("statusTestBadge").textContent = "本番は手動確認";
-        renderAll();
-        return;
-      }
-
-      if (!lastPreorders.length) {
-        try {
-          const preorders = await apiFetch("/api/admin/preorders?limit=50", { auth: true });
-          lastPreorders = preorders.preorders || [];
-        } catch (e) {
-          addCheck("status", "FAIL", "ステータス更新用データ取得", e.message);
-          renderAll();
-          return;
-        }
-      }
-
-      const target = lastPreorders.find((p) => p.id && !["cancelled", "no_show"].includes(p.status || "pending")) || lastPreorders[0];
-
-      if (!target) {
-        addCheck("status", "WARN", "ステータス更新テスト", "取り置きデータがありません。営業前DEMO設定を実行してから再確認してください。");
-        $("statusTestBadge").className = "badge blue";
-        $("statusTestBadge").textContent = "データなし";
-        renderAll();
-        return;
-      }
-
-      const current = target.status || "pending";
-
-      if (!confirm(`DEMOデータの取り置き1件を同じステータス「${statusLabel(current)}」で更新テストします。実行しますか？`)) {
-        addCheck("status", "WARN", "ステータス更新テスト", "ユーザーがキャンセルしました。");
-        renderAll();
-        return;
-      }
-
-      try {
-        const result = await simpleAdminPost({
-          action: "status-test",
-          preorder_id: target.id,
-          status: current,
-          staff_name: "STEP24Bチェック",
-          memo: "admin-check.html STEP BAKERY-24BB ステータス更新テスト"
-        });
-
-        addCheck("status", "PASS", "ステータス更新API", result.message || `同じステータス「${statusLabel(current)}」で更新できました。`);
-        $("statusTestBadge").className = "badge green";
-        $("statusTestBadge").textContent = "PASS";
-        setStatus("statusTestBox", "DEMOステータス更新テストが通りました。staff.html の更新APIも使える可能性が高いです。", "ok");
-      } catch (e) {
-        addCheck("status", "FAIL", "ステータス更新API", e.message);
-        $("statusTestBadge").className = "badge red";
-        $("statusTestBadge").textContent = "NG";
-        setStatus("statusTestBox", "ステータス更新APIが失敗しました。本番前に修正が必要です。", "ng");
-      }
-
+      addCheck("status", "WARN", "更新テスト", "STEP24Cでは更新テストは行いません。GET診断が通ったら、次STEPでowner/staffの更新方式を修正して確認します。");
+      $("statusTestBadge").className = "badge blue";
+      $("statusTestBadge").textContent = "次STEP";
+      setStatus("statusTestBox", "まずはGET方式の管理系読込診断を通してください。", "info");
       renderAll();
     }
 
     function buildLinks() {
       return [
-        ["owner.html", pageUrl("owner.html", "&v=24b"), "オーナー管理画面"],
-        ["staff.html", pageUrl("staff.html", "&v=24b"), "スタッフ取り置き画面"],
-        ["wallet.html", pageUrl("wallet.html", "&v=24b"), "お客様会員証"],
+        ["owner.html", pageUrl("owner.html", "&v=24c"), "オーナー管理画面"],
+        ["staff.html", pageUrl("staff.html", "&v=24c"), "スタッフ取り置き画面"],
+        ["wallet.html", pageUrl("wallet.html", "&v=24c"), "お客様会員証"],
         ["final-check.html", pageUrl("final-check.html", "&v=23e"), "総合チェック"],
         ["qr.html", `${DEFAULT_PAGES}/qr.html?v=22`, "QRリンク集"],
         ["sales-demo.html", `${DEFAULT_PAGES}/sales-demo.html?v=22`, "営業DEMO進行"]
