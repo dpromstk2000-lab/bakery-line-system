@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ja">
+<html lang="ja">a
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
@@ -414,10 +414,10 @@
   <div class="wrap">
     <header class="hero">
       <div>
-        <div class="badge">STEP BAKERY-23B / 管理APIチェック修正版</div>
+        <div class="badge">STEP BAKERY-23C / 管理APIチェック再修正版</div>
         <h1>営業DEMO・本番前<br>総合チェック</h1>
         <p class="lead">
-          管理系APIのチェックでFailed to fetchが出にくいように、認証ヘッダーを最小化した修正版です。
+          管理系APIチェック時だけ管理コードをAPIクエリに付け、CORS preflightを避ける再修正版です。
           本番前に「何がOKで、何を後回しにするか」を一画面で見ます。
         </p>
         <div class="button-row">
@@ -431,7 +431,7 @@
         <div class="title">判定方針</div>
         <div class="big">ライト版は取り置き・ECO・顧客管理が主役。チャージはオプション。</div>
         <div class="small">
-          Worker側のCORSもSTEP23B版にすると、管理系APIの自動チェックが安定します。
+          Worker側もSTEP23C版にすると、final-checkの管理系API自動チェックが通りやすくなります。
         </div>
       </div>
     </header>
@@ -460,7 +460,7 @@
         </div>
       </div>
 
-      <div id="overallStatus" class="status-box info">総合チェックを実行してください。管理系APIだけ Failed to fetch になる場合は、Workerを STEP23B版に更新してください。</div>
+      <div id="overallStatus" class="status-box info">総合チェックを実行してください。管理系APIだけ Failed to fetch になる場合は、Workerを STEP23C版に更新してください。</div>
 
       <div class="score-grid">
         <div class="score-card ok">
@@ -542,7 +542,7 @@
     </details>
 
     <div class="footer">
-      DPRO SHOP / Bakery final-check.html / STEP BAKERY-23B<br>
+      DPRO SHOP / Bakery final-check.html / STEP BAKERY-23C<br>
       ライト版営業DEMO・スタッフ運用・チャージオプション方針の総合チェックページです。
     </div>
   </div>
@@ -594,12 +594,11 @@
       return `${DEFAULT_PAGES}/${file}${extra}`;
     }
 
-    function authHeaders() {
-      // GETの管理系APIチェックでは、余計なヘッダーを付けず、
-      // WorkerのCORS preflightを安定させるため管理コードだけ送ります。
-      return {
-        "X-DPRO-Admin-Code": adminCode()
-      };
+    function authQuery() {
+      // final-check の管理系GET確認だけ、CORS preflightを避けるため
+      // Worker APIへのクエリとして管理コードを付けます。
+      // ブラウザの表示URLには残りません。
+      return "&admin_code=" + encodeURIComponent(adminCode());
     }
 
     function escapeHtml(value) {
@@ -696,11 +695,16 @@
 
     async function apiGet(path, auth = false) {
       const connector = path.includes("?") ? "&" : "?";
-      const url = apiBase() + path + connector + "shop_code=" + encodeURIComponent(shopCode());
+      let url = apiBase() + path + connector + "shop_code=" + encodeURIComponent(shopCode());
+
+      if (auth) {
+        if (!adminCode()) throw new Error("管理コードが未入力です。");
+        url += authQuery();
+      }
 
       const res = await fetch(url, {
         method: "GET",
-        headers: auth ? authHeaders() : {}
+        cache: "no-store"
       });
 
       const text = await res.text();
