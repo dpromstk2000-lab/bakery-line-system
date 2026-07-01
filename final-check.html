@@ -414,10 +414,10 @@
   <div class="wrap">
     <header class="hero">
       <div>
-        <div class="badge">STEP BAKERY-23 / 総合チェック更新版</div>
+        <div class="badge">STEP BAKERY-23B / 管理APIチェック修正版</div>
         <h1>営業DEMO・本番前<br>総合チェック</h1>
         <p class="lead">
-          STEP22までのライト版・スタッフ画面・取り置き上限・チャージオプション方針をまとめて確認します。
+          管理系APIのチェックでFailed to fetchが出にくいように、認証ヘッダーを最小化した修正版です。
           本番前に「何がOKで、何を後回しにするか」を一画面で見ます。
         </p>
         <div class="button-row">
@@ -431,7 +431,7 @@
         <div class="title">判定方針</div>
         <div class="big">ライト版は取り置き・ECO・顧客管理が主役。チャージはオプション。</div>
         <div class="small">
-          staff.html まで含めて、オーナー・スタッフ・お客様それぞれの動線があるかを確認します。
+          Worker側のCORSもSTEP23B版にすると、管理系APIの自動チェックが安定します。
         </div>
       </div>
     </header>
@@ -460,7 +460,7 @@
         </div>
       </div>
 
-      <div id="overallStatus" class="status-box info">総合チェックを実行してください。</div>
+      <div id="overallStatus" class="status-box info">総合チェックを実行してください。管理系APIだけ Failed to fetch になる場合は、Workerを STEP23B版に更新してください。</div>
 
       <div class="score-grid">
         <div class="score-card ok">
@@ -542,7 +542,7 @@
     </details>
 
     <div class="footer">
-      DPRO SHOP / Bakery final-check.html / STEP BAKERY-23<br>
+      DPRO SHOP / Bakery final-check.html / STEP BAKERY-23B<br>
       ライト版営業DEMO・スタッフ運用・チャージオプション方針の総合チェックページです。
     </div>
   </div>
@@ -595,9 +595,9 @@
     }
 
     function authHeaders() {
+      // GETの管理系APIチェックでは、余計なヘッダーを付けず、
+      // WorkerのCORS preflightを安定させるため管理コードだけ送ります。
       return {
-        "Content-Type": "application/json",
-        "Accept": "application/json",
         "X-DPRO-Admin-Code": adminCode()
       };
     }
