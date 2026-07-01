@@ -1,0 +1,373 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>DPROベーカリー | チャージ上位オプション管理</title>
+  <style>
+:root { --ink:#1c1917; --muted:#78716c; --line:#fed7aa; --main:#ea580c; --green:#16a34a; --blue:#2563eb; --red:#dc2626; --brown:#7c2d12; --shadow:0 20px 60px rgba(120,53,15,.10); }
+* { box-sizing:border-box; }
+body { margin:0; font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; color:var(--ink); background:linear-gradient(135deg,#fff7ed,#fffaf0 55%,#fef3c7); min-height:100vh; }
+.wrap { width:min(100% - 24px,1200px); margin:0 auto; padding:22px 0 58px; }
+.hero { background:rgba(255,255,255,.96); border:1px solid var(--line); border-radius:30px; padding:26px; box-shadow:var(--shadow); display:grid; grid-template-columns:1.08fr .92fr; gap:18px; align-items:center; margin-bottom:16px; }
+.hero-card { background:linear-gradient(135deg,#7c2d12,#9a3412); color:#fff; border-radius:24px; padding:20px; box-shadow:0 20px 44px rgba(124,45,18,.24); }
+.badge,.pill { display:inline-flex; width:fit-content; padding:6px 11px; border-radius:999px; font-size:12px; font-weight:950; border:1px solid #fed7aa; background:#ffedd5; color:#9a3412; }
+.pill.green { background:#ecfdf5; color:#166534; border-color:#bbf7d0; }
+.pill.blue { background:#dbeafe; color:#1d4ed8; border-color:#bfdbfe; }
+.pill.red { background:#fee2e2; color:#991b1b; border-color:#fecaca; }
+h1 { margin:12px 0 10px; font-size:clamp(34px,5vw,64px); line-height:1.02; letter-spacing:-.08em; }
+h2 { margin:0; font-size:clamp(24px,3vw,34px); letter-spacing:-.06em; line-height:1.16; }
+h3 { margin:0 0 8px; font-size:20px; letter-spacing:-.04em; }
+p,.small { color:var(--muted); line-height:1.75; font-weight:850; }
+.hero-card p,.hero-card .small { color:rgba(255,255,255,.82); }
+.panel { background:rgba(255,255,255,.96); border:1px solid var(--line); border-radius:24px; padding:18px; margin-top:16px; box-shadow:0 14px 38px rgba(120,53,15,.07); }
+.panel-head { display:flex; justify-content:space-between; align-items:flex-start; gap:12px; margin-bottom:12px; }
+.grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px; }
+.grid3 { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:14px; }
+.card { background:#fff; border:1px solid var(--line); border-radius:20px; padding:16px; }
+.card.ok { background:#ecfdf5; border-color:#bbf7d0; }
+.card.info { background:#eff6ff; border-color:#bfdbfe; }
+.card.warn { background:#fffbeb; border-color:#fde68a; }
+.form-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; }
+.form-grid.three { grid-template-columns:repeat(3,minmax(0,1fr)); }
+label { display:block; color:var(--muted); font-size:12px; font-weight:950; margin-bottom:6px; }
+input, textarea, select { width:100%; border:1px solid #fdba74; background:#fff; border-radius:13px; padding:12px; color:var(--ink); outline:none; font:inherit; font-weight:850; }
+textarea { min-height:120px; resize:vertical; }
+button,a.btn { border:none; border-radius:999px; padding:11px 14px; background:var(--main); color:#fff; font-weight:950; text-decoration:none; cursor:pointer; display:inline-flex; align-items:center; justify-content:center; gap:7px; }
+button.green,a.green { background:var(--green); }
+button.blue,a.blue { background:var(--blue); }
+button.red,a.red { background:var(--red); }
+button.ghost,a.ghost { background:#fff; color:#9a3412; border:1px solid #fdba74; }
+.buttons { display:flex; flex-wrap:wrap; gap:8px; margin-top:12px; }
+.status { margin-top:12px; border-radius:16px; padding:12px; background:#eff6ff; border:1px solid #bfdbfe; color:#1e3a8a; font-weight:900; white-space:pre-wrap; }
+.status.ok { background:#ecfdf5; border-color:#bbf7d0; color:#166534; }
+.status.warn { background:#fffbeb; border-color:#fde68a; color:#92400e; }
+.status.ng { background:#fef2f2; border-color:#fecaca; color:#991b1b; }
+table { width:100%; border-collapse:collapse; font-size:13px; }
+th,td { border-bottom:1px solid #fed7aa; padding:10px 8px; text-align:left; vertical-align:top; }
+th { color:#9a3412; background:#fff7ed; font-size:12px; }
+.mono { font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; }
+.url-box { font-size:12px; word-break:break-all; background:#fff7ed; border:1px solid #fed7aa; border-radius:14px; padding:10px; color:#57534e; font-weight:800; }
+@media(max-width:860px) { .hero,.grid,.grid3,.form-grid,.form-grid.three { grid-template-columns:1fr; } .panel-head { display:block; } button,a.btn { width:100%; } table { font-size:12px; } }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="hero">
+      <div>
+        <div class="badge">STEP BAKERY-30-CHARGE / 安全版チャージ管理</div>
+        <h1>チャージ機能<br>上位オプション管理</h1>
+        <p>
+          ライト版の主役は会員証・取り置き・ECOです。
+          この画面は、導入希望店舗だけに使うチャージ上位オプションです。
+          有償残高とおまけ残高を分け、履歴を残します。
+        </p>
+        <div class="buttons">
+          <button class="green" id="loadButton">チャージ状況を読む</button>
+          <a class="btn ghost" href="https://dpromstk2000-lab.github.io/bakery-line-system/charge-terms.html?v=30-charge" target="_blank">注意文・規約案</a>
+          <a class="btn blue" href="https://dpromstk2000-lab.github.io/bakery-line-system/owner.html?shop_code=bakery_demo&api=https%3A%2F%2Fdpro-bakery-wallet-api.dpromstk2000.workers.dev&v=30-charge" target="_blank">ownerへ戻る</a>
+        </div>
+      </div>
+      <div class="hero-card">
+        <h2>安全ルール</h2>
+        <p>
+          支払い確認前にチャージしない。有償残高とおまけ残高を混ぜない。
+          返金・取消・補正は必ず台帳に残す。Square連携はまだ設計枠です。
+        </p>
+      </div>
+    </header>
+
+    <section class="panel">
+      <div class="panel-head">
+        <div>
+          <h2>接続・管理コード</h2>
+          <p class="small">DEMO管理コードは保存コード削除→自動入力で入れられます。</p>
+        </div>
+        <span id="connectionBadge" class="pill blue">未確認</span>
+      </div>
+      <div class="form-grid">
+        <div><label>Worker API URL</label><input id="apiBaseInput" value="https://dpro-bakery-wallet-api.dpromstk2000.workers.dev" /></div>
+        <div><label>店舗コード</label><input id="shopCodeInput" value="bakery_demo" /></div>
+        <div><label>管理コード</label><input id="adminCodeInput" type="password" placeholder="管理コード" /></div>
+        <div><label>スタッフ名</label><input id="staffNameInput" value="管理スタッフ" /></div>
+      </div>
+      <div class="buttons">
+        <button class="ghost" id="fillDemoCodeButton">DEMO管理コードを自動入力</button>
+        <button class="ghost" id="toggleAdminCodeButton">表示/非表示</button>
+        <button class="red" id="clearCodeButton">保存コード削除</button>
+      </div>
+      <div id="connectionStatus" class="status">まだ読み込んでいません。</div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <div>
+          <h2>安全版 手動チャージ</h2>
+          <p class="small">店頭現金・カード・PayPay等で支払い確認後にだけ実行します。</p>
+        </div>
+        <span class="pill red">本番注意</span>
+      </div>
+
+      <div class="form-grid three">
+        <div><label>会員コード / LINE ID</label><input id="customerKeyInput" placeholder="例：DEMO-BK-001" /></div>
+        <div><label>有償チャージ金額</label><input id="paidAmountInput" type="number" min="0" step="1" value="3000" /></div>
+        <div><label>おまけ率</label><input id="bonusRateInput" type="number" min="0" step="0.01" value="0.05" /></div>
+        <div><label>おまけ残高</label><input id="bonusAmountInput" type="number" min="0" step="1" placeholder="空なら自動計算" /></div>
+        <div>
+          <label>支払い確認方法</label>
+          <select id="providerInput">
+            <option value="store_cash">店頭現金</option>
+            <option value="store_card">店頭カード</option>
+            <option value="store_paypay">店頭PayPay等</option>
+            <option value="manual_admin">管理者確認</option>
+          </select>
+        </div>
+        <div><label>外部決済ID</label><input id="externalPaymentIdInput" placeholder="任意：Square決済ID等" /></div>
+      </div>
+
+      <label style="margin-top:12px;">メモ</label>
+      <textarea id="chargeMemoInput">店頭支払い確認後の安全版手動チャージ</textarea>
+
+      <div class="grid">
+        <label class="card ok"><input id="confirmedPaymentInput" type="checkbox" /> 店頭で支払い確認済みです</label>
+        <label class="card warn"><input id="confirmedPolicyInput" type="checkbox" /> チャージ注意事項を説明・確認しました</label>
+      </div>
+
+      <div class="buttons">
+        <button class="ghost" data-demo-member="DEMO-BK-001">DEMO-BK-001</button>
+        <button class="ghost" data-demo-member="DEMO-BK-002">DEMO-BK-002</button>
+        <button class="green" id="manualChargeButton">手動チャージ実行</button>
+      </div>
+
+      <div id="chargeStatus" class="status">支払い確認と注意事項確認にチェックしてから実行してください。</div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <div>
+          <h2>返金・取消・補正</h2>
+          <p class="small">誤入金、二重入金、店舗都合、取消などを台帳に残します。金額はマイナス入力できます。</p>
+        </div>
+        <span class="pill red">履歴必須</span>
+      </div>
+
+      <div class="form-grid three">
+        <div><label>会員コード / LINE ID</label><input id="adjustCustomerKeyInput" placeholder="例：DEMO-BK-001" /></div>
+        <div><label>有償残高の増減</label><input id="paidDeltaInput" type="number" step="1" value="-500" /></div>
+        <div><label>おまけ残高の増減</label><input id="bonusDeltaInput" type="number" step="1" value="0" /></div>
+        <div>
+          <label>理由</label>
+          <select id="reasonTypeInput">
+            <option value="refund">返金</option>
+            <option value="charge_cancel">チャージ取消</option>
+            <option value="correction">入力補正</option>
+            <option value="bonus_adjust">おまけ補正</option>
+            <option value="expire">失効</option>
+            <option value="payment_correction">決済補正</option>
+          </select>
+        </div>
+        <div><label>関連台帳ID</label><input id="relatedLedgerInput" placeholder="任意" /></div>
+        <div><label>外部決済ID</label><input id="adjustExternalIdInput" placeholder="任意" /></div>
+      </div>
+
+      <label style="margin-top:12px;">補正メモ</label>
+      <textarea id="adjustMemoInput">誤入金・取消・返金等のため補正</textarea>
+
+      <label class="card warn"><input id="confirmedAdjustmentInput" type="checkbox" /> 補正理由と金額を確認しました</label>
+
+      <div class="buttons">
+        <button class="red" id="adjustButton">補正・返金・取消を登録</button>
+      </div>
+
+      <div id="adjustStatus" class="status">補正は必ず理由とメモを残してください。</div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <div>
+          <h2>残高・台帳</h2>
+          <p class="small">有償残高・おまけ残高・履歴を確認します。</p>
+        </div>
+        <button class="blue" id="reloadButton">再読込</button>
+      </div>
+
+      <div class="grid3">
+        <div class="card ok"><h3>有償残高合計</h3><p id="totalPaidBalance">-</p></div>
+        <div class="card ok"><h3>おまけ残高合計</h3><p id="totalBonusBalance">-</p></div>
+        <div class="card info"><h3>合計残高</h3><p id="totalBalance">-</p></div>
+      </div>
+
+      <h3 style="margin-top:16px;">会員残高</h3>
+      <div style="overflow:auto;">
+        <table>
+          <thead><tr><th>会員</th><th>会員コード</th><th>有償</th><th>おまけ</th><th>合計</th><th>操作</th></tr></thead>
+          <tbody id="customersTbody"><tr><td colspan="6">未読込</td></tr></tbody>
+        </table>
+      </div>
+
+      <h3 style="margin-top:16px;">チャージ台帳</h3>
+      <div style="overflow:auto;">
+        <table>
+          <thead><tr><th>日時</th><th>理由</th><th>会員</th><th>有償増減</th><th>おまけ増減</th><th>残高後</th><th>メモ</th></tr></thead>
+          <tbody id="ledgerTbody"><tr><td colspan="7">未読込</td></tr></tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+
+<script>
+const DEFAULTS = {
+  apiBase: "https://dpro-bakery-wallet-api.dpromstk2000.workers.dev",
+  shopCode: "bakery_demo",
+  adminStorageKey: "DPRO_BAKERY_CHARGE_ADMIN_CODE"
+};
+const $ = (id) => document.getElementById(id);
+function clean(v) { return String(v ?? "").trim(); }
+function apiBase() { return clean($("apiBaseInput").value || DEFAULTS.apiBase).replace(/\/+$/, ""); }
+function shopCode() { return clean($("shopCodeInput").value || DEFAULTS.shopCode); }
+function adminCode() { return clean($("adminCodeInput").value); }
+function staffName() { return clean($("staffNameInput").value || "管理スタッフ"); }
+function yen(v) { return Number(v || 0).toLocaleString("ja-JP") + "円"; }
+function escapeHtml(v) { return String(v ?? "").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;"); }
+function setStatus(id, msg, type="info") { $(id).className = "status " + (type === "ok" ? "ok" : type === "ng" ? "ng" : type === "warn" ? "warn" : ""); $(id).textContent = typeof msg === "string" ? msg : JSON.stringify(msg, null, 2); }
+
+async function post(path, payload={}) {
+  const res = await fetch(apiBase() + path, {
+    method: "POST",
+    cache: "no-store",
+    body: JSON.stringify({ shop_code: shopCode(), admin_code: adminCode(), ...payload })
+  });
+  const text = await res.text();
+  let data;
+  try { data = text ? JSON.parse(text) : null; } catch { data = { ok:false, message:text || "APIエラー" }; }
+  if (!res.ok || data?.ok === false) throw new Error(data?.message || data?.error || text || "APIエラー");
+  return data;
+}
+
+async function loadChargeCheck() {
+  if (!adminCode()) {
+    setStatus("connectionStatus", "管理コードを入力してください。", "warn");
+    return;
+  }
+  const data = await post("/api/simple/charge-check", {});
+  $("connectionBadge").className = "pill green";
+  $("connectionBadge").textContent = "接続OK";
+  setStatus("connectionStatus", {
+    settings: data.settings,
+    customers: data.customers?.count,
+    ledger: data.ledger?.count
+  }, "ok");
+
+  const c = data.customers || {};
+  $("totalPaidBalance").textContent = yen(c.total_paid_balance);
+  $("totalBonusBalance").textContent = yen(c.total_bonus_balance);
+  $("totalBalance").textContent = yen(c.total_balance);
+
+  const rows = c.rows || [];
+  $("customersTbody").innerHTML = rows.length ? rows.map((x) => `
+    <tr>
+      <td>${escapeHtml(x.customer_name || x.line_display_name || "お客様")}</td>
+      <td class="mono">${escapeHtml(x.member_code || "")}</td>
+      <td>${yen(x.paid_balance)}</td>
+      <td>${yen(x.bonus_balance)}</td>
+      <td>${yen(x.balance)}</td>
+      <td><button class="ghost" data-member="${escapeHtml(x.member_code || "")}">選択</button></td>
+    </tr>
+  `).join("") : `<tr><td colspan="6">会員がありません。</td></tr>`;
+
+  document.querySelectorAll("[data-member]").forEach((button) => {
+    button.addEventListener("click", () => {
+      const m = button.getAttribute("data-member") || "";
+      $("customerKeyInput").value = m;
+      $("adjustCustomerKeyInput").value = m;
+      setStatus("chargeStatus", m + " を選択しました。", "ok");
+    });
+  });
+
+  const ledger = data.ledger?.rows || [];
+  $("ledgerTbody").innerHTML = ledger.length ? ledger.map((l) => `
+    <tr>
+      <td>${escapeHtml(new Date(l.created_at).toLocaleString("ja-JP"))}</td>
+      <td><span class="pill blue">${escapeHtml(l.reason_type)}</span><div class="small">${escapeHtml(l.provider || "")}</div></td>
+      <td>${escapeHtml(l.customer_name || "")}<div class="small mono">${escapeHtml(l.member_code || "")}</div></td>
+      <td>${yen(l.paid_delta)}</td>
+      <td>${yen(l.bonus_delta)}</td>
+      <td>${yen(l.total_balance_after)}<div class="small">有償 ${yen(l.paid_balance_after)} / おまけ ${yen(l.bonus_balance_after)}</div></td>
+      <td>${escapeHtml(l.memo || "")}<div class="small mono">${escapeHtml(l.id || "")}</div></td>
+    </tr>
+  `).join("") : `<tr><td colspan="7">履歴がありません。</td></tr>`;
+}
+
+async function manualCharge() {
+  try {
+    const paidAmount = Number($("paidAmountInput").value || 0);
+    const bonusAmountRaw = clean($("bonusAmountInput").value);
+    const data = await post("/api/simple/charge-manual", {
+      customer_key: $("customerKeyInput").value,
+      paid_amount: paidAmount,
+      bonus_rate: $("bonusRateInput").value,
+      bonus_amount: bonusAmountRaw === "" ? undefined : Number(bonusAmountRaw),
+      provider: $("providerInput").value,
+      external_payment_id: $("externalPaymentIdInput").value,
+      staff_name: staffName(),
+      memo: $("chargeMemoInput").value,
+      confirmed_payment: $("confirmedPaymentInput").checked,
+      confirmed_policy: $("confirmedPolicyInput").checked,
+      source: "charge_admin_html_step30"
+    });
+    setStatus("chargeStatus", data, "ok");
+    await loadChargeCheck();
+  } catch(e) {
+    setStatus("chargeStatus", e.message, "ng");
+  }
+}
+
+async function adjustCharge() {
+  try {
+    const data = await post("/api/simple/charge-adjust", {
+      customer_key: $("adjustCustomerKeyInput").value,
+      paid_delta: Number($("paidDeltaInput").value || 0),
+      bonus_delta: Number($("bonusDeltaInput").value || 0),
+      reason_type: $("reasonTypeInput").value,
+      related_ledger_id: $("relatedLedgerInput").value,
+      external_payment_id: $("adjustExternalIdInput").value,
+      staff_name: staffName(),
+      memo: $("adjustMemoInput").value,
+      confirmed_adjustment: $("confirmedAdjustmentInput").checked,
+      source: "charge_admin_html_step30_adjust"
+    });
+    setStatus("adjustStatus", data, "ok");
+    await loadChargeCheck();
+  } catch(e) {
+    setStatus("adjustStatus", e.message, "ng");
+  }
+}
+
+$("loadButton").addEventListener("click", loadChargeCheck);
+$("reloadButton").addEventListener("click", loadChargeCheck);
+$("manualChargeButton").addEventListener("click", manualCharge);
+$("adjustButton").addEventListener("click", adjustCharge);
+$("fillDemoCodeButton").addEventListener("click", () => {
+  $("adminCodeInput").value = "dpro-bakery-demo-2026";
+  sessionStorage.setItem(DEFAULTS.adminStorageKey + "_" + shopCode(), $("adminCodeInput").value);
+  setStatus("connectionStatus", "DEMO管理コードを入力しました。", "ok");
+});
+$("toggleAdminCodeButton").addEventListener("click", () => {
+  $("adminCodeInput").type = $("adminCodeInput").type === "password" ? "text" : "password";
+});
+$("clearCodeButton").addEventListener("click", () => {
+  sessionStorage.removeItem(DEFAULTS.adminStorageKey + "_" + shopCode());
+  $("adminCodeInput").value = "";
+  setStatus("connectionStatus", "保存コードを削除しました。", "ok");
+});
+document.querySelectorAll("[data-demo-member]").forEach((b) => {
+  b.addEventListener("click", () => {
+    $("customerKeyInput").value = b.getAttribute("data-demo-member");
+    $("adjustCustomerKeyInput").value = b.getAttribute("data-demo-member");
+  });
+});
+const stored = sessionStorage.getItem(DEFAULTS.adminStorageKey + "_" + shopCode());
+if (stored) $("adminCodeInput").value = stored;
+</script>
+</body>
+</html>
