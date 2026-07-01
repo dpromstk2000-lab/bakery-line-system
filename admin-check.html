@@ -419,10 +419,10 @@
   <div class="wrap">
     <header class="hero">
       <div>
-        <div class="badge">STEP BAKERY-24DB / 管理系API CORS回避チェック</div>
+        <div class="badge">STEP BAKERY-24EB / 管理系API CORS回避チェック</div>
         <h1>管理画面・スタッフ画面<br>本番前チェック</h1>
         <p class="lead">
-          STEP24Cで不足していたWorker側ハンドラーを修正し、GETだけで管理系の読込処理を切り分け診断します。
+          Cloudflare側の管理コードは正しいため、Worker内の照合をtrim対応に修正しました。
           ここが通れば、チャージなしライト版の本番候補としてかなり安心です。
         </p>
         <div class="button-row">
@@ -436,7 +436,7 @@
         <div class="title">本番OKの判断基準</div>
         <div class="big">owner.html と staff.html が読む・更新するAPIが通ること。</div>
         <div class="small">
-          今回のエラーは endpoint は呼べているが、Worker内の関数が未定義だったためです。STEP24Dでその関数を追加しました。
+          今回のエラーは endpoint まで届いています。管理コード照合で前後空白などに強くしました。
         </div>
       </div>
     </header>
@@ -465,7 +465,7 @@
         </div>
       </div>
 
-      <div id="overallStatus" class="status-box info">まず「読込チェック実行」を押してください。</div>
+      <div id="overallStatus" class="status-box info">管理コード欄は一度全削除して、dpro-bakery-demo-2026 を入れ直してから実行してください。</div>
 
       <div class="score-grid">
         <div class="score-card ok">
@@ -539,7 +539,7 @@
     </details>
 
     <div class="footer">
-      DPRO SHOP / Bakery admin-check.html / STEP BAKERY-24DB<br>
+      DPRO SHOP / Bakery admin-check.html / STEP BAKERY-24EB<br>
       本番前に、管理系APIが実際に使えるかを確認するための専用チェック画面です。
     </div>
   </div>
@@ -861,9 +861,9 @@
 
     function buildLinks() {
       return [
-        ["owner.html", pageUrl("owner.html", "&v=24d"), "オーナー管理画面"],
-        ["staff.html", pageUrl("staff.html", "&v=24d"), "スタッフ取り置き画面"],
-        ["wallet.html", pageUrl("wallet.html", "&v=24d"), "お客様会員証"],
+        ["owner.html", pageUrl("owner.html", "&v=24e"), "オーナー管理画面"],
+        ["staff.html", pageUrl("staff.html", "&v=24e"), "スタッフ取り置き画面"],
+        ["wallet.html", pageUrl("wallet.html", "&v=24e"), "お客様会員証"],
         ["final-check.html", pageUrl("final-check.html", "&v=23e"), "総合チェック"],
         ["qr.html", `${DEFAULT_PAGES}/qr.html?v=22`, "QRリンク集"],
         ["sales-demo.html", `${DEFAULT_PAGES}/sales-demo.html?v=22`, "営業DEMO進行"]
