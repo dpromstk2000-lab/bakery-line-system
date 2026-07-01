@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>DPROベーカリー | チャージ注意文・規約案</title>
+  <style>
+:root { --ink:#1c1917; --muted:#78716c; --line:#fed7aa; --main:#ea580c; --green:#16a34a; --blue:#2563eb; --red:#dc2626; --brown:#7c2d12; --shadow:0 20px 60px rgba(120,53,15,.10); }
+* { box-sizing:border-box; }
+body { margin:0; font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; color:var(--ink); background:linear-gradient(135deg,#fff7ed,#fffaf0 55%,#fef3c7); min-height:100vh; }
+.wrap { width:min(100% - 24px,1200px); margin:0 auto; padding:22px 0 58px; }
+.hero { background:rgba(255,255,255,.96); border:1px solid var(--line); border-radius:30px; padding:26px; box-shadow:var(--shadow); display:grid; grid-template-columns:1.08fr .92fr; gap:18px; align-items:center; margin-bottom:16px; }
+.hero-card { background:linear-gradient(135deg,#7c2d12,#9a3412); color:#fff; border-radius:24px; padding:20px; box-shadow:0 20px 44px rgba(124,45,18,.24); }
+.badge,.pill { display:inline-flex; width:fit-content; padding:6px 11px; border-radius:999px; font-size:12px; font-weight:950; border:1px solid #fed7aa; background:#ffedd5; color:#9a3412; }
+.pill.green { background:#ecfdf5; color:#166534; border-color:#bbf7d0; }
+.pill.blue { background:#dbeafe; color:#1d4ed8; border-color:#bfdbfe; }
+.pill.red { background:#fee2e2; color:#991b1b; border-color:#fecaca; }
+h1 { margin:12px 0 10px; font-size:clamp(34px,5vw,64px); line-height:1.02; letter-spacing:-.08em; }
+h2 { margin:0; font-size:clamp(24px,3vw,34px); letter-spacing:-.06em; line-height:1.16; }
+h3 { margin:0 0 8px; font-size:20px; letter-spacing:-.04em; }
+p,.small { color:var(--muted); line-height:1.75; font-weight:850; }
+.hero-card p,.hero-card .small { color:rgba(255,255,255,.82); }
+.panel { background:rgba(255,255,255,.96); border:1px solid var(--line); border-radius:24px; padding:18px; margin-top:16px; box-shadow:0 14px 38px rgba(120,53,15,.07); }
+.panel-head { display:flex; justify-content:space-between; align-items:flex-start; gap:12px; margin-bottom:12px; }
+.grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px; }
+.grid3 { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:14px; }
+.card { background:#fff; border:1px solid var(--line); border-radius:20px; padding:16px; }
+.card.ok { background:#ecfdf5; border-color:#bbf7d0; }
+.card.info { background:#eff6ff; border-color:#bfdbfe; }
+.card.warn { background:#fffbeb; border-color:#fde68a; }
+.form-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; }
+.form-grid.three { grid-template-columns:repeat(3,minmax(0,1fr)); }
+label { display:block; color:var(--muted); font-size:12px; font-weight:950; margin-bottom:6px; }
+input, textarea, select { width:100%; border:1px solid #fdba74; background:#fff; border-radius:13px; padding:12px; color:var(--ink); outline:none; font:inherit; font-weight:850; }
+textarea { min-height:120px; resize:vertical; }
+button,a.btn { border:none; border-radius:999px; padding:11px 14px; background:var(--main); color:#fff; font-weight:950; text-decoration:none; cursor:pointer; display:inline-flex; align-items:center; justify-content:center; gap:7px; }
+button.green,a.green { background:var(--green); }
+button.blue,a.blue { background:var(--blue); }
+button.red,a.red { background:var(--red); }
+button.ghost,a.ghost { background:#fff; color:#9a3412; border:1px solid #fdba74; }
+.buttons { display:flex; flex-wrap:wrap; gap:8px; margin-top:12px; }
+.status { margin-top:12px; border-radius:16px; padding:12px; background:#eff6ff; border:1px solid #bfdbfe; color:#1e3a8a; font-weight:900; white-space:pre-wrap; }
+.status.ok { background:#ecfdf5; border-color:#bbf7d0; color:#166534; }
+.status.warn { background:#fffbeb; border-color:#fde68a; color:#92400e; }
+.status.ng { background:#fef2f2; border-color:#fecaca; color:#991b1b; }
+table { width:100%; border-collapse:collapse; font-size:13px; }
+th,td { border-bottom:1px solid #fed7aa; padding:10px 8px; text-align:left; vertical-align:top; }
+th { color:#9a3412; background:#fff7ed; font-size:12px; }
+.mono { font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; }
+.url-box { font-size:12px; word-break:break-all; background:#fff7ed; border:1px solid #fed7aa; border-radius:14px; padding:10px; color:#57534e; font-weight:800; }
+@media(max-width:860px) { .hero,.grid,.grid3,.form-grid,.form-grid.three { grid-template-columns:1fr; } .panel-head { display:block; } button,a.btn { width:100%; } table { font-size:12px; } }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="hero">
+      <div>
+        <div class="badge">STEP BAKERY-30-CHARGE / 注意文・規約案</div>
+        <h1>チャージ機能<br>注意文・規約案</h1>
+        <p>
+          本ページはチャージ上位オプションを導入する場合のたたき台です。
+          実店舗で使う前に、店舗の運用・決済方法・返金方針に合わせて専門家確認を行う前提です。
+        </p>
+        <div class="buttons">
+          <button class="green" id="copyButton">文面コピー</button>
+          <a class="btn ghost" href="https://dpromstk2000-lab.github.io/bakery-line-system/charge-admin.html?shop_code=bakery_demo&api=https%3A%2F%2Fdpro-bakery-wallet-api.dpromstk2000.workers.dev&v=30-charge" target="_blank">チャージ管理へ</a>
+        </div>
+      </div>
+      <div class="hero-card">
+        <h2>重要</h2>
+        <p>チャージはライト版の主役ではありません。希望店舗だけに提案する上位オプションです。</p>
+      </div>
+    </header>
+
+    <section class="panel">
+      <h2>お客様向け表示文</h2>
+      <textarea id="termsText">【チャージ機能について】
+
+このチャージ機能は、店頭でお支払い確認後に、当店の会員証残高へ反映する機能です。
+
+■ 残高の種類
+・有償残高：お客様がお支払いされた金額分の残高
+・おまけ残高：キャンペーン等で当店が付与する特典残高
+
+アプリ上では合計残高を表示しますが、当店管理上は有償残高とおまけ残高を分けて記録します。
+
+■ ご利用について
+・残高は当店でのお買い物にご利用いただけます。
+・残高の換金はできません。
+・おまけ残高は返金対象外です。
+・お支払い確認前のチャージ反映はできません。
+
+■ 返金・取消について
+チャージ後の返金は原則としてお受けしておりません。
+ただし、店舗都合によるサービス終了、誤入金、二重入金、その他当店が必要と判断した場合は、当店所定の方法で対応します。
+
+■ ご注意
+本機能の内容は店舗運用により変更される場合があります。
+実際の導入時には、店舗の掲示・案内・利用規約をご確認ください。</textarea>
+    </section>
+
+    <section class="panel">
+      <h2>オーナー説明用</h2>
+      <div class="grid">
+        <div class="card ok"><h3>有償残高</h3><p>お客様が支払った金額。返金や取消の対象になり得るため、必ず分けて管理します。</p></div>
+        <div class="card ok"><h3>おまけ残高</h3><p>キャンペーン特典。返金対象外として扱う前提で文面に明記します。</p></div>
+        <div class="card warn"><h3>返金</h3><p>「一切返金不可」と断定せず、店舗都合・誤入金・二重入金などの例外対応を残します。</p></div>
+        <div class="card info"><h3>Square連携</h3><p>現時点では設計枠。実決済連携は別STEPで確認します。</p></div>
+      </div>
+    </section>
+  </div>
+<script>
+async function copyText(text) {
+  if (navigator.clipboard && window.isSecureContext) return navigator.clipboard.writeText(text);
+  const t=document.createElement('textarea'); t.value=text; document.body.appendChild(t); t.select(); document.execCommand('copy'); t.remove();
+}
+document.getElementById("copyButton").addEventListener("click", async () => {
+  await copyText(document.getElementById("termsText").value);
+  alert("コピーしました");
+});
+</script>
+</body>
+</html>
