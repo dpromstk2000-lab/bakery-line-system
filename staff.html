@@ -492,10 +492,10 @@
   <div class="wrap">
     <header class="hero">
       <div>
-        <div class="badge">STEP BAKERY-21 / スタッフ用iPad取り置き画面</div>
+        <div class="badge">STEP BAKERY-25 / スタッフ用 安定通信版</div>
         <h1>今日の取り置き<br>スタッフ画面</h1>
         <p class="lead">
-          オーナー管理画面とは分けて、スタッフが毎日使う「取り置き対応」だけに絞った画面です。
+          管理コード付きヘッダーを使わず、安定通信APIで今日の取り置き読込・ステータス更新を行うスタッフ画面です。
           接続設定・商品管理・チャージ・DEMO設定は出しません。
         </p>
         <div class="button-row">
@@ -509,7 +509,7 @@
         <div class="title">スタッフ目線</div>
         <div class="big">見るのは、誰が・何時に・何を取りに来るか。</div>
         <div class="small">
-          受付済み → 準備中 → 準備完了 → 受け渡し済み、までを大きなボタンで操作できます。
+          受付済み → 準備中 → 準備完了 → 受け渡し済み、までを安定版APIで操作できます。
         </div>
       </div>
     </header>
@@ -639,7 +639,7 @@
     </div>
 
     <div class="footer">
-      DPRO SHOP / パン屋スタッフ用取り置き画面 / staff.html<br>
+      DPRO SHOP / パン屋スタッフ用取り置き画面 / staff.html / STEP25<br>
       オーナー管理画面とは分け、スタッフが触る機能だけに絞った画面です。
     </div>
   </div>
@@ -745,6 +745,28 @@
       const text = await res.text();
       let data = null;
       try { data = text ? JSON.parse(text) : null; } catch { data = text; }
+
+      if (!res.ok || data?.ok === false) {
+        throw new Error(data?.message || data?.error || text || "APIエラーです。");
+      }
+
+      return data;
+    }
+
+    async function stableAdminPost(path, payload) {
+      const res = await fetch(apiBase() + path, {
+        method: "POST",
+        cache: "no-store",
+        body: JSON.stringify({
+          shop_code: shopCode(),
+          admin_code: adminCode(),
+          ...payload
+        })
+      });
+
+      const text = await res.text();
+      let data = null;
+      try { data = text ? JSON.parse(text) : null; } catch { data = { ok:false, message:text || "APIエラーです。" }; }
 
       if (!res.ok || data?.ok === false) {
         throw new Error(data?.message || data?.error || text || "APIエラーです。");
@@ -896,8 +918,11 @@
         $("loadedBadge").className = "badge blue";
         setStatus("startStatus", "取り置きを読み込み中です。", "info");
 
-        const data = await apiFetch("/api/admin/preorders?date=" + encodeURIComponent(dateValue) + "&limit=120", { auth: true });
-        currentRows = (data.preorders || []).sort((a, b) => {
+        const data = await stableAdminPost("/api/simple/admin-check", {
+          action: "read-check",
+          date: dateValue
+        });
+        currentRows = (data.preorders?.rows || []).sort((a, b) => {
           const at = `${a.pickup_date || ""} ${a.pickup_time || ""}`;
           const bt = `${b.pickup_date || ""} ${b.pickup_time || ""}`;
           return at.localeCompare(bt);
@@ -922,16 +947,11 @@
         const label = statusLabel(nextStatus);
         if (!confirm(`「${label}」に変更しますか？`)) return;
 
-        const data = await apiFetch("/api/admin/preorders/status", {
-          method: "POST",
-          auth: true,
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            preorder_id: preorderId,
-            status: nextStatus,
-            staff_name: "スタッフ",
-            memo: "staff.html STEP BAKERY-21から更新"
-          })
+        const data = await stableAdminPost("/api/simple/preorder-status", {
+          preorder_id: preorderId,
+          status: nextStatus,
+          staff_name: "スタッフ",
+          memo: "staff.html STEP BAKERY-25から更新"
         });
 
         setStatus("startStatus", data.message || `「${label}」に変更しました。`, "ok");
