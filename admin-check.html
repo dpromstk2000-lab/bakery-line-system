@@ -419,10 +419,10 @@
   <div class="wrap">
     <header class="hero">
       <div>
-        <div class="badge">STEP BAKERY-24 / 管理系API実画面チェック</div>
+        <div class="badge">STEP BAKERY-24BB / 管理系API CORS回避チェック</div>
         <h1>管理画面・スタッフ画面<br>本番前チェック</h1>
         <p class="lead">
-          final-check.html の見た目判定ではなく、owner.html / staff.html が実際に使う管理系APIを直接テストします。
+          管理コード付きヘッダーのCORS問題を避けるため、text/plain POSTの専用診断APIで管理系APIを直接テストします。
           ここが通れば、チャージなしライト版の本番候補としてかなり安心です。
         </p>
         <div class="button-row">
@@ -436,7 +436,7 @@
         <div class="title">本番OKの判断基準</div>
         <div class="big">owner.html と staff.html が読む・更新するAPIが通ること。</div>
         <div class="small">
-          final-check専用診断APIではなく、実際の管理画面と同じヘッダー認証で確認します。
+          まずはCORSに詰まらない診断APIで、WorkerとSupabaseの管理系処理そのものが通るか確認します。
         </div>
       </div>
     </header>
@@ -491,7 +491,7 @@
       <div class="panel-head">
         <div>
           <h2>読込チェック</h2>
-          <div class="small">owner.html / staff.html と同じ管理コードヘッダーで、管理系APIを確認します。</div>
+          <div class="small">専用診断APIで、安全チェック・サマリー・顧客・商品・取り置き・履歴をまとめて確認します。</div>
         </div>
       </div>
 
@@ -511,7 +511,7 @@
       <div class="panel-head">
         <div>
           <h2>ステータス更新テスト</h2>
-          <div class="small">DEMO店舗 bakery_demo の時だけ、取り置きステータス更新APIを安全に確認します。</div>
+          <div class="small">DEMO店舗 bakery_demo の時だけ、専用診断API経由で取り置きステータス更新を確認します。</div>
         </div>
         <div id="statusTestBadge" class="badge blue">未実行</div>
       </div>
@@ -539,7 +539,7 @@
     </details>
 
     <div class="footer">
-      DPRO SHOP / Bakery admin-check.html / STEP BAKERY-24<br>
+      DPRO SHOP / Bakery admin-check.html / STEP BAKERY-24BB<br>
       本番前に、管理系APIが実際に使えるかを確認するための専用チェック画面です。
     </div>
   </div>
@@ -710,6 +710,31 @@
       return data;
     }
 
+    async function simpleAdminPost(payload) {
+      const url = apiBase() + "/api/simple/admin-check";
+
+      const res = await fetch(url, {
+        method: "POST",
+        cache: "no-store",
+        // headersを付けない。ブラウザは text/plain として送り、CORS preflightを避ける。
+        body: JSON.stringify({
+          shop_code: shopCode(),
+          admin_code: adminCode(),
+          ...payload
+        })
+      });
+
+      const text = await res.text();
+      let data = null;
+      try { data = text ? JSON.parse(text) : null; } catch { data = text; }
+
+      if (!res.ok || data?.ok === false) {
+        throw new Error(data?.message || data?.error || text || "APIエラーです。");
+      }
+
+      return data;
+    }
+
     async function runPublicChecks() {
       try {
         const health = await fetch(apiBase() + "/api/health", { cache: "no-store" }).then((r) => r.json());
@@ -758,47 +783,30 @@
       sessionStorage.setItem(storageKey(), adminCode());
 
       try {
-        const safety = await apiFetch("/api/admin/safety-check", { auth: true });
-        addCheck("admin", safety.production_guard ? "PASS" : "FAIL", "安全チェック", safety.message || "安全チェックOK");
-        addCheck("admin", "PASS", "DEMOチャージ制御", safety.is_demo ? "DEMO店舗のみ許可" : "本番店舗では拒否");
-      } catch (e) {
-        addCheck("admin", "FAIL", "安全チェック", e.message);
-      }
+        const data = await simpleAdminPost({
+          action: "read-check",
+          date: todayJst()
+        });
 
-      try {
-        const summary = await apiFetch("/api/admin/owner-summary", { auth: true });
-        addCheck("admin", "PASS", "オーナーサマリー", `会員 ${summary.customers?.active ?? "-"} / 今日の取り置き ${summary.preorders?.today_count ?? "-"}`);
-      } catch (e) {
-        addCheck("admin", "FAIL", "オーナーサマリー", e.message);
-      }
+        addCheck("admin", data.safety?.production_guard ? "PASS" : "FAIL", "安全チェック", data.safety?.message || "安全チェックOK");
+        addCheck("admin", "PASS", "DEMOチャージ制御", data.safety?.is_demo ? "DEMO店舗のみ許可" : "本番店舗では拒否");
+        addCheck("admin", "PASS", "オーナーサマリー", `会員 ${data.summary?.customers?.active ?? "-"} / 今日の取り置き ${data.summary?.preorders?.today_count ?? "-"}`);
+        addCheck("admin", "PASS", "顧客一覧API", `顧客 ${data.customers?.count ?? "-"} 件`);
+        addCheck("admin", "PASS", "商品管理API", `商品 ${data.products?.count ?? "-"} 件 / 受付中 ${data.products?.preorder_available_count ?? "-"} 件`);
+        addCheck("admin", "PASS", "取り置き一覧API", `本日 ${data.preorders?.count ?? "-"} 件`);
+        addCheck("admin", "PASS", "決済・履歴API", `本日履歴 ${data.transactions?.count ?? "-"} 件`);
 
-      try {
-        const customers = await apiFetch("/api/admin/customers?limit=10", { auth: true });
-        addCheck("admin", "PASS", "顧客一覧API", `顧客 ${(customers.customers || []).length} 件取得`);
+        lastPreorders = data.preorders?.rows || [];
+        log("Simple admin read-check OK", {
+          customers: data.customers?.count,
+          preorders: data.preorders?.count,
+          products: data.products?.count,
+          transactions: data.transactions?.count,
+          auth_mode: data.auth_mode
+        });
       } catch (e) {
-        addCheck("admin", "FAIL", "顧客一覧API", e.message);
-      }
-
-      try {
-        const products = await apiFetch("/api/admin/products", { auth: true });
-        addCheck("admin", "PASS", "商品管理API", `商品 ${(products.products || []).length} 件取得`);
-      } catch (e) {
-        addCheck("admin", "FAIL", "商品管理API", e.message);
-      }
-
-      try {
-        const preorders = await apiFetch("/api/admin/preorders?date=" + encodeURIComponent(todayJst()) + "&limit=50", { auth: true });
-        lastPreorders = preorders.preorders || [];
-        addCheck("admin", "PASS", "取り置き一覧API", `本日 ${lastPreorders.length} 件取得`);
-      } catch (e) {
-        addCheck("admin", "FAIL", "取り置き一覧API", e.message);
-      }
-
-      try {
-        const transactions = await apiFetch("/api/admin/transactions?limit=10", { auth: true });
-        addCheck("admin", "PASS", "決済・履歴API", `履歴 ${(transactions.transactions || []).length} 件取得`);
-      } catch (e) {
-        addCheck("admin", "WARN", "決済・履歴API", e.message);
+        addCheck("admin", "FAIL", "管理系シンプル診断API", e.message);
+        log("Simple admin read-check NG", { error: e.message });
       }
     }
 
@@ -880,16 +888,12 @@
       }
 
       try {
-        const result = await apiFetch("/api/admin/preorders/status", {
-          method: "POST",
-          auth: true,
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            preorder_id: target.id,
-            status: current,
-            staff_name: "STEP24チェック",
-            memo: "admin-check.html STEP BAKERY-24 ステータス更新テスト"
-          })
+        const result = await simpleAdminPost({
+          action: "status-test",
+          preorder_id: target.id,
+          status: current,
+          staff_name: "STEP24Bチェック",
+          memo: "admin-check.html STEP BAKERY-24BB ステータス更新テスト"
         });
 
         addCheck("status", "PASS", "ステータス更新API", result.message || `同じステータス「${statusLabel(current)}」で更新できました。`);
@@ -908,9 +912,9 @@
 
     function buildLinks() {
       return [
-        ["owner.html", pageUrl("owner.html", "&v=24"), "オーナー管理画面"],
-        ["staff.html", pageUrl("staff.html", "&v=24"), "スタッフ取り置き画面"],
-        ["wallet.html", pageUrl("wallet.html", "&v=24"), "お客様会員証"],
+        ["owner.html", pageUrl("owner.html", "&v=24b"), "オーナー管理画面"],
+        ["staff.html", pageUrl("staff.html", "&v=24b"), "スタッフ取り置き画面"],
+        ["wallet.html", pageUrl("wallet.html", "&v=24b"), "お客様会員証"],
         ["final-check.html", pageUrl("final-check.html", "&v=23e"), "総合チェック"],
         ["qr.html", `${DEFAULT_PAGES}/qr.html?v=22`, "QRリンク集"],
         ["sales-demo.html", `${DEFAULT_PAGES}/sales-demo.html?v=22`, "営業DEMO進行"]
