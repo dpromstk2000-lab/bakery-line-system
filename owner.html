@@ -482,11 +482,11 @@
   <div class="wrap">
     <header class="hero">
       <div>
-        <div class="badge">STEP BAKERY-19 / 商品管理・取り置き上限</div>
+        <div class="badge">STEP BAKERY-20 / 左インデックス管理画面</div>
         <h1>パン屋オーナー<br>管理画面</h1>
         <p class="lead">
-          今日の取り置き対応に加えて、商品ごとの取り置きON/OFF・1日上限・表示順を管理できます。
-          チャージは引き続き希望店舗向けの上位オプションとして下部に残します。
+          左側のインデックスから、今日やること・取り置き設定・商品管理・ECO文面へすぐ移動できます。
+          チャージは希望店舗向けの上位オプションとして下部にまとめています。
         </p>
         <div class="button-row">
           <button class="green" type="button" id="loadAllButton">一括読込</button>
@@ -497,14 +497,43 @@
 
       <div class="hero-card">
         <div class="title">ライト版のポイント</div>
-        <div class="big">人気パンの売り切れ・受け過ぎを防ぐため、商品ごとの上限を管理します。</div>
+        <div class="big">縦長になりすぎないように、左インデックスで必要な画面へすぐ移動します。</div>
         <div class="small">
           チャージは法律・返金・決済連携の確認が必要なため、導入希望店舗だけに提案するオプションです。
         </div>
       </div>
     </header>
 
-    <section class="panel">
+    <div class="owner-layout">
+      <aside class="side-index" aria-label="オーナー管理メニュー">
+        <div class="side-index-title">管理メニュー</div>
+        <small>必要な場所へすぐ移動できます。営業時は上から順番に見せると分かりやすいです。</small>
+        <nav>
+          <a class="nav-main" href="#todaySection">① 今日やること</a>
+          <a class="nav-main" href="#preordersSection">② 取り置き対応</a>
+          <a class="nav-main" href="#productsSection">③ 商品・上限</a>
+          <a class="nav-main" href="#ecoSection">④ ECO文面</a>
+          <a href="#pickupSection">営業日・休業日</a>
+          <a href="#customersSection">顧客一覧</a>
+          <a href="#connectionSection">接続設定</a>
+          <a class="nav-option" href="#chargeSection">チャージ オプション</a>
+          <a class="nav-option" href="#transactionsSection">決済履歴</a>
+          <a class="nav-option" href="#demoSection">DEMO設定</a>
+          <a class="nav-option" href="#logsSection">診断ログ</a>
+        </nav>
+        <div class="compact-note">主役は「取り置き・ECO・顧客管理」。チャージは最後に必要な店舗だけ説明します。</div>
+      </aside>
+
+      <main class="owner-main">
+        <div class="quick-top" id="todaySection">
+          <a class="quick-card" href="#preordersSection"><strong>今日の取り置き</strong><span>準備中・受け渡しまで管理</span></a>
+          <a class="quick-card" href="#productsSection"><strong>商品上限</strong><span>人気パンの受け過ぎ防止</span></a>
+          <a class="quick-card" href="#ecoSection"><strong>ECOレスキュー</strong><span>夕方の売れ残り対策</span></a>
+          <a class="quick-card" href="#pickupSection"><strong>休業日設定</strong><span>定休日・臨時休業を反映</span></a>
+        </div>
+
+
+    <section class="panel" id="connectionSection">
       <div class="panel-head">
         <div>
           <h2>接続設定</h2>
@@ -542,7 +571,7 @@
       <div id="connectionStatus" class="status-box info">未接続です。</div>
     </section>
 
-    <section class="panel">
+    <section class="panel" id="summarySection">
       <div class="panel-head">
         <div>
           <h2>今日の状況</h2>
@@ -579,7 +608,7 @@
       <div class="status-box ok">営業時の主役：今日の取り置き・ECOレスキュー・顧客管理です。取り置きは「準備中」「準備完了」「受け渡し済み」まで見せられます。</div>
     </section>
 
-    <section class="panel">
+    <section class="panel" id="chargeSection">
       <div class="panel-head">
         <div>
           <h2>オプション機能：手動チャージ</h2>
@@ -621,7 +650,7 @@
       <div id="manualChargeStatus" class="status-box info">ライト版では通常使いません。チャージ導入店舗のみ、支払い確認後にこの手動チャージを使います。</div>
     </section>
 
-    <section class="panel">
+    <section class="panel" id="pickupSection">
       <div class="panel-head">
         <div>
           <h2>取り置き設定</h2>
@@ -684,7 +713,7 @@
       <div id="pickupStatus" class="status-box info">まだ読み込んでいません。</div>
     </section>
 
-    <section class="panel">
+    <section class="panel" id="productsSection">
       <div class="panel-head">
         <div>
           <h2>商品管理・取り置き上限</h2>
@@ -715,7 +744,7 @@
       </div>
     </section>
 
-    <section class="panel">
+    <section class="panel" id="ecoSection">
       <div class="panel-head">
         <div>
           <h2>ECOレスキュー文面作成</h2>
@@ -754,7 +783,7 @@
       <div id="ecoStatus" class="status-box info">未作成です。</div>
     </section>
 
-    <section class="panel">
+    <section class="panel" id="demoSection">
       <div class="panel-head">
         <div>
           <h2>営業前DEMO設定</h2>
@@ -767,7 +796,7 @@
       <div id="demoSetupStatus" class="status-box info">本番店舗では実行しないでください。bakery_demo 以外では拒否されます。</div>
     </section>
 
-    <section class="panel">
+    <section class="panel" id="customersSection">
       <div class="panel-head">
         <div>
           <h2>顧客一覧</h2>
@@ -793,7 +822,7 @@
       </div>
     </section>
 
-    <section class="panel">
+    <section class="panel" id="preordersSection">
       <div class="panel-head">
         <div>
           <h2>今日やること・取り置き一覧</h2>
@@ -821,7 +850,7 @@
       </div>
     </section>
 
-    <section class="panel">
+    <section class="panel" id="transactionsSection">
       <div class="panel-head">
         <div>
           <h2>決済・チャージ履歴</h2>
@@ -848,7 +877,7 @@
       </div>
     </section>
 
-    <details>
+    <details id="logsSection">
       <summary>操作履歴・診断ログ</summary>
       <div class="detail-body">
         <div class="button-row">
@@ -860,9 +889,12 @@
       </div>
     </details>
 
+      </main>
+    </div>
+
     <div class="footer">
-      DPRO SHOP / パン屋専用LIFF会員証 / owner.html<br>
-      本番運用ではDEMOチャージを使わず、店頭支払い確認後に手動チャージします。
+      DPRO SHOP / パン屋専用 左インデックス管理 / owner.html<br>
+      左インデックスで、取り置き・商品上限・ECO・顧客管理へすぐ移動できます。
     </div>
   </div>
 
@@ -1632,11 +1664,42 @@
       });
     }
 
+
+    function setupSideIndex() {
+      const links = Array.from(document.querySelectorAll(".side-index a[href^='#']"));
+      const targets = links
+        .map((link) => document.querySelector(link.getAttribute("href")))
+        .filter(Boolean);
+
+      links.forEach((link) => {
+        link.addEventListener("click", () => {
+          links.forEach((l) => l.classList.remove("active"));
+          link.classList.add("active");
+        });
+      });
+
+      const onScroll = () => {
+        let current = targets[0];
+        targets.forEach((target) => {
+          const rect = target.getBoundingClientRect();
+          if (rect.top <= 120) current = target;
+        });
+        if (!current) return;
+        links.forEach((link) => {
+          link.classList.toggle("active", link.getAttribute("href") === "#" + current.id);
+        });
+      };
+
+      window.addEventListener("scroll", onScroll, { passive: true });
+      onScroll();
+    }
+
     function init() {
       loadInitialParams();
       bindEvents();
       buildSpecialClosedCalendar();
       renderSpecialClosedDays();
+      setupSideIndex();
       logDiag("owner.html initialized", { shop_code: shopCode(), api: apiBase() });
     }
 
