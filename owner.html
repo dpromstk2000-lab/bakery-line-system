@@ -482,11 +482,11 @@
   <div class="wrap">
     <header class="hero">
       <div>
-        <div class="badge">STEP BAKERY-13 / オーナー運用管理</div>
+        <div class="badge">STEP BAKERY-17 / ライト版オーナー管理</div>
         <h1>パン屋オーナー<br>管理画面</h1>
         <p class="lead">
-          今日のチャージ・会員証決済・取り置き・ECOレスキューに加えて、
-          本番用の手動チャージ、定休日、2か月先までの臨時休業日を管理できます。
+          今日の取り置き、ECOレスキュー、顧客管理、定休日・臨時休業日を中心に管理します。
+          チャージは希望店舗向けの上位オプションとして下部に残します。
         </p>
         <div class="button-row">
           <button class="green" type="button" id="loadAllButton">一括読込</button>
@@ -496,10 +496,10 @@
       </div>
 
       <div class="hero-card">
-        <div class="title">本番運用のポイント</div>
-        <div class="big">本番では、お客様のDEMOチャージを止めて店頭確認後に手動チャージします。</div>
+        <div class="title">ライト版のポイント</div>
+        <div class="big">まずは取り置き・ECOレスキュー・常連管理を主役にします。</div>
         <div class="small">
-          定休日・臨時休業日は取り置き予約に反映されます。年末年始やお盆も2か月先まで登録できます。
+          チャージは法律・返金・決済連携の確認が必要なため、導入希望店舗だけに提案するオプションです。
         </div>
       </div>
     </header>
@@ -546,7 +546,7 @@
       <div class="panel-head">
         <div>
           <h2>今日の状況</h2>
-          <div class="small">チャージ・会員証決済・取り置きがAPIから反映されます。</div>
+          <div class="small">ライト版では、会員・取り置き・ECOレスキューを中心に確認します。</div>
         </div>
         <button class="ghost" type="button" id="reloadSummaryButton">再読込</button>
       </div>
@@ -557,15 +557,15 @@
           <div class="value" id="cardCustomers">-</div>
         </div>
         <div class="card">
-          <div class="label">今日のチャージ</div>
+          <div class="label">オプション：今日のチャージ</div>
           <div class="value" id="cardCharge">-</div>
         </div>
         <div class="card">
-          <div class="label">今日の決済</div>
+          <div class="label">オプション：今日の決済</div>
           <div class="value" id="cardPayment">-</div>
         </div>
         <div class="card">
-          <div class="label">未使用残高</div>
+          <div class="label">オプション：未使用残高</div>
           <div class="value" id="cardBalance">-</div>
         </div>
         <div class="card">
@@ -575,13 +575,15 @@
       </div>
 
       <div id="summaryStatus" class="status-box info">まだ読み込んでいません。</div>
+
+      <div class="status-box ok">営業時の主役：今日の取り置き・ECOレスキュー・顧客管理です。チャージ関連の数字はオプション導入時だけ説明します。</div>
     </section>
 
     <section class="panel">
       <div class="panel-head">
         <div>
-          <h2>本番用 手動チャージ</h2>
-          <div class="small">店頭で現金・カード決済を確認した後、管理者が残高を追加します。</div>
+          <h2>オプション機能：手動チャージ</h2>
+          <div class="small">希望店舗だけに提案する上位オプションです。店頭で支払い確認後、管理者が残高を追加します。</div>
         </div>
       </div>
 
@@ -616,7 +618,7 @@
         <button class="green" type="button" id="manualChargeButton">手動チャージ実行</button>
       </div>
 
-      <div id="manualChargeStatus" class="status-box info">本番店舗では、お客様側DEMOチャージではなく、この手動チャージを使います。</div>
+      <div id="manualChargeStatus" class="status-box info">ライト版では通常使いません。チャージ導入店舗のみ、支払い確認後にこの手動チャージを使います。</div>
     </section>
 
     <section class="panel">
