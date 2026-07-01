@@ -601,6 +601,27 @@
       transform: translateY(-1px);
     }
 
+
+    #startSection {
+      border: 2px solid #bbf7d0;
+      background:
+        radial-gradient(circle at 0% 0%, rgba(187,247,208,.44), transparent 30%),
+        #ffffff;
+    }
+
+    #connectionSection {
+      border-style: dashed;
+      opacity: .96;
+    }
+
+    #connectionSection .panel-head h2::after {
+      content: "（普段は触らない）";
+      font-size: 13px;
+      color: var(--muted);
+      margin-left: 8px;
+      letter-spacing: 0;
+    }
+
     .footer {
       text-align: center;
       color: var(--muted);
@@ -653,10 +674,10 @@
   <div class="wrap">
     <header class="hero">
       <div>
-        <div class="badge">STEP BAKERY-20B / 左固定インデックス修正版</div>
+        <div class="badge">STEP BAKERY-20C / オーナー目線ホーム修正版</div>
         <h1>パン屋オーナー<br>管理画面</h1>
         <p class="lead">
-          左側に固定されたインデックスから、今日やること・取り置き対応・商品管理・ECO文面へすぐ移動できます。
+          最初に見るのは接続設定ではなく、今日やることです。接続設定は下部の初期設定に移動しました。
           チャージは希望店舗向けの上位オプションとして下部にまとめています。
         </p>
         <div class="button-row">
@@ -668,9 +689,9 @@
 
       <div class="hero-card">
         <div class="title">ライト版のポイント</div>
-        <div class="big">左固定インデックスで、縦長でも必要な画面へすぐ移動できます。</div>
+        <div class="big">オーナーが最初に見るべき「今日やること」を先頭にしました。</div>
         <div class="small">
-          チャージは法律・返金・決済連携の確認が必要なため、導入希望店舗だけに提案するオプションです。
+          接続設定や診断は初期設定に下げ、日常運用は取り置き・商品上限・ECOレスキューを中心にします。
         </div>
       </div>
     </header>
@@ -680,19 +701,20 @@
         <div class="side-index-title">管理メニュー</div>
         <small>必要な場所へすぐ移動できます。営業時は上から順番に見せると分かりやすいです。</small>
         <nav>
-          <a class="nav-main" href="#todaySection">① 今日やること</a>
-          <a class="nav-main" href="#preordersSection">② 取り置き対応</a>
-          <a class="nav-main" href="#productsSection">③ 商品・上限</a>
-          <a class="nav-main" href="#ecoSection">④ ECO文面</a>
+          <a class="nav-main" href="#startSection">① 今日の開始</a>
+          <a class="nav-main" href="#summarySection">② 今日の状況</a>
+          <a class="nav-main" href="#preordersSection">③ 取り置き対応</a>
+          <a class="nav-main" href="#productsSection">④ 商品・上限</a>
+          <a class="nav-main" href="#ecoSection">⑤ ECO文面</a>
           <a href="#pickupSection">営業日・休業日</a>
           <a href="#customersSection">顧客一覧</a>
-          <a href="#connectionSection">接続設定</a>
           <a class="nav-option" href="#chargeSection">チャージ オプション</a>
           <a class="nav-option" href="#transactionsSection">決済履歴</a>
           <a class="nav-option" href="#demoSection">DEMO設定</a>
+          <a class="nav-option" href="#connectionSection">初期設定・接続</a>
           <a class="nav-option" href="#logsSection">診断ログ</a>
         </nav>
-        <div class="compact-note">主役は「取り置き・ECO・顧客管理」。チャージは最後に必要な店舗だけ説明します。</div>
+        <div class="compact-note">初期設定は下部へ移動。普段は「今日の開始」→「取り置き対応」で使います。</div>
       </aside>
 
       <main class="owner-main">
@@ -704,42 +726,33 @@
         </div>
 
 
-    <section class="panel" id="connectionSection">
+
+    <section class="panel" id="startSection">
       <div class="panel-head">
         <div>
-          <h2>接続設定</h2>
-          <div class="small">管理コードはこの端末の sessionStorage に保存します。URLには残しません。</div>
+          <h2>今日の管理を開始</h2>
+          <div class="small">オーナーが普段触るのはここだけで十分です。管理コードを入れて「今日の状況を読む」を押します。</div>
         </div>
-        <div id="demoBadge" class="badge blue">確認前</div>
+        <div class="badge green">日常運用</div>
       </div>
 
       <div class="form-grid">
         <div>
-          <label for="apiBaseInput">Worker API URL</label>
-          <input id="apiBaseInput" value="https://dpro-bakery-wallet-api.dpromstk2000.workers.dev" autocomplete="off" />
+          <label for="quickAdminCodeInput">管理コード</label>
+          <input id="quickAdminCodeInput" type="password" placeholder="管理コードを入力" autocomplete="off" />
         </div>
         <div>
-          <label for="shopCodeInput">店舗コード shop_code</label>
-          <input id="shopCodeInput" value="bakery_demo" autocomplete="off" />
-        </div>
-        <div>
-          <label for="adminCodeInput">管理コード</label>
-          <input id="adminCodeInput" type="password" placeholder="管理コードを入力" autocomplete="off" />
-        </div>
-        <div>
-          <label for="staffNameInput">担当スタッフ名</label>
-          <input id="staffNameInput" value="管理スタッフ" autocomplete="off" />
+          <label for="quickStaffNameInput">担当スタッフ名</label>
+          <input id="quickStaffNameInput" value="管理スタッフ" autocomplete="off" />
         </div>
       </div>
 
       <div class="button-row">
-        <button class="green" type="button" id="saveAdminButton">管理コード保存</button>
-        <button class="ghost" type="button" id="checkSafetyButton">安全チェック</button>
-        <button class="ghost" type="button" id="openSystemCheckButton">system-check</button>
-        <button class="ghost" type="button" id="openProductionSetupButton">本番店舗作成</button>
+        <button class="green" type="button" id="quickStartButton">今日の状況を読む</button>
+        <button class="ghost" type="button" id="quickOpenSettingsButton">初期設定を開く</button>
       </div>
 
-      <div id="connectionStatus" class="status-box info">未接続です。</div>
+      <div id="quickStartStatus" class="status-box info">接続設定ではなく、今日の運用から始めます。</div>
     </section>
 
     <section class="panel" id="summarySection">
@@ -1048,6 +1061,45 @@
       </div>
     </section>
 
+    <section class="panel" id="connectionSection">
+      <div class="panel-head">
+        <div>
+          <h2>初期設定・接続情報</h2>
+          <div class="small">通常は触りません。初回設定・接続確認・本番導入時だけ使います。</div>
+        </div>
+        <div id="demoBadge" class="badge blue">確認前</div>
+      </div>
+
+      <div class="form-grid">
+        <div>
+          <label for="apiBaseInput">Worker API URL</label>
+          <input id="apiBaseInput" value="https://dpro-bakery-wallet-api.dpromstk2000.workers.dev" autocomplete="off" />
+        </div>
+        <div>
+          <label for="shopCodeInput">店舗コード shop_code</label>
+          <input id="shopCodeInput" value="bakery_demo" autocomplete="off" />
+        </div>
+        <div>
+          <label for="adminCodeInput">管理コード</label>
+          <input id="adminCodeInput" type="password" placeholder="管理コードを入力" autocomplete="off" />
+        </div>
+        <div>
+          <label for="staffNameInput">担当スタッフ名</label>
+          <input id="staffNameInput" value="管理スタッフ" autocomplete="off" />
+        </div>
+      </div>
+
+      <div class="button-row">
+        <button class="green" type="button" id="saveAdminButton">管理コード保存</button>
+        <button class="ghost" type="button" id="checkSafetyButton">安全チェック</button>
+        <button class="ghost" type="button" id="openSystemCheckButton">system-check</button>
+        <button class="ghost" type="button" id="openProductionSetupButton">本番店舗作成</button>
+      </div>
+
+      <div id="connectionStatus" class="status-box info">未接続です。</div>
+    </section>
+
+
     <details id="logsSection">
       <summary>操作履歴・診断ログ</summary>
       <div class="detail-body">
@@ -1200,7 +1252,10 @@
       if (shop) $("shopCodeInput").value = shop;
 
       const stored = sessionStorage.getItem(adminStorageKey());
-      if (stored) $("adminCodeInput").value = stored;
+      if (stored) {
+        $("adminCodeInput").value = stored;
+        if ($("quickAdminCodeInput")) $("quickAdminCodeInput").value = stored;
+      }
     }
 
     async function checkSafety() {
@@ -1774,6 +1829,25 @@
       }
     }
 
+
+    async function quickStart() {
+      const quickCode = $("quickAdminCodeInput") ? clean($("quickAdminCodeInput").value) : "";
+      const quickStaff = $("quickStaffNameInput") ? clean($("quickStaffNameInput").value) : "";
+
+      if (quickCode) $("adminCodeInput").value = quickCode;
+      if (quickStaff) $("staffNameInput").value = quickStaff;
+
+      if (!adminCode()) {
+        setStatus("quickStartStatus", "管理コードを入力してください。", "warn");
+        return;
+      }
+
+      saveAdminCode();
+      setStatus("quickStartStatus", "読み込み中です。", "info");
+      await loadAll();
+      setStatus("quickStartStatus", "今日の状況を読み込みました。下の取り置き対応から確認できます。", "ok");
+    }
+
     async function loadAll() {
       await checkSafety();
       await Promise.allSettled([
@@ -1788,6 +1862,8 @@
 
     function bindEvents() {
       $("saveAdminButton").addEventListener("click", saveAdminCode);
+      $("quickStartButton").addEventListener("click", quickStart);
+      $("quickOpenSettingsButton").addEventListener("click", () => { location.hash = "#connectionSection"; });
       $("checkSafetyButton").addEventListener("click", checkSafety);
       $("loadAllButton").addEventListener("click", loadAll);
       $("reloadSummaryButton").addEventListener("click", loadSummary);
