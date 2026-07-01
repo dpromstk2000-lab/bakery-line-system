@@ -482,10 +482,10 @@
   <div class="wrap">
     <header class="hero">
       <div>
-        <div class="badge">STEP BAKERY-18 / 取り置き本番運用</div>
+        <div class="badge">STEP BAKERY-19 / 商品管理・取り置き上限</div>
         <h1>パン屋オーナー<br>管理画面</h1>
         <p class="lead">
-          今日の取り置きを、受付済み・準備中・準備完了・受け渡し済みまで管理できます。
+          今日の取り置き対応に加えて、商品ごとの取り置きON/OFF・1日上限・表示順を管理できます。
           チャージは引き続き希望店舗向けの上位オプションとして下部に残します。
         </p>
         <div class="button-row">
@@ -497,7 +497,7 @@
 
       <div class="hero-card">
         <div class="title">ライト版のポイント</div>
-        <div class="big">まずは今日の取り置き対応を主役にします。</div>
+        <div class="big">人気パンの売り切れ・受け過ぎを防ぐため、商品ごとの上限を管理します。</div>
         <div class="small">
           チャージは法律・返金・決済連携の確認が必要なため、導入希望店舗だけに提案するオプションです。
         </div>
@@ -682,6 +682,37 @@
       </div>
 
       <div id="pickupStatus" class="status-box info">まだ読み込んでいません。</div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <div>
+          <h2>商品管理・取り置き上限</h2>
+          <div class="small">商品ごとの取り置きON/OFF、1日上限、表示順を管理します。</div>
+        </div>
+        <button class="ghost" type="button" id="reloadProductsButton">商品を再読込</button>
+      </div>
+
+      <div id="productsStatus" class="status-box info">未読込です。</div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>表示順</th>
+              <th>商品</th>
+              <th>価格</th>
+              <th>取り置き</th>
+              <th>1日上限</th>
+              <th>メモ</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody id="productsTbody">
+            <tr><td colspan="7">未読込です。</td></tr>
+          </tbody>
+        </table>
+      </div>
     </section>
 
     <section class="panel">
@@ -1073,6 +1104,82 @@
       } catch (e) {
         $("transactionsTbody").innerHTML = `<tr><td colspan="6">${escapeHtml(e.message)}</td></tr>`;
         logDiag("決済履歴読込NG", { error: e.message });
+      }
+    }
+
+    async function loadProducts() {
+      try {
+        const data = await apiFetch("/api/admin/products", { auth: true });
+        const rows = data.products || [];
+
+        $("productsTbody").innerHTML = rows.length ? rows.map((p) => {
+          const key = p.product_code || p.id;
+          return `
+            <tr>
+              <td><input style="min-width:76px;" id="prod_order_${escapeHtml(key)}" type="number" value="${escapeHtml(p.display_order ?? 100)}"></td>
+              <td>
+                <strong>${escapeHtml(p.product_name || "-")}</strong>
+                <div class="small">${escapeHtml(p.product_code || "")}</div>
+                <div class="small">${escapeHtml(p.description || "")}</div>
+              </td>
+              <td>
+                <input style="min-width:110px;" id="prod_price_${escapeHtml(key)}" type="number" min="0" value="${escapeHtml(p.preorder_price || p.price || 0)}">
+              </td>
+              <td>
+                <label class="day-option" style="display:inline-flex;">
+                  <input id="prod_preorder_${escapeHtml(key)}" type="checkbox" ${p.is_preorder_available !== false ? "checked" : ""}>
+                  受付する
+                </label>
+              </td>
+              <td>
+                <input style="min-width:100px;" id="prod_limit_${escapeHtml(key)}" type="number" min="0" placeholder="無制限" value="${escapeHtml(p.daily_preorder_limit ?? "")}">
+              </td>
+              <td>
+                <input style="min-width:180px;" id="prod_note_${escapeHtml(key)}" value="${escapeHtml(p.preorder_admin_note || "")}">
+              </td>
+              <td>
+                <button class="green" type="button" data-product-save="${escapeHtml(key)}">保存</button>
+              </td>
+            </tr>
+          `;
+        }).join("") : `<tr><td colspan="7">商品がありません。</td></tr>`;
+
+        document.querySelectorAll("[data-product-save]").forEach((button) => {
+          button.addEventListener("click", () => saveProduct(button.getAttribute("data-product-save")));
+        });
+
+        setStatus("productsStatus", `商品を${rows.length}件読み込みました。`, "ok");
+        logDiag("商品一覧読込OK", { count: rows.length });
+      } catch (e) {
+        $("productsTbody").innerHTML = `<tr><td colspan="7">${escapeHtml(e.message)}</td></tr>`;
+        setStatus("productsStatus", e.message, "ng");
+        logDiag("商品一覧読込NG", { error: e.message });
+      }
+    }
+
+    async function saveProduct(key) {
+      try {
+        const body = {
+          product_code: key,
+          preorder_price: Number($("prod_price_" + key)?.value || 0),
+          is_preorder_available: $("prod_preorder_" + key)?.checked === true,
+          daily_preorder_limit: $("prod_limit_" + key)?.value || "",
+          display_order: Number($("prod_order_" + key)?.value || 100),
+          preorder_admin_note: $("prod_note_" + key)?.value || "",
+          staff_name: "管理スタッフ"
+        };
+
+        const data = await apiFetch("/api/admin/products/update", {
+          method: "POST",
+          auth: true,
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(body)
+        });
+
+        setStatus("productsStatus", data.message || "商品設定を保存しました。", "ok");
+        await loadProducts();
+      } catch (e) {
+        setStatus("productsStatus", e.message || "商品設定の保存に失敗しました。", "ng");
       }
     }
 
@@ -1471,6 +1578,7 @@
         loadCustomers(),
         loadTransactions(),
         loadPreorders(),
+        loadProducts(),
         loadPickupSettings()
       ]);
     }
@@ -1483,6 +1591,7 @@
       $("reloadCustomersButton").addEventListener("click", loadCustomers);
       $("reloadTransactionsButton").addEventListener("click", loadTransactions);
       $("reloadPreordersButton").addEventListener("click", loadPreorders);
+      $("reloadProductsButton").addEventListener("click", loadProducts);
       $("reloadLogsButton").addEventListener("click", loadLogs);
       $("manualChargeButton").addEventListener("click", manualCharge);
       $("loadPickupButton").addEventListener("click", loadPickupSettings);
