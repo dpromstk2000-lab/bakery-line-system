@@ -726,10 +726,10 @@
 <body>
   <div class="wrap">
     <header class="hero">
-      <div class="badge">STEP BAKERY-17 / ライト版・チャージはオプション</div>
+      <div class="badge">STEP BAKERY-18 / 取り置き上限対応</div>
       <h1>LINEデジタル<br>会員証</h1>
       <p class="lead">
-        人気パンの取り置き、ECOレスキュー通知、常連様向け会員証をLINEの中でまとめます。チャージは希望店舗向けのオプションです。
+        人気パンの取り置き、ECOレスキュー通知、常連様向け会員証をLINEの中でまとめます。取り置きは商品ごとの上限・残数にも対応します。
       </p>
       <div class="button-row">
         <button class="green" data-scroll="#walletPanel" type="button">会員証</button>
@@ -967,6 +967,7 @@
     let specialClosedMap = new Map();
     let currentCustomer = null;
     let currentProducts = [];
+    let currentAvailabilityDate = "";
     let preorderItems = {};
     let selectedCharge = 1000;
     let selectedPickupDate = "";
@@ -1160,7 +1161,7 @@
         renderChargeMode();
         renderHolidaySummary();
         renderPickupSettings();
-        renderProducts();
+        await loadAvailabilityForDate(selectedPickupDate);
         renderUrls();
       } catch (e) {
         setStatus("shopStatus", e.message || "店舗設定の取得に失敗しました。", "ng");
@@ -1340,6 +1341,7 @@
           $("pickupDateInput").value = date;
           renderPickupDateGrid();
           updatePickupStatus();
+          loadAvailabilityForDate(date);
         });
       });
     }
@@ -1371,6 +1373,25 @@
       $("preorderButton").disabled = false;
     }
 
+    async function loadAvailabilityForDate(date) {
+      if (!date) {
+        renderProducts();
+        return;
+      }
+
+      try {
+        currentAvailabilityDate = date;
+        const data = await apiGet("/api/public/preorder-availability?pickup_date=" + encodeURIComponent(date));
+        if (Array.isArray(data.products)) {
+          currentProducts = data.products.filter((p) => p.is_preorder_available !== false);
+        }
+        renderProducts();
+      } catch (e) {
+        setStatus("preorderStatus", "商品ごとの残数取得に失敗しました。通常の商品一覧で表示します。\n" + (e.message || ""), "warn");
+        renderProducts();
+      }
+    }
+
     function renderProducts() {
       if (!currentProducts.length) {
         $("productGrid").innerHTML = '<div class="status-box warn">取り置き可能な商品がありません。</div>';
@@ -1380,14 +1401,26 @@
       $("productGrid").innerHTML = currentProducts.map((p) => {
         const code = p.product_code || p.id;
         const qty = preorderItems[code] || 0;
+        const remainingRaw = p.remaining_preorder_quantity;
+        const limitRaw = p.daily_preorder_limit;
+        const remaining = remainingRaw === null || remainingRaw === undefined ? null : Number(remainingRaw);
+        const limit = limitRaw === null || limitRaw === undefined ? null : Number(limitRaw);
+        const soldOut = p.preorder_sold_out === true || (remaining !== null && remaining <= 0);
+        const remainText = limit === null
+          ? "取り置き上限なし"
+          : soldOut
+            ? "本日分は受付終了"
+            : `本日残り ${remaining} / ${limit} 個`;
+
         return `
-          <div class="product-card ${qty > 0 ? "selected" : ""}">
+          <div class="product-card ${qty > 0 ? "selected" : ""}" style="${soldOut ? "opacity:.55;" : ""}">
             <strong>${escapeHtml(p.product_name || "-")}</strong>
             <span>${yen(p.preorder_price || p.price)} / ${escapeHtml(p.description || "")}</span>
+            <span>${escapeHtml(remainText)}</span>
             <div class="qty-row">
               <button type="button" data-qty-minus="${escapeHtml(code)}">−</button>
               <div class="qty-number">${qty}</div>
-              <button type="button" data-qty-plus="${escapeHtml(code)}">＋</button>
+              <button type="button" data-qty-plus="${escapeHtml(code)}" ${soldOut ? "disabled" : ""}>＋</button>
             </div>
           </div>
         `;
@@ -1405,8 +1438,17 @@
     }
 
     function changeQty(code, delta) {
+      const product = currentProducts.find((p) => String(p.product_code || p.id) === String(code));
       const current = preorderItems[code] || 0;
-      const next = Math.max(0, Math.min(20, current + delta));
+      const remainingRaw = product?.remaining_preorder_quantity;
+      const maxQty = remainingRaw === null || remainingRaw === undefined ? 20 : Math.max(0, Number(remainingRaw));
+      const next = Math.max(0, Math.min(maxQty, current + delta));
+
+      if (delta > 0 && maxQty <= current) {
+        setStatus("preorderStatus", "この商品は本日の取り置き上限に達しています。", "warn");
+        return;
+      }
+
       preorderItems[code] = next;
       if (next === 0) delete preorderItems[code];
       renderProducts();
@@ -1864,7 +1906,7 @@
           payment_method: "store",
           total_amount: total,
           items,
-          memo: "wallet.html STEP BAKERY-14から取り置き予約"
+          memo: "wallet.html STEP BAKERY-18から取り置き予約"
         });
 
         preorderItems = {};
@@ -1962,6 +2004,7 @@
         const date = $("pickupDateInput").value;
         if (dateStatus(date).ok) {
           selectedPickupDate = date;
+          loadAvailabilityForDate(date);
         }
         renderPickupDateGrid();
         updatePickupStatus();
