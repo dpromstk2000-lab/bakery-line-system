@@ -674,10 +674,10 @@
   <div class="wrap">
     <header class="hero">
       <div>
-        <div class="badge">STEP BAKERY-25 / 管理系安定通信版</div>
+        <div class="badge">STEP BAKERY-30-CHARGE / チャージ上位オプション導線追加</div>
         <h1>パン屋オーナー<br>管理画面</h1>
         <p class="lead">
-          最初に見るのは今日やることです。管理系の読込・取り置き更新・商品保存を安定版APIに寄せました。
+          最初に見るのは今日やることです。チャージは上位オプションとして分離し、安全版チャージ管理画面へ誘導します。
           チャージは希望店舗向けの上位オプションとして下部にまとめています。
         </p>
         <div class="button-row">
@@ -816,8 +816,8 @@
     <section class="panel" id="chargeSection">
       <div class="panel-head">
         <div>
-          <h2>オプション機能：手動チャージ</h2>
-          <div class="small">希望店舗だけに提案する上位オプションです。店頭で支払い確認後、管理者が残高を追加します。</div>
+          <h2>オプション機能：安全版チャージ</h2>
+          <div class="small">希望店舗だけに提案する上位オプションです。有償残高・おまけ残高・返金/補正台帳を分けて管理します。</div>
         </div>
       </div>
 
@@ -849,10 +849,11 @@
         <button class="ghost" type="button" data-charge-demo="DEMO-BK-001">佐藤さん</button>
         <button class="ghost" type="button" data-charge-demo="DEMO-BK-002">田中さん</button>
         <button class="ghost" type="button" data-charge-demo="DEMO-BK-003">山本さん</button>
-        <button class="green" type="button" id="manualChargeButton">手動チャージ実行</button>
+        <button class="green" type="button" id="manualChargeButton">簡易チャージ実行</button>
+        <button class="blue" type="button" id="openChargeAdminButton">安全版チャージ管理を開く</button>
       </div>
 
-      <div id="manualChargeStatus" class="status-box info">ライト版では通常使いません。チャージ導入店舗のみ、支払い確認後にこの手動チャージを使います。</div>
+      <div id="manualChargeStatus" class="status-box info">ライト版では通常使いません。詳しい返金・取消・おまけ残高管理は「安全版チャージ管理」を使います。</div>
     </section>
 
     <section class="panel" id="pickupSection">
@@ -1592,17 +1593,16 @@
         $("manualChargeButton").disabled = true;
         $("manualChargeButton").textContent = "チャージ中...";
 
-        const data = await apiFetch("/api/admin/manual-charge", {
-          method: "POST",
-          auth: true,
-          body: JSON.stringify({
-            shop_code: shopCode(),
-            customer_key: member,
-            amount,
-            provider: $("chargeProviderInput").value,
-            staff_name: staffName(),
-            memo: clean($("chargeMemoInput").value)
-          })
+        const data = await stableAdminPost("/api/simple/charge-manual", {
+          customer_key: member,
+          paid_amount: amount,
+          bonus_rate: 0.05,
+          provider: $("chargeProviderInput").value,
+          staff_name: staffName(),
+          memo: clean($("chargeMemoInput").value),
+          confirmed_payment: true,
+          confirmed_policy: true,
+          source: "owner_html_step30_charge"
         });
 
         setStatus("manualChargeStatus", JSON.stringify(data, null, 2), "ok");
@@ -1611,7 +1611,7 @@
         setStatus("manualChargeStatus", e.message, "ng");
       } finally {
         $("manualChargeButton").disabled = false;
-        $("manualChargeButton").textContent = "手動チャージ実行";
+        $("manualChargeButton").textContent = "簡易チャージ実行";
       }
     }
 
@@ -2135,6 +2135,7 @@
       });
       $("openSystemCheckButton").addEventListener("click", () => window.open(pageUrl("system-check.html"), "_blank"));
       $("openProductionSetupButton").addEventListener("click", () => window.open(`${DEFAULT_PAGES}/production-setup.html`, "_blank"));
+      $("openChargeAdminButton").addEventListener("click", () => window.open(pageUrl("charge-admin.html") + "&v=30-charge", "_blank"));
 
       document.querySelectorAll("[data-charge-demo]").forEach((button) => {
         button.addEventListener("click", () => {
