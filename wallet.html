@@ -726,15 +726,15 @@
 <body>
   <div class="wrap">
     <header class="hero">
-      <div class="badge">STEP BAKERY-14C / DEMO会員表示修正版</div>
-      <h1>デジタルお財布<br>会員証</h1>
+      <div class="badge">STEP BAKERY-17 / ライト版・チャージはオプション</div>
+      <h1>LINEデジタル<br>会員証</h1>
       <p class="lead">
-        レジでQRを見せるだけ。取り置き予約は、店舗の定休日・臨時休業日・受け取り時間に合わせて選べます。
+        人気パンの取り置き、ECOレスキュー通知、常連様向け会員証をLINEの中でまとめます。チャージは希望店舗向けのオプションです。
       </p>
       <div class="button-row">
         <button class="green" data-scroll="#walletPanel" type="button">会員証</button>
         <button class="blue" data-scroll="#preorderPanel" type="button">取り置き</button>
-        <button class="dark" data-scroll="#chargePanel" type="button">チャージ</button>
+        <button class="dark" data-scroll="#ecoPanel" type="button">ECO通知</button>
       </div>
       <div id="shopStatus" class="status-box info">店舗設定を読み込み中です。</div>
     </header>
@@ -812,28 +812,6 @@
       <div id="walletStatus" class="status-box info">会員証を表示しています。</div>
     </section>
 
-    <section class="panel hidden" id="chargePanel">
-      <div class="panel-head">
-        <div>
-          <h2>チャージ</h2>
-          <div class="small" id="chargeLead">DEMO店舗では、動作確認用のDEMOチャージが使えます。</div>
-        </div>
-        <div id="chargeModeBadge" class="badge blue">確認中</div>
-      </div>
-
-      <div class="charge-grid" id="chargeGrid">
-        <div class="charge-card selected" data-charge="1000"><strong>1,000円</strong><span>上乗せあり</span></div>
-        <div class="charge-card" data-charge="3000"><strong>3,000円</strong><span>上乗せあり</span></div>
-        <div class="charge-card" data-charge="5000"><strong>5,000円</strong><span>上乗せあり</span></div>
-        <div class="charge-card" data-charge="10000"><strong>10,000円</strong><span>上乗せあり</span></div>
-      </div>
-
-      <div class="button-row">
-        <button class="green" id="demoChargeButton" type="button">DEMOチャージする</button>
-      </div>
-      <div id="chargeStatus" class="status-box info">チャージ金額を選んでください。</div>
-    </section>
-
     <section class="panel hidden" id="preorderPanel">
       <div class="panel-head">
         <div>
@@ -907,6 +885,32 @@
       <div id="ecoStatus" class="status-box info">設定を変更できます。</div>
     </section>
 
+<section class="panel hidden" id="chargePanel">
+      <div class="panel-head">
+        <div>
+          <h2>オプション：チャージ残高</h2>
+          <div class="small" id="chargeLead">チャージは希望店舗向けの上位オプションです。DEMO店舗では動作確認用のDEMOチャージが使えます。</div>
+        </div>
+        <div id="chargeModeBadge" class="badge blue">確認中</div>
+      </div>
+
+      <div class="status-box warn">このチャージ機能はライト版の主役ではありません。店舗が希望した場合に、利用規約・返金ルール・決済確認方法を決めたうえで追加するオプションです。</div>
+
+      <div class="charge-grid" id="chargeGrid">
+        <div class="charge-card selected" data-charge="1000"><strong>1,000円</strong><span>上乗せあり</span></div>
+        <div class="charge-card" data-charge="3000"><strong>3,000円</strong><span>上乗せあり</span></div>
+        <div class="charge-card" data-charge="5000"><strong>5,000円</strong><span>上乗せあり</span></div>
+        <div class="charge-card" data-charge="10000"><strong>10,000円</strong><span>上乗せあり</span></div>
+      </div>
+
+      <div class="button-row">
+        <button class="green" id="demoChargeButton" type="button">DEMOチャージする</button>
+      </div>
+      <div id="chargeStatus" class="status-box info">オプション機能です。お店から案内がある場合のみ使います。</div>
+    </section>
+
+    
+
     <details>
       <summary>DEMO・開発設定</summary>
       <div class="detail-body">
@@ -944,7 +948,7 @@
     </details>
 
     <div class="footer">
-      DPRO SHOP / パン屋専用LIFF会員証 / wallet.html<br>
+      DPRO SHOP / パン屋専用LIFFライト版会員証 / wallet.html<br>
       定休日・臨時休業・受け取り時間は Worker API → Supabase の設定を読み込んで反映します。
     </div>
   </div>
@@ -1189,8 +1193,8 @@
         $("chargeModeBadge").textContent = "DEMO可";
         $("demoChargeButton").disabled = false;
         $("demoChargeButton").classList.remove("hidden");
-        $("chargeLead").textContent = "DEMO店舗では、動作確認用のDEMOチャージが使えます。";
-        setStatus("chargeStatus", "チャージ金額を選んでください。", "info");
+        $("chargeLead").textContent = "チャージは希望店舗向けの上位オプションです。DEMO店舗では動作確認用のDEMOチャージが使えます。";
+        setStatus("chargeStatus", "オプション機能です。お店から案内がある場合のみ使います。", "info");
       } else {
         $("chargeModeBadge").className = "badge red";
         $("chargeModeBadge").textContent = "本番";
