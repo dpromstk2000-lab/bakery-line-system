@@ -482,11 +482,11 @@
   <div class="wrap">
     <header class="hero">
       <div>
-        <div class="badge">STEP BAKERY-17 / ライト版オーナー管理</div>
+        <div class="badge">STEP BAKERY-18 / 取り置き本番運用</div>
         <h1>パン屋オーナー<br>管理画面</h1>
         <p class="lead">
-          今日の取り置き、ECOレスキュー、顧客管理、定休日・臨時休業日を中心に管理します。
-          チャージは希望店舗向けの上位オプションとして下部に残します。
+          今日の取り置きを、受付済み・準備中・準備完了・受け渡し済みまで管理できます。
+          チャージは引き続き希望店舗向けの上位オプションとして下部に残します。
         </p>
         <div class="button-row">
           <button class="green" type="button" id="loadAllButton">一括読込</button>
@@ -497,7 +497,7 @@
 
       <div class="hero-card">
         <div class="title">ライト版のポイント</div>
-        <div class="big">まずは取り置き・ECOレスキュー・常連管理を主役にします。</div>
+        <div class="big">まずは今日の取り置き対応を主役にします。</div>
         <div class="small">
           チャージは法律・返金・決済連携の確認が必要なため、導入希望店舗だけに提案するオプションです。
         </div>
@@ -576,7 +576,7 @@
 
       <div id="summaryStatus" class="status-box info">まだ読み込んでいません。</div>
 
-      <div class="status-box ok">営業時の主役：今日の取り置き・ECOレスキュー・顧客管理です。チャージ関連の数字はオプション導入時だけ説明します。</div>
+      <div class="status-box ok">営業時の主役：今日の取り置き・ECOレスキュー・顧客管理です。取り置きは「準備中」「準備完了」「受け渡し済み」まで見せられます。</div>
     </section>
 
     <section class="panel">
@@ -765,8 +765,8 @@
     <section class="panel">
       <div class="panel-head">
         <div>
-          <h2>取り置き一覧</h2>
-          <div class="small">今日以降の取り置き予約を確認します。</div>
+          <h2>今日やること・取り置き一覧</h2>
+          <div class="small">受付済み・準備中・準備完了・受け渡し済み・キャンセルを管理します。</div>
         </div>
         <button class="ghost" type="button" id="reloadPreordersButton">再読込</button>
       </div>
@@ -780,10 +780,11 @@
               <th>商品</th>
               <th>金額</th>
               <th>状態</th>
+              <th>操作</th>
             </tr>
           </thead>
           <tbody id="preordersTbody">
-            <tr><td colspan="6">未読込です。</td></tr>
+            <tr><td colspan="7">未読込です。</td></tr>
           </tbody>
         </table>
       </div>
@@ -1075,6 +1076,66 @@
       }
     }
 
+    function statusLabel(status) {
+      const map = {
+        pending: "受付済み",
+        preparing: "準備中",
+        ready: "準備完了",
+        picked_up: "受け渡し済み",
+        cancelled: "キャンセル",
+        no_show: "未受取"
+      };
+      return map[status] || status || "-";
+    }
+
+    function preorderActionButtons(p) {
+      const id = p.id;
+      const current = p.status || "pending";
+      const actions = [
+        ["preparing", "準備中"],
+        ["ready", "準備完了"],
+        ["picked_up", "受け渡し済み"],
+        ["cancelled", "キャンセル"],
+        ["no_show", "未受取"]
+      ].filter(([status]) => status !== current);
+
+      return actions.map(([status, label]) =>
+        `<button class="ghost" type="button" data-preorder-id="${escapeHtml(id)}" data-preorder-status="${escapeHtml(status)}">${escapeHtml(label)}</button>`
+      ).join("");
+    }
+
+    async function changePreorderStatus(preorderId, status) {
+      try {
+        const label = statusLabel(status);
+        if (!confirm(`取り置きステータスを「${label}」に変更しますか？`)) return;
+
+        const data = await apiFetch("/api/admin/preorders/status", {
+          method: "POST",
+          auth: true,
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            preorder_id: preorderId,
+            status,
+            staff_name: "管理スタッフ",
+            memo: "owner.html STEP BAKERY-18から更新"
+          })
+        });
+
+        setStatus("summaryStatus", data.message || "取り置きステータスを更新しました。", "ok");
+        await Promise.allSettled([loadPreorders(), loadSummary()]);
+      } catch (e) {
+        setStatus("summaryStatus", e.message || "ステータス更新に失敗しました。", "ng");
+      }
+    }
+
+    function bindPreorderActionButtons() {
+      document.querySelectorAll("[data-preorder-id][data-preorder-status]").forEach((button) => {
+        button.addEventListener("click", () => {
+          changePreorderStatus(button.getAttribute("data-preorder-id"), button.getAttribute("data-preorder-status"));
+        });
+      });
+    }
+
     async function loadPreorders() {
       try {
         const data = await apiFetch("/api/admin/preorders?limit=80", { auth: true });
@@ -1082,23 +1143,29 @@
 
         $("preordersTbody").innerHTML = rows.length ? rows.map((p) => {
           const itemText = Array.isArray(p.items)
-            ? p.items.map((i) => `${i.product_name || i.name || i.product_code || "商品"} × ${i.quantity || 1}`).join(" / ")
+            ? p.items.map((i) => `${i.product_name || i.name || i.product_code || "商品"} × ${i.quantity || i.qty || 1}`).join(" / ")
             : JSON.stringify(p.items || "");
+
+          const status = p.status || "pending";
+          const isDone = ["picked_up", "cancelled", "no_show"].includes(status);
+
           return `
-            <tr>
+            <tr style="${isDone ? "opacity:.62;" : ""}">
               <td>${escapeHtml(p.pickup_date || "")}</td>
               <td>${escapeHtml(p.pickup_time || "")}</td>
               <td>${escapeHtml(p.customer_name || p.member_code || "")}</td>
               <td>${escapeHtml(itemText)}</td>
               <td>${yen(p.total_amount)}</td>
-              <td><span class="pill">${escapeHtml(p.status || "")}</span></td>
+              <td><span class="pill">${escapeHtml(statusLabel(status))}</span></td>
+              <td><div class="button-row" style="margin-top:0;">${preorderActionButtons(p)}</div></td>
             </tr>
           `;
-        }).join("") : `<tr><td colspan="6">取り置き予約がありません。</td></tr>`;
+        }).join("") : `<tr><td colspan="7">取り置き予約がありません。</td></tr>`;
 
+        bindPreorderActionButtons();
         logDiag("取り置き一覧読込OK", { count: rows.length });
       } catch (e) {
-        $("preordersTbody").innerHTML = `<tr><td colspan="6">${escapeHtml(e.message)}</td></tr>`;
+        $("preordersTbody").innerHTML = `<tr><td colspan="7">${escapeHtml(e.message)}</td></tr>`;
         logDiag("取り置き一覧読込NG", { error: e.message });
       }
     }
