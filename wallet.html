@@ -726,7 +726,7 @@
 <body>
   <div class="wrap">
     <header class="hero">
-      <div class="badge">STEP BAKERY-18 / 取り置き上限対応</div>
+      <div class="badge">STEP BAKERY-30-CHARGE / 取り置き上限対応</div>
       <h1>LINEデジタル<br>会員証</h1>
       <p class="lead">
         人気パンの取り置き、ECOレスキュー通知、常連様向け会員証をLINEの中でまとめます。取り置きは商品ごとの上限・残数にも対応します。
@@ -797,6 +797,7 @@
         </div>
         <div class="wallet-balance" id="walletBalance">0円</div>
         <div class="wallet-meta">
+          <div>有償残高：<span id="walletPaidBalance">0円</span> / おまけ残高：<span id="walletBonusBalance">0円</span></div>
           <div>会員コード：<span id="walletMemberCode">-</span></div>
           <div>レジで下のQRを見せてください。</div>
         </div>
@@ -906,7 +907,10 @@
       <div class="button-row">
         <button class="green" id="demoChargeButton" type="button">DEMOチャージする</button>
       </div>
-      <div id="chargeStatus" class="status-box info">オプション機能です。お店から案内がある場合のみ使います。</div>
+      <div id="chargeStatus" class="status-box info">オプション機能です。お店から案内がある場合のみ使います。有償残高とおまけ残高は分けて管理されます。</div>
+      <div class="button-row">
+        <a class="ghost" href="charge-terms.html?v=30-charge" target="_blank" rel="noopener">チャージ注意事項を見る</a>
+      </div>
     </section>
 
     
@@ -949,7 +953,7 @@
 
     <div class="footer">
       DPRO SHOP / パン屋専用LIFFライト版会員証 / wallet.html<br>
-      定休日・臨時休業・受け取り時間は Worker API → Supabase の設定を読み込んで反映します。
+      定休日・臨時休業・受け取り時間に加え、チャージ上位オプションの残高内訳も表示します。
     </div>
   </div>
 
@@ -1484,7 +1488,11 @@
       const name = currentCustomer.customer_name || currentCustomer.line_display_name || "お客様";
       const member = currentCustomer.member_code || currentCustomer.line_user_id || currentCustomer.id || "";
       $("walletName").textContent = name;
-      $("walletBalance").textContent = yen(currentCustomer.balance);
+      const paid = Number(currentCustomer.paid_balance ?? currentCustomer.balance ?? 0);
+      const bonus = Number(currentCustomer.bonus_balance ?? 0);
+      $("walletBalance").textContent = yen(paid + bonus);
+      if ($("walletPaidBalance")) $("walletPaidBalance").textContent = yen(paid);
+      if ($("walletBonusBalance")) $("walletBonusBalance").textContent = yen(bonus);
       $("walletMemberCode").textContent = member;
       $("walletRank").textContent = currentCustomer.customer_rank || "会員";
       renderRealQr(member);
@@ -1906,7 +1914,7 @@
           payment_method: "store",
           total_amount: total,
           items,
-          memo: "wallet.html STEP BAKERY-18から取り置き予約"
+          memo: "wallet.html STEP BAKERY-30-CHARGEから取り置き予約"
         });
 
         preorderItems = {};
