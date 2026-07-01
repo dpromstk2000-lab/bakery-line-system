@@ -1,0 +1,998 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>DPROベーカリー | staff.html</title>
+  <style>
+    :root {
+      --bg: #fff7ed;
+      --panel: #ffffff;
+      --ink: #1c1917;
+      --muted: #78716c;
+      --line: #fed7aa;
+      --main: #b45309;
+      --main2: #ea580c;
+      --soft: #ffedd5;
+      --green: #16a34a;
+      --red: #dc2626;
+      --blue: #2563eb;
+      --yellow: #f59e0b;
+      --dark: #292524;
+      --shadow: 0 20px 60px rgba(120, 53, 15, .10);
+      --radius: 24px;
+    }
+
+    * { box-sizing: border-box; }
+
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: 16px;
+    }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 12% 0%, rgba(251, 191, 36, .24), transparent 30%),
+        radial-gradient(circle at 90% 10%, rgba(254, 215, 170, .7), transparent 28%),
+        linear-gradient(135deg, #fff7ed 0%, #fffaf0 54%, #fef3c7 100%);
+      min-height: 100vh;
+    }
+
+    .wrap {
+      width: min(100% - 24px, 1180px);
+      margin: 0 auto;
+      padding: 18px 0 54px;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap: 18px;
+      align-items: center;
+      background: rgba(255,255,255,.94);
+      border: 1px solid var(--line);
+      border-radius: 30px;
+      padding: 24px;
+      box-shadow: var(--shadow);
+      margin-bottom: 16px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      width: fit-content;
+      gap: 6px;
+      padding: 6px 11px;
+      border-radius: 999px;
+      background: #ffedd5;
+      color: #9a3412;
+      font-size: 12px;
+      font-weight: 950;
+      border: 1px solid #fed7aa;
+    }
+
+    .badge.green {
+      background: #dcfce7;
+      color: #166534;
+      border-color: #bbf7d0;
+    }
+
+    .badge.blue {
+      background: #dbeafe;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+
+    .badge.red {
+      background: #fee2e2;
+      color: #991b1b;
+      border-color: #fecaca;
+    }
+
+    .badge.dark {
+      background: #292524;
+      color: #fff;
+      border-color: #292524;
+    }
+
+    h1 {
+      margin: 12px 0 10px;
+      font-size: clamp(31px, 4vw, 56px);
+      line-height: 1.02;
+      letter-spacing: -.08em;
+    }
+
+    h2 {
+      margin: 0;
+      font-size: clamp(22px, 2.5vw, 32px);
+      letter-spacing: -.06em;
+    }
+
+    h3 {
+      margin: 0 0 10px;
+      font-size: 18px;
+      letter-spacing: -.04em;
+    }
+
+    .lead {
+      margin: 0;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.8;
+      font-weight: 800;
+    }
+
+    .hero-card {
+      border-radius: 24px;
+      padding: 20px;
+      background: linear-gradient(135deg, #7c2d12, #9a3412);
+      color: #fff;
+      box-shadow: 0 20px 44px rgba(124, 45, 18, .22);
+    }
+
+    .hero-card .title {
+      font-size: 13px;
+      font-weight: 950;
+      opacity: .8;
+    }
+
+    .hero-card .big {
+      font-size: 26px;
+      font-weight: 950;
+      line-height: 1.22;
+      letter-spacing: -.06em;
+      margin: 8px 0;
+    }
+
+    .hero-card .small {
+      color: rgba(255,255,255,.84);
+    }
+
+    .panel {
+      background: rgba(255,255,255,.95);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 18px;
+      box-shadow: 0 16px 42px rgba(120, 53, 15, .07);
+      margin: 14px 0;
+    }
+
+    .panel-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: flex-start;
+      margin-bottom: 14px;
+    }
+
+    .small {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 850;
+      line-height: 1.55;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    label {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 950;
+      margin-bottom: 6px;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      border: 1px solid #fdba74;
+      background: #fff;
+      border-radius: 12px;
+      padding: 11px 12px;
+      color: var(--ink);
+      outline: none;
+      font: inherit;
+      font-weight: 800;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      border-color: #f97316;
+      box-shadow: 0 0 0 3px rgba(249, 115, 22, .14);
+    }
+
+    button, .button-link {
+      border: none;
+      border-radius: 999px;
+      padding: 11px 15px;
+      cursor: pointer;
+      font-weight: 950;
+      color: #fff;
+      background: var(--main2);
+      text-decoration: none;
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      gap: 7px;
+      box-shadow: 0 12px 24px rgba(234, 88, 12, .14);
+      transition: .16s ease;
+      white-space: nowrap;
+    }
+
+    button:hover, .button-link:hover {
+      transform: translateY(-1px);
+    }
+
+    button:disabled {
+      opacity: .55;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    button.green, .button-link.green { background: var(--green); box-shadow: 0 12px 24px rgba(22, 163, 74, .14); }
+    button.blue, .button-link.blue { background: var(--blue); box-shadow: 0 12px 24px rgba(37, 99, 235, .14); }
+    button.red, .button-link.red { background: var(--red); box-shadow: 0 12px 24px rgba(220, 38, 38, .14); }
+    button.yellow, .button-link.yellow { background: var(--yellow); box-shadow: 0 12px 24px rgba(245, 158, 11, .14); }
+    button.dark, .button-link.dark { background: var(--dark); box-shadow: 0 12px 24px rgba(41, 37, 36, .14); }
+    button.ghost, .button-link.ghost {
+      background: #fff;
+      color: #9a3412;
+      border: 1px solid #fdba74;
+      box-shadow: none;
+    }
+
+    .button-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .status-box {
+      border-radius: 16px;
+      padding: 12px 14px;
+      font-weight: 850;
+      font-size: 13px;
+      line-height: 1.65;
+      margin-top: 12px;
+      white-space: pre-wrap;
+      border: 1px solid transparent;
+    }
+
+    .status-box.info {
+      background: #eff6ff;
+      color: #1e3a8a;
+      border-color: #bfdbfe;
+    }
+
+    .status-box.ok {
+      background: #ecfdf5;
+      color: #166534;
+      border-color: #bbf7d0;
+    }
+
+    .status-box.warn {
+      background: #fffbeb;
+      color: #92400e;
+      border-color: #fde68a;
+    }
+
+    .status-box.ng {
+      background: #fef2f2;
+      color: #991b1b;
+      border-color: #fecaca;
+    }
+
+    .top-layout {
+      display: grid;
+      grid-template-columns: 340px minmax(0, 1fr);
+      gap: 14px;
+      align-items: start;
+    }
+
+    .today-summary {
+      display: grid;
+      gap: 10px;
+    }
+
+    .summary-card {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+      align-items: center;
+      padding: 14px;
+      background: #fff7ed;
+      border: 1px solid #fed7aa;
+      border-radius: 18px;
+    }
+
+    .summary-card .label {
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: 950;
+    }
+
+    .summary-card .value {
+      font-size: 28px;
+      font-weight: 950;
+      letter-spacing: -.06em;
+    }
+
+    .summary-card.main {
+      background: #ecfdf5;
+      border-color: #bbf7d0;
+    }
+
+    .summary-card.main .value {
+      color: #166534;
+    }
+
+    .status-tabs {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin: 12px 0;
+    }
+
+    .tab-btn {
+      background: #fff;
+      color: var(--ink);
+      border: 1px solid var(--line);
+      box-shadow: none;
+      padding: 10px 13px;
+    }
+
+    .tab-btn.active {
+      background: var(--dark);
+      color: #fff;
+      border-color: var(--dark);
+    }
+
+    .preorder-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .preorder-card {
+      border: 1px solid var(--line);
+      background: #fff;
+      border-radius: 22px;
+      padding: 16px;
+      box-shadow: 0 12px 32px rgba(120, 53, 15, .06);
+      display: grid;
+      gap: 10px;
+    }
+
+    .preorder-card.done {
+      opacity: .62;
+    }
+
+    .preorder-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: flex-start;
+    }
+
+    .time {
+      font-size: 28px;
+      font-weight: 950;
+      letter-spacing: -.06em;
+      color: #7c2d12;
+    }
+
+    .customer {
+      font-size: 18px;
+      font-weight: 950;
+      letter-spacing: -.04em;
+    }
+
+    .items {
+      background: #fff7ed;
+      border: 1px solid #fed7aa;
+      border-radius: 16px;
+      padding: 12px;
+      font-weight: 900;
+      line-height: 1.6;
+    }
+
+    .meta-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 850;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      width: fit-content;
+      border-radius: 999px;
+      padding: 6px 10px;
+      background: #ffedd5;
+      color: #9a3412;
+      font-size: 12px;
+      font-weight: 950;
+      border: 1px solid #fed7aa;
+    }
+
+    .pill.pending { background: #eff6ff; color: #1d4ed8; border-color: #bfdbfe; }
+    .pill.preparing { background: #fffbeb; color: #92400e; border-color: #fde68a; }
+    .pill.ready { background: #ecfdf5; color: #166534; border-color: #bbf7d0; }
+    .pill.picked_up { background: #f5f5f4; color: #44403c; border-color: #d6d3d1; }
+    .pill.cancelled, .pill.no_show { background: #fef2f2; color: #991b1b; border-color: #fecaca; }
+
+    .action-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .bottom-nav {
+      position: sticky;
+      bottom: 0;
+      z-index: 20;
+      background: rgba(255,247,237,.92);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      padding: 10px;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 8px;
+      box-shadow: 0 -12px 36px rgba(120, 53, 15, .10);
+      margin-top: 14px;
+    }
+
+    .bottom-nav a, .bottom-nav button {
+      border-radius: 16px;
+      padding: 10px 8px;
+      font-size: 12px;
+      box-shadow: none;
+    }
+
+    .footer {
+      text-align: center;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+      line-height: 1.7;
+      margin-top: 24px;
+    }
+
+    @media (max-width: 980px) {
+      .hero { grid-template-columns: 1fr; }
+      .top-layout { grid-template-columns: 1fr; }
+      .form-grid { grid-template-columns: 1fr 1fr; }
+      .preorder-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 640px) {
+      .wrap { width: min(100% - 14px, 1180px); padding-top: 8px; }
+      .hero { padding: 18px; border-radius: 22px; }
+      .panel { padding: 14px; border-radius: 20px; }
+      .form-grid { grid-template-columns: 1fr; }
+      .panel-head { display: block; }
+      .button-row button, .button-row .button-link { width: 100%; }
+      .bottom-nav { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .action-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <header class="hero">
+      <div>
+        <div class="badge">STEP BAKERY-21 / スタッフ用iPad取り置き画面</div>
+        <h1>今日の取り置き<br>スタッフ画面</h1>
+        <p class="lead">
+          オーナー管理画面とは分けて、スタッフが毎日使う「取り置き対応」だけに絞った画面です。
+          接続設定・商品管理・チャージ・DEMO設定は出しません。
+        </p>
+        <div class="button-row">
+          <button class="green" type="button" id="loadTodayButton">今日の取り置きを読む</button>
+          <button class="ghost" type="button" id="loadTomorrowButton">明日を見る</button>
+          <a class="button-link blue" id="openOwnerButton" href="#">オーナー管理へ</a>
+        </div>
+      </div>
+
+      <div class="hero-card">
+        <div class="title">スタッフ目線</div>
+        <div class="big">見るのは、誰が・何時に・何を取りに来るか。</div>
+        <div class="small">
+          受付済み → 準備中 → 準備完了 → 受け渡し済み、までを大きなボタンで操作できます。
+        </div>
+      </div>
+    </header>
+
+    <section class="panel" id="startSection">
+      <div class="panel-head">
+        <div>
+          <h2>開始</h2>
+          <div class="small">スタッフ用なので、普段は管理コードと日付だけで使えます。</div>
+        </div>
+        <div class="badge green">日常運用</div>
+      </div>
+
+      <div class="form-grid">
+        <div>
+          <label for="apiBaseInput">Worker API URL</label>
+          <input id="apiBaseInput" value="https://dpro-bakery-wallet-api.dpromstk2000.workers.dev" autocomplete="off" />
+        </div>
+        <div>
+          <label for="shopCodeInput">店舗コード</label>
+          <input id="shopCodeInput" value="bakery_demo" autocomplete="off" />
+        </div>
+        <div>
+          <label for="adminCodeInput">管理コード</label>
+          <input id="adminCodeInput" type="password" placeholder="管理コードを入力" autocomplete="off" />
+        </div>
+        <div>
+          <label for="targetDateInput">表示する日</label>
+          <input id="targetDateInput" type="date" />
+        </div>
+      </div>
+
+      <div id="startStatus" class="status-box info">管理コードを入力して、今日の取り置きを読み込んでください。</div>
+    </section>
+
+    <div class="top-layout">
+      <section class="panel" id="summarySection">
+        <div class="panel-head">
+          <div>
+            <h2>今日の状況</h2>
+            <div class="small">スタッフが見るべき数だけを表示します。</div>
+          </div>
+          <button class="ghost" id="reloadButton" type="button">再読込</button>
+        </div>
+
+        <div class="today-summary">
+          <div class="summary-card main">
+            <div>
+              <div class="label">本日の取り置き</div>
+              <div class="small" id="summaryDateText">-</div>
+            </div>
+            <div class="value" id="sumAll">-</div>
+          </div>
+          <div class="summary-card">
+            <div>
+              <div class="label">準備が必要</div>
+              <div class="small">受付済み・準備中</div>
+            </div>
+            <div class="value" id="sumNeed">-</div>
+          </div>
+          <div class="summary-card">
+            <div>
+              <div class="label">準備完了</div>
+              <div class="small">受け渡し待ち</div>
+            </div>
+            <div class="value" id="sumReady">-</div>
+          </div>
+          <div class="summary-card">
+            <div>
+              <div class="label">受け渡し済み</div>
+              <div class="small">完了</div>
+            </div>
+            <div class="value" id="sumDone">-</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel" id="flowSection">
+        <div class="panel-head">
+          <div>
+            <h2>使い方</h2>
+            <div class="small">忙しい店内でも迷わない流れにしています。</div>
+          </div>
+        </div>
+
+        <div class="status-box ok">1. 受付済みの注文を確認
+2. 作り始めたら「準備中」
+3. 袋詰めまで終わったら「準備完了」
+4. お客様へ渡したら「受け渡し済み」
+5. 来なかった場合だけ「未受取」</div>
+
+        <div class="button-row">
+          <a class="button-link ghost" id="openWalletButton" href="#">お客様会員証</a>
+          <a class="button-link ghost" id="openCashierButton" href="#">店員レジ</a>
+        </div>
+      </section>
+    </div>
+
+    <section class="panel" id="preordersSection">
+      <div class="panel-head">
+        <div>
+          <h2>取り置き一覧</h2>
+          <div class="small">ステータスで絞り込みできます。カード内の大きなボタンで状態を変更します。</div>
+        </div>
+        <div class="badge blue" id="loadedBadge">未読込</div>
+      </div>
+
+      <div class="status-tabs" id="statusTabs">
+        <button class="tab-btn active" type="button" data-filter="active">未完了</button>
+        <button class="tab-btn" type="button" data-filter="pending">受付済み</button>
+        <button class="tab-btn" type="button" data-filter="preparing">準備中</button>
+        <button class="tab-btn" type="button" data-filter="ready">準備完了</button>
+        <button class="tab-btn" type="button" data-filter="picked_up">受け渡し済み</button>
+        <button class="tab-btn" type="button" data-filter="all">すべて</button>
+      </div>
+
+      <div id="preorderGrid" class="preorder-grid">
+        <div class="status-box info">まだ読み込んでいません。</div>
+      </div>
+    </section>
+
+    <div class="bottom-nav">
+      <button class="green" type="button" id="bottomReloadButton">再読込</button>
+      <a class="button-link ghost" href="#summarySection">状況</a>
+      <a class="button-link ghost" href="#preordersSection">取り置き</a>
+      <a class="button-link ghost" href="#startSection">開始</a>
+    </div>
+
+    <div class="footer">
+      DPRO SHOP / パン屋スタッフ用取り置き画面 / staff.html<br>
+      オーナー管理画面とは分け、スタッフが触る機能だけに絞った画面です。
+    </div>
+  </div>
+
+  <script>
+    const DEFAULTS = {
+      apiBase: "https://dpro-bakery-wallet-api.dpromstk2000.workers.dev",
+      shopCode: "bakery_demo",
+      pagesBase: "https://dpromstk2000-lab.github.io/bakery-line-system"
+    };
+
+    let currentRows = [];
+    let currentFilter = "active";
+
+    const $ = (id) => document.getElementById(id);
+
+    function clean(value) {
+      return String(value ?? "").trim();
+    }
+
+    function todayJst() {
+      return new Intl.DateTimeFormat("en-CA", {
+        timeZone: "Asia/Tokyo",
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit"
+      }).format(new Date());
+    }
+
+    function addDays(dateString, days) {
+      const d = new Date(`${dateString}T00:00:00+09:00`);
+      d.setDate(d.getDate() + days);
+      return new Intl.DateTimeFormat("en-CA", {
+        timeZone: "Asia/Tokyo",
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit"
+      }).format(d);
+    }
+
+    function apiBase() {
+      return clean($("apiBaseInput").value || DEFAULTS.apiBase).replace(/\/+$/, "");
+    }
+
+    function shopCode() {
+      return clean($("shopCodeInput").value || DEFAULTS.shopCode);
+    }
+
+    function adminCode() {
+      return clean($("adminCodeInput").value);
+    }
+
+    function targetDate() {
+      return clean($("targetDateInput").value || todayJst());
+    }
+
+    function storageKey() {
+      return `dpro_bakery_staff_admin_${shopCode()}`;
+    }
+
+    function authHeaders() {
+      return {
+        "X-DPRO-Admin-Code": adminCode()
+      };
+    }
+
+    function setStatus(id, message, tone = "info") {
+      const el = $(id);
+      if (!el) return;
+      el.className = "status-box " + tone;
+      el.textContent = message;
+    }
+
+    function escapeHtml(value) {
+      return String(value ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function yen(value) {
+      return Number(value || 0).toLocaleString("ja-JP") + "円";
+    }
+
+    function urlFor(file) {
+      return `${DEFAULTS.pagesBase}/${file}?shop_code=${encodeURIComponent(shopCode())}&api=${encodeURIComponent(apiBase())}`;
+    }
+
+    async function apiFetch(path, options = {}) {
+      const connector = path.includes("?") ? "&" : "?";
+      const url = apiBase() + path + connector + "shop_code=" + encodeURIComponent(shopCode());
+
+      const res = await fetch(url, {
+        ...options,
+        headers: {
+          ...(options.headers || {}),
+          ...(options.auth ? authHeaders() : {})
+        }
+      });
+
+      const text = await res.text();
+      let data = null;
+      try { data = text ? JSON.parse(text) : null; } catch { data = text; }
+
+      if (!res.ok || data?.ok === false) {
+        throw new Error(data?.message || data?.error || text || "APIエラーです。");
+      }
+
+      return data;
+    }
+
+    function statusLabel(status) {
+      const map = {
+        pending: "受付済み",
+        preparing: "準備中",
+        ready: "準備完了",
+        picked_up: "受け渡し済み",
+        cancelled: "キャンセル",
+        no_show: "未受取"
+      };
+      return map[status] || status || "-";
+    }
+
+    function statusTone(status) {
+      if (status === "pending") return "pending";
+      if (status === "preparing") return "preparing";
+      if (status === "ready") return "ready";
+      if (status === "picked_up") return "picked_up";
+      if (status === "cancelled") return "cancelled";
+      if (status === "no_show") return "no_show";
+      return "";
+    }
+
+    function itemText(preorder) {
+      const items = Array.isArray(preorder.items) ? preorder.items : [];
+      if (!items.length) return "商品情報なし";
+      return items.map((i) => {
+        const name = i.product_name || i.name || i.product_code || "商品";
+        const qty = i.quantity || i.qty || 1;
+        return `${name} × ${qty}`;
+      }).join("\n");
+    }
+
+    function isDoneStatus(status) {
+      return ["picked_up", "cancelled", "no_show"].includes(status);
+    }
+
+    function filterRows(rows) {
+      if (currentFilter === "all") return rows;
+      if (currentFilter === "active") return rows.filter((p) => !isDoneStatus(p.status || "pending"));
+      return rows.filter((p) => (p.status || "pending") === currentFilter);
+    }
+
+    function updateSummary(rows) {
+      const all = rows.length;
+      const need = rows.filter((p) => ["pending", "preparing"].includes(p.status || "pending")).length;
+      const ready = rows.filter((p) => (p.status || "pending") === "ready").length;
+      const done = rows.filter((p) => (p.status || "pending") === "picked_up").length;
+
+      $("sumAll").textContent = all;
+      $("sumNeed").textContent = need;
+      $("sumReady").textContent = ready;
+      $("sumDone").textContent = done;
+      $("summaryDateText").textContent = targetDate();
+    }
+
+    function actionButtons(preorder) {
+      const status = preorder.status || "pending";
+      const id = preorder.id;
+
+      if (status === "picked_up") {
+        return `<button class="ghost" type="button" data-status-id="${escapeHtml(id)}" data-status-next="ready">準備完了に戻す</button>`;
+      }
+
+      if (status === "cancelled" || status === "no_show") {
+        return `<button class="ghost" type="button" data-status-id="${escapeHtml(id)}" data-status-next="pending">受付済みに戻す</button>`;
+      }
+
+      const buttons = [];
+
+      if (status === "pending") {
+        buttons.push(`<button class="yellow" type="button" data-status-id="${escapeHtml(id)}" data-status-next="preparing">準備中</button>`);
+      }
+
+      if (status === "pending" || status === "preparing") {
+        buttons.push(`<button class="green" type="button" data-status-id="${escapeHtml(id)}" data-status-next="ready">準備完了</button>`);
+      }
+
+      if (status === "ready") {
+        buttons.push(`<button class="blue" type="button" data-status-id="${escapeHtml(id)}" data-status-next="picked_up">受け渡し済み</button>`);
+      }
+
+      buttons.push(`<button class="ghost" type="button" data-status-id="${escapeHtml(id)}" data-status-next="no_show">未受取</button>`);
+      buttons.push(`<button class="red" type="button" data-status-id="${escapeHtml(id)}" data-status-next="cancelled">キャンセル</button>`);
+
+      return buttons.join("");
+    }
+
+    function renderPreorders() {
+      const rows = filterRows(currentRows);
+
+      if (!rows.length) {
+        $("preorderGrid").innerHTML = `<div class="status-box info">この条件の取り置きはありません。</div>`;
+        return;
+      }
+
+      $("preorderGrid").innerHTML = rows.map((p) => {
+        const status = p.status || "pending";
+        const done = isDoneStatus(status);
+        return `
+          <article class="preorder-card ${done ? "done" : ""}">
+            <div class="preorder-head">
+              <div>
+                <div class="time">${escapeHtml(p.pickup_time || "--:--")}</div>
+                <div class="customer">${escapeHtml(p.customer_name || p.member_code || "お客様")}</div>
+              </div>
+              <span class="pill ${statusTone(status)}">${escapeHtml(statusLabel(status))}</span>
+            </div>
+
+            <div class="items">${escapeHtml(itemText(p))}</div>
+
+            <div class="meta-row">
+              <span>受取日：${escapeHtml(p.pickup_date || "")}</span>
+              <span>金額：${yen(p.total_amount)}</span>
+              <span>会員：${escapeHtml(p.member_code || "")}</span>
+            </div>
+
+            ${p.memo ? `<div class="status-box info">${escapeHtml(p.memo)}</div>` : ""}
+
+            <div class="action-grid">${actionButtons(p)}</div>
+          </article>
+        `;
+      }).join("");
+
+      document.querySelectorAll("[data-status-id][data-status-next]").forEach((button) => {
+        button.addEventListener("click", () => {
+          changeStatus(button.getAttribute("data-status-id"), button.getAttribute("data-status-next"));
+        });
+      });
+    }
+
+    async function loadPreorders(dateValue = targetDate()) {
+      if (!adminCode()) {
+        setStatus("startStatus", "管理コードを入力してください。", "warn");
+        return;
+      }
+
+      sessionStorage.setItem(storageKey(), adminCode());
+
+      try {
+        $("loadedBadge").textContent = "読込中";
+        $("loadedBadge").className = "badge blue";
+        setStatus("startStatus", "取り置きを読み込み中です。", "info");
+
+        const data = await apiFetch("/api/admin/preorders?date=" + encodeURIComponent(dateValue) + "&limit=120", { auth: true });
+        currentRows = (data.preorders || []).sort((a, b) => {
+          const at = `${a.pickup_date || ""} ${a.pickup_time || ""}`;
+          const bt = `${b.pickup_date || ""} ${b.pickup_time || ""}`;
+          return at.localeCompare(bt);
+        });
+
+        updateSummary(currentRows);
+        renderPreorders();
+
+        $("loadedBadge").textContent = `${currentRows.length}件`;
+        $("loadedBadge").className = "badge green";
+        setStatus("startStatus", `${dateValue} の取り置きを読み込みました。`, "ok");
+      } catch (e) {
+        $("loadedBadge").textContent = "NG";
+        $("loadedBadge").className = "badge red";
+        $("preorderGrid").innerHTML = `<div class="status-box ng">${escapeHtml(e.message)}</div>`;
+        setStatus("startStatus", e.message || "読み込みに失敗しました。", "ng");
+      }
+    }
+
+    async function changeStatus(preorderId, nextStatus) {
+      try {
+        const label = statusLabel(nextStatus);
+        if (!confirm(`「${label}」に変更しますか？`)) return;
+
+        const data = await apiFetch("/api/admin/preorders/status", {
+          method: "POST",
+          auth: true,
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            preorder_id: preorderId,
+            status: nextStatus,
+            staff_name: "スタッフ",
+            memo: "staff.html STEP BAKERY-21から更新"
+          })
+        });
+
+        setStatus("startStatus", data.message || `「${label}」に変更しました。`, "ok");
+        await loadPreorders();
+      } catch (e) {
+        setStatus("startStatus", e.message || "ステータス変更に失敗しました。", "ng");
+      }
+    }
+
+    function bindEvents() {
+      $("loadTodayButton").addEventListener("click", () => {
+        $("targetDateInput").value = todayJst();
+        loadPreorders(todayJst());
+      });
+
+      $("loadTomorrowButton").addEventListener("click", () => {
+        const tomorrow = addDays(todayJst(), 1);
+        $("targetDateInput").value = tomorrow;
+        loadPreorders(tomorrow);
+      });
+
+      $("reloadButton").addEventListener("click", () => loadPreorders());
+      $("bottomReloadButton").addEventListener("click", () => loadPreorders());
+
+      $("targetDateInput").addEventListener("change", () => loadPreorders());
+
+      document.querySelectorAll(".tab-btn").forEach((button) => {
+        button.addEventListener("click", () => {
+          currentFilter = button.getAttribute("data-filter");
+          document.querySelectorAll(".tab-btn").forEach((b) => b.classList.remove("active"));
+          button.classList.add("active");
+          renderPreorders();
+        });
+      });
+    }
+
+    function init() {
+      const params = new URLSearchParams(location.search);
+      const api = params.get("api");
+      const shop = params.get("shop_code");
+
+      if (api) $("apiBaseInput").value = api;
+      if (shop) $("shopCodeInput").value = shop;
+
+      const stored = sessionStorage.getItem(storageKey());
+      if (stored) $("adminCodeInput").value = stored;
+
+      $("targetDateInput").value = todayJst();
+
+      $("openOwnerButton").href = urlFor("owner.html");
+      $("openWalletButton").href = urlFor("wallet.html");
+      $("openCashierButton").href = urlFor("cashier.html");
+
+      bindEvents();
+
+      if (stored) {
+        loadPreorders(todayJst());
+      }
+    }
+
+    init();
+  </script>
+</body>
+</html>
