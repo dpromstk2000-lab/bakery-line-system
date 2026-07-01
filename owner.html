@@ -674,16 +674,17 @@
   <div class="wrap">
     <header class="hero">
       <div>
-        <div class="badge">STEP BAKERY-20C / オーナー目線ホーム修正版</div>
+        <div class="badge">STEP BAKERY-22 / staff導線追加</div>
         <h1>パン屋オーナー<br>管理画面</h1>
         <p class="lead">
-          最初に見るのは接続設定ではなく、今日やることです。接続設定は下部の初期設定に移動しました。
+          最初に見るのは今日やることです。店頭スタッフ用の取り置き画面もすぐ開けます。
           チャージは希望店舗向けの上位オプションとして下部にまとめています。
         </p>
         <div class="button-row">
           <button class="green" type="button" id="loadAllButton">一括読込</button>
           <button class="blue" type="button" id="openWalletButton">会員証を開く</button>
           <button class="dark" type="button" id="openCashierButton">店員レジを開く</button>
+          <button class="blue" type="button" id="openStaffButton">スタッフ取り置き画面</button>
         </div>
       </div>
 
@@ -704,6 +705,7 @@
           <a class="nav-main" href="#startSection">① 今日の開始</a>
           <a class="nav-main" href="#summarySection">② 今日の状況</a>
           <a class="nav-main" href="#preordersSection">③ 取り置き対応</a>
+          <a class="nav-main" href="#staffLinkSection">スタッフ画面</a>
           <a class="nav-main" href="#productsSection">④ 商品・上限</a>
           <a class="nav-main" href="#ecoSection">⑤ ECO文面</a>
           <a href="#pickupSection">営業日・休業日</a>
@@ -753,6 +755,25 @@
       </div>
 
       <div id="quickStartStatus" class="status-box info">接続設定ではなく、今日の運用から始めます。</div>
+    </section>
+
+    <section class="panel" id="staffLinkSection">
+      <div class="panel-head">
+        <div>
+          <h2>スタッフ用 取り置き画面</h2>
+          <div class="small">店頭スタッフやiPadでは、オーナー管理画面ではなく staff.html を使います。</div>
+        </div>
+        <div class="badge green">スタッフ用</div>
+      </div>
+
+      <div class="status-box ok">スタッフ画面は、今日の取り置き対応だけに絞っています。商品管理・チャージ・接続設定・DEMO設定は表示しません。</div>
+
+      <div class="button-row">
+        <button class="green" type="button" id="openStaffButton2">スタッフ画面を開く</button>
+        <button class="ghost" type="button" id="copyStaffUrlButton">スタッフ画面URLコピー</button>
+      </div>
+
+      <div id="staffLinkStatus" class="status-box info">iPadやスマホで開いて、今日の取り置き確認に使います。</div>
     </section>
 
     <section class="panel" id="summarySection">
@@ -1896,6 +1917,12 @@
 
       $("openWalletButton").addEventListener("click", () => window.open(pageUrl("wallet.html"), "_blank"));
       $("openCashierButton").addEventListener("click", () => window.open(pageUrl("cashier.html"), "_blank"));
+      $("openStaffButton").addEventListener("click", () => window.open(pageUrl("staff.html"), "_blank"));
+      $("openStaffButton2").addEventListener("click", () => window.open(pageUrl("staff.html"), "_blank"));
+      $("copyStaffUrlButton").addEventListener("click", async () => {
+        await copyText(pageUrl("staff.html"));
+        setStatus("staffLinkStatus", "スタッフ画面URLをコピーしました。", "ok");
+      });
       $("openSystemCheckButton").addEventListener("click", () => window.open(pageUrl("system-check.html"), "_blank"));
       $("openProductionSetupButton").addEventListener("click", () => window.open(`${DEFAULT_PAGES}/production-setup.html`, "_blank"));
 
