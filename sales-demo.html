@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>DPROベーカリー | 営業DEMO進行ページ</title>
+  <title>DPROベーカリー | 営業DEMO進行ページ ライト版</title>
   <style>
     :root {
       --bg: #fff7ed;
@@ -291,7 +291,7 @@
   <div class="wrap">
     <header class="hero">
       <div>
-        <div class="badge">STEP BAKERY-9 / 営業DEMO進行ページ</div>
+        <div class="badge">STEP BAKERY-17 / 営業DEMO進行ページ ライト版</div>
         <h1>パン屋オーナーへ<br>見せる順番ページ</h1>
         <p class="lead">
           技術説明ではなく「売上・レジ時短・常連化・廃棄削減」を順番に見せるための営業用ページです。
@@ -307,10 +307,27 @@
         <div class="title">営業で伝える結論</div>
         <div class="big">LINEを会員証にすると、パン屋の売上導線が毎日残ります。</div>
         <div class="small">
-          チャージで未来売上を確保し、取り置きで売り逃しを減らし、ECOレスキューで夕方の余りを現金化します。
+          チャージ（オプション）で未来売上を確保し、取り置きで売り逃しを減らし、ECOレスキューで夕方の余りを現金化します。
         </div>
       </div>
     </header>
+
+    <section class="panel">
+      <div class="panel-head">
+        <div>
+          <h2>STEP BAKERY-17 営業方針</h2>
+          <div class="small">チャージは前面に出さず、ライト版の価値を先に伝えます。</div>
+        </div>
+      </div>
+      <div class="status-box ok">営業の主役は「LINE会員証」「人気パン取り置き」「ECOレスキュー」「顧客管理」です。チャージは法律・返金・Square連携の確認が必要なため、希望店舗向けの上位オプションとして最後に軽く案内します。</div>
+      <div class="flow-grid">
+        <div class="flow-card"><div class="flow-no">1</div><strong>LINE会員証</strong><div class="small">友だちを顧客情報として残す入口。</div></div>
+        <div class="flow-card"><div class="flow-no">2</div><strong>人気パン取り置き</strong><div class="small">売り逃しと電話対応を減らす。</div></div>
+        <div class="flow-card"><div class="flow-no">3</div><strong>ECOレスキュー</strong><div class="small">夕方の売れ残りを常連へ案内。</div></div>
+        <div class="flow-card"><div class="flow-no">4</div><strong>オーナー管理</strong><div class="small">今日やることをまとめて確認。</div></div>
+      </div>
+    </section>
+
 
     <section class="panel">
       <div class="panel-head">
@@ -330,7 +347,7 @@
         <div class="step">
           <div class="num">2</div>
           <h3>会員証を見せる</h3>
-          <div class="small">残高・QR・5%チャージを見せる。</div>
+          <div class="small">残高・QR・5%チャージ（オプション）を見せる。</div>
         </div>
         <div class="step">
           <div class="num">3</div>
@@ -362,14 +379,14 @@
       <textarea class="script-box" id="scriptBox">オーナー、これは単なるLINE会員証ではありません。
 
 まずお客様は、LINEからデジタル会員証を開きます。
-ここにチャージ残高が表示されて、レジではQRを見せるだけです。
+ここにチャージ（オプション）残高が表示されて、レジではQRを見せるだけです。
 
 次に店員さんは、レジ画面で会員証を読み取り、金額を入れて決済します。
 財布を出す、細かい小銭を探す、支払いアプリを開く、という時間を減らせます。
 
 そして決済が終わると、オーナー管理画面にすぐ反映されます。
-今日のチャージ、今日の決済、未使用残高、取り置き予約が見えるので、
-「今日どれだけ未来の売上が残っているか」が分かります。
+今日のチャージ（オプション）、今日の決済、未使用残高、取り置き予約が見えるので、
+「今日どれだけ再来店のきっかけが残っているか」が分かります。
 
 さらに夕方、売れ残りそうなパンがあれば、ECOレスキュー文面を作ってLINE公式に貼るだけです。
 廃棄する前に、夕方に寄れる常連様へ案内できます。
@@ -502,7 +519,7 @@
         <div class="check"><strong>5. owner</strong>決済履歴と未使用残高が更新。</div>
         <div class="check"><strong>6. ECOレスキュー</strong>文面作成とコピーができる。</div>
       </div>
-      <div class="status-box" id="statusBox">営業DEMO進行ページを表示しました。</div>
+      <div class="status-box" id="statusBox">営業DEMO進行ページ ライト版を表示しました。</div>
     </section>
 
     <div class="footer">
