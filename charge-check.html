@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>DPROベーカリー | チャージ機能 実機チェック</title>
+<style>
+:root{--ink:#1c1917;--muted:#78716c;--line:#fed7aa;--main:#ea580c;--green:#16a34a;--blue:#2563eb;--red:#dc2626;--shadow:0 20px 60px rgba(120,53,15,.10)}
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--ink);background:linear-gradient(135deg,#fff7ed,#fffaf0 55%,#fef3c7);min-height:100vh}
+.wrap{width:min(100% - 24px,1180px);margin:0 auto;padding:22px 0 58px}
+.hero{background:rgba(255,255,255,.96);border:1px solid var(--line);border-radius:30px;padding:26px;box-shadow:var(--shadow);display:grid;grid-template-columns:1.08fr .92fr;gap:18px;align-items:center;margin-bottom:16px}
+.hero-card{background:linear-gradient(135deg,#7c2d12,#9a3412);color:#fff;border-radius:24px;padding:20px;box-shadow:0 20px 44px rgba(124,45,18,.24)}
+.badge,.pill{display:inline-flex;width:fit-content;padding:6px 11px;border-radius:999px;font-size:12px;font-weight:950;border:1px solid #fed7aa;background:#ffedd5;color:#9a3412}
+.pill.green{background:#ecfdf5;color:#166534;border-color:#bbf7d0}.pill.blue{background:#dbeafe;color:#1d4ed8;border-color:#bfdbfe}.pill.red{background:#fee2e2;color:#991b1b;border-color:#fecaca}
+h1{margin:12px 0 10px;font-size:clamp(34px,5vw,64px);line-height:1.02;letter-spacing:-.08em}h2{margin:0;font-size:clamp(24px,3vw,34px);letter-spacing:-.06em;line-height:1.16}h3{margin:0 0 8px;font-size:20px;letter-spacing:-.04em}
+p,.small{color:var(--muted);line-height:1.75;font-weight:850}.hero-card p{color:rgba(255,255,255,.82)}
+.panel{background:rgba(255,255,255,.96);border:1px solid var(--line);border-radius:24px;padding:18px;margin-top:16px;box-shadow:0 14px 38px rgba(120,53,15,.07)}
+.panel-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:12px}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.card{background:#fff;border:1px solid var(--line);border-radius:20px;padding:16px}.card.ok{background:#ecfdf5;border-color:#bbf7d0}.card.warn{background:#fffbeb;border-color:#fde68a}
+.form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.form-grid.three{grid-template-columns:repeat(3,minmax(0,1fr))}
+label{display:block;color:var(--muted);font-size:12px;font-weight:950;margin-bottom:6px}input,textarea,select{width:100%;border:1px solid #fdba74;background:#fff;border-radius:13px;padding:12px;color:var(--ink);outline:none;font:inherit;font-weight:850}textarea{min-height:220px;resize:vertical}
+button,a.btn{border:none;border-radius:999px;padding:11px 14px;background:var(--main);color:#fff;font-weight:950;text-decoration:none;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:7px}button.green,a.green{background:var(--green)}button.blue,a.blue{background:var(--blue)}button.red,a.red{background:var(--red)}button.ghost,a.ghost{background:#fff;color:#9a3412;border:1px solid #fdba74}
+.buttons{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}.status{margin-top:12px;border-radius:16px;padding:12px;background:#eff6ff;border:1px solid #bfdbfe;color:#1e3a8a;font-weight:900;white-space:pre-wrap}.status.ok{background:#ecfdf5;border-color:#bbf7d0;color:#166534}.status.warn{background:#fffbeb;border-color:#fde68a;color:#92400e}.status.ng{background:#fef2f2;border-color:#fecaca;color:#991b1b}
+table{width:100%;border-collapse:collapse;font-size:13px}th,td{border-bottom:1px solid #fed7aa;padding:10px 8px;text-align:left;vertical-align:top}th{color:#9a3412;background:#fff7ed;font-size:12px}.mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+.row{display:grid;grid-template-columns:120px 1fr;gap:10px;border:1px solid var(--line);background:#fff;border-radius:16px;padding:12px;margin-top:8px}.url-box{font-size:12px;word-break:break-all;background:#fff7ed;border:1px solid #fed7aa;border-radius:14px;padding:10px;color:#57534e;font-weight:800}
+@media(max-width:860px){.hero,.grid,.grid3,.form-grid,.form-grid.three,.row{grid-template-columns:1fr}button,a.btn{width:100%}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="hero">
+<div>
+<div class="badge">STEP BAKERY-31-CHARGE / 実機チェック</div>
+<h1>チャージ機能<br>最終チェック</h1>
+<p>STEP30-CHARGEを反映した後に使う確認画面です。SQL・Worker・charge-admin・walletの連動を実際にチェックします。</p>
+<div class="buttons">
+<button class="green" id="runReadButton">読込チェック実行</button>
+<button class="blue" id="runChargeButton">安全チャージテスト</button>
+<button class="red" id="runReverseButton">テスト取消</button>
+</div>
+</div>
+<div class="hero-card"><h2>判定ルール</h2><p>ここがOKならチャージ上位オプションDEMOとして安心です。本番導入前には規約・返金方針・決済確認方法を店舗ごとに決めます。</p></div>
+</header>
+
+<section class="panel">
+<div class="panel-head"><div><h2>接続設定</h2><p class="small">保存コード削除→DEMO管理コード自動入力→読込チェックの順で確認します。</p></div><span id="overallBadge" class="pill blue">未確認</span></div>
+<div class="form-grid">
+<div><label>Worker API URL</label><input id="apiBaseInput" value="https://dpro-bakery-wallet-api.dpromstk2000.workers.dev" /></div>
+<div><label>店舗コード</label><input id="shopCodeInput" value="bakery_demo" /></div>
+<div><label>管理コード</label><input id="adminCodeInput" type="password" placeholder="管理コード" /></div>
+<div><label>テスト会員コード</label><input id="memberInput" value="DEMO-BK-001" /></div>
+</div>
+<div class="buttons">
+<button class="ghost" id="fillDemoCodeButton">DEMO管理コードを自動入力</button>
+<button class="ghost" id="toggleAdminCodeButton">表示/非表示</button>
+<button class="red" id="clearCodeButton">保存コード削除</button>
+<button class="ghost" id="copyReportButton">結果コピー</button>
+</div>
+<div id="overallStatus" class="status">未確認です。</div>
+</section>
+
+<section class="panel">
+<h2>チェック結果</h2>
+<div id="resultList"></div>
+</section>
+
+<section class="panel">
+<h2>安全チャージテスト</h2>
+<p class="small">DEMO会員に少額の有償残高100円＋おまけ5円を付与します。必要なら取消で戻します。</p>
+<div class="form-grid three">
+<div><label>有償テスト金額</label><input id="testPaidInput" type="number" value="100" /></div>
+<div><label>おまけテスト金額</label><input id="testBonusInput" type="number" value="5" /></div>
+<div><label>支払い確認方法</label><select id="providerInput"><option value="test_cash">テスト現金確認</option><option value="test_card">テストカード確認</option></select></div>
+</div>
+<div class="grid">
+<label class="card ok"><input id="confirmedPaymentInput" type="checkbox" /> 支払い確認済みとしてテストする</label>
+<label class="card warn"><input id="confirmedPolicyInput" type="checkbox" /> 注意事項確認済みとしてテストする</label>
+</div>
+<div id="chargeStatus" class="status">まだチャージテストしていません。</div>
+</section>
+
+<section class="panel">
+<h2>会員残高・台帳</h2>
+<div class="grid3">
+<div class="card ok"><h3>有償残高合計</h3><p id="totalPaidBalance">-</p></div>
+<div class="card ok"><h3>おまけ残高合計</h3><p id="totalBonusBalance">-</p></div>
+<div class="card"><h3>合計残高</h3><p id="totalBalance">-</p></div>
+</div>
+
+<h3 style="margin-top:16px;">テスト会員</h3>
+<div style="overflow:auto;"><table><thead><tr><th>会員</th><th>会員コード</th><th>有償</th><th>おまけ</th><th>合計</th></tr></thead><tbody id="customersTbody"><tr><td colspan="5">未読込</td></tr></tbody></table></div>
+
+<h3 style="margin-top:16px;">最新台帳</h3>
+<div style="overflow:auto;"><table><thead><tr><th>日時</th><th>理由</th><th>会員</th><th>有償</th><th>おまけ</th><th>残高後</th><th>メモ</th></tr></thead><tbody id="ledgerTbody"><tr><td colspan="7">未読込</td></tr></tbody></table></div>
+</section>
+
+<section class="panel">
+<h2>関連画面</h2>
+<div class="grid3">
+<div class="card"><h3>charge-admin</h3><div class="url-box">https://dpromstk2000-lab.github.io/bakery-line-system/charge-admin.html?shop_code=bakery_demo&api=https%3A%2F%2Fdpro-bakery-wallet-api.dpromstk2000.workers.dev&v=30-charge</div><div class="buttons"><a class="btn green" href="https://dpromstk2000-lab.github.io/bakery-line-system/charge-admin.html?shop_code=bakery_demo&api=https%3A%2F%2Fdpro-bakery-wallet-api.dpromstk2000.workers.dev&v=30-charge" target="_blank">開く</a></div></div>
+<div class="card"><h3>wallet</h3><div class="url-box">https://dpromstk2000-lab.github.io/bakery-line-system/wallet.html?shop_code=bakery_demo&api=https%3A%2F%2Fdpro-bakery-wallet-api.dpromstk2000.workers.dev&v=30-charge</div><div class="buttons"><a class="btn blue" href="https://dpromstk2000-lab.github.io/bakery-line-system/wallet.html?shop_code=bakery_demo&api=https%3A%2F%2Fdpro-bakery-wallet-api.dpromstk2000.workers.dev&v=30-charge" target="_blank">開く</a></div></div>
+<div class="card"><h3>charge-terms</h3><div class="url-box">https://dpromstk2000-lab.github.io/bakery-line-system/charge-terms.html?v=30-charge</div><div class="buttons"><a class="btn ghost" href="https://dpromstk2000-lab.github.io/bakery-line-system/charge-terms.html?v=30-charge" target="_blank">開く</a></div></div>
+</div>
+</section>
+
+<section class="panel">
+<h2>コピー用レポート</h2>
+<textarea id="reportText" readonly></textarea>
+</section>
+</div>
+
+<script>
+const EXPECTED_VERSION = "BAKERY-30-CHARGE-SAFE-WALLET-20260701";
+const DEFAULTS = { apiBase: "https://dpro-bakery-wallet-api.dpromstk2000.workers.dev", shopCode: "bakery_demo", adminStorageKey: "DPRO_BAKERY_STEP31_CHARGE_ADMIN_CODE" };
+let checks = [];
+let lastChargeLedgerId = "";
+const $ = (id) => document.getElementById(id);
+function clean(v) { return String(v ?? "").trim(); }
+function apiBase() { return clean($("apiBaseInput").value || DEFAULTS.apiBase).replace(/\/+$/, ""); }
+function shopCode() { return clean($("shopCodeInput").value || DEFAULTS.shopCode); }
+function adminCode() { return clean($("adminCodeInput").value); }
+function memberCode() { return clean($("memberInput").value || "DEMO-BK-001"); }
+function yen(v) { return Number(v || 0).toLocaleString("ja-JP") + "円"; }
+function escapeHtml(v) { return String(v ?? "").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;"); }
+function addCheck(status,title,detail) { checks.push({status,title,detail}); renderChecks(); }
+function renderChecks() {
+  const fail = checks.filter(c=>c.status==="FAIL").length;
+  const warn = checks.filter(c=>c.status==="WARN").length;
+  $("overallBadge").className = fail ? "pill red" : warn ? "pill blue" : checks.length ? "pill green" : "pill blue";
+  $("overallBadge").textContent = fail ? "NG" : warn ? "要確認" : checks.length ? "OK" : "未確認";
+  $("overallStatus").className = "status " + (fail ? "ng" : warn ? "warn" : checks.length ? "ok" : "");
+  $("overallStatus").textContent = fail ? "NGがあります。チャージ本番導入はまだ不可です。" : warn ? "WARNがあります。本番前に確認してください。" : checks.length ? "チャージ機能の基本チェックはOKです。" : "未確認です。";
+  $("resultList").innerHTML = checks.map(c => `<div class="row"><span class="pill ${c.status==="PASS"?"green":c.status==="FAIL"?"red":"blue"}">${c.status}</span><div><b>${escapeHtml(c.title)}</b><div class="small">${escapeHtml(typeof c.detail==="string"?c.detail:JSON.stringify(c.detail))}</div></div></div>`).join("");
+  $("reportText").value = reportText();
+}
+function reportText() {
+  const lines = ["STEP BAKERY-31-CHARGE チャージ機能実機チェック", "日時: " + new Date().toLocaleString("ja-JP"), "期待Worker: " + EXPECTED_VERSION, ""];
+  checks.forEach(c => lines.push(`${c.status} - ${c.title} - ${typeof c.detail==="string"?c.detail:JSON.stringify(c.detail)}`));
+  lines.push("", "判定:", $("overallStatus").textContent);
+  return lines.join("\n");
+}
+async function getJson(path) {
+  const res = await fetch(apiBase()+path, {cache:"no-store"});
+  const text = await res.text(); let data;
+  try { data = text ? JSON.parse(text) : null; } catch { data = {ok:false,message:text||"APIエラー"}; }
+  if (!res.ok || data?.ok === false) throw new Error(data?.message || data?.error || text || "APIエラー");
+  return data;
+}
+async function postJson(path,payload={}) {
+  const res = await fetch(apiBase()+path, {method:"POST",cache:"no-store",body:JSON.stringify({shop_code:shopCode(),admin_code:adminCode(),...payload})});
+  const text = await res.text(); let data;
+  try { data = text ? JSON.parse(text) : null; } catch { data = {ok:false,message:text||"APIエラー"}; }
+  if (!res.ok || data?.ok === false) throw new Error(data?.message || data?.error || text || "APIエラー");
+  return data;
+}
+async function runReadCheck() {
+  checks = []; renderChecks();
+  try {
+    const health = await getJson("/api/health");
+    addCheck(health.version === EXPECTED_VERSION ? "PASS" : "FAIL", "Worker version", health.version || "-");
+  } catch(e) { addCheck("FAIL","Worker health",e.message); return; }
+  try {
+    const settings = await getJson("/api/public/charge-settings?shop_code="+encodeURIComponent(shopCode()));
+    addCheck(settings.charge_enabled ? "PASS" : "FAIL", "charge_enabled", settings);
+    addCheck(settings.manual_charge_enabled ? "PASS" : "FAIL", "manual_charge_enabled", settings);
+  } catch(e) { addCheck("FAIL","公開チャージ設定API",e.message); }
+  try {
+    const data = await postJson("/api/simple/charge-check", {});
+    addCheck("PASS", "管理チャージ読込API", "charge-check OK");
+    addCheck(Array.isArray(data.customers?.rows) ? "PASS" : "FAIL", "顧客残高読込", `customers: ${data.customers?.count ?? "-"}`);
+    addCheck(Array.isArray(data.ledger?.rows) ? "PASS" : "FAIL", "チャージ台帳読込", `ledger: ${data.ledger?.count ?? "-"}`);
+    renderData(data);
+  } catch(e) { addCheck("FAIL","管理チャージ読込API",e.message); }
+}
+function renderData(data) {
+  const c = data.customers || {};
+  $("totalPaidBalance").textContent = yen(c.total_paid_balance);
+  $("totalBonusBalance").textContent = yen(c.total_bonus_balance);
+  $("totalBalance").textContent = yen(c.total_balance);
+  const member = memberCode();
+  const rows = (c.rows || []).filter(x => !member || x.member_code === member || x.line_user_id === member);
+  $("customersTbody").innerHTML = rows.length ? rows.map(x => `<tr><td>${escapeHtml(x.customer_name||x.line_display_name||"お客様")}</td><td class="mono">${escapeHtml(x.member_code||"")}</td><td>${yen(x.paid_balance)}</td><td>${yen(x.bonus_balance)}</td><td>${yen(x.balance)}</td></tr>`).join("") : `<tr><td colspan="5">テスト会員が見つかりません。</td></tr>`;
+  const ledger = data.ledger?.rows || [];
+  $("ledgerTbody").innerHTML = ledger.length ? ledger.slice(0,20).map(l => `<tr><td>${escapeHtml(new Date(l.created_at).toLocaleString("ja-JP"))}</td><td><span class="pill blue">${escapeHtml(l.reason_type)}</span><div class="small">${escapeHtml(l.provider||"")}</div></td><td>${escapeHtml(l.customer_name||"")}<div class="small mono">${escapeHtml(l.member_code||"")}</div></td><td>${yen(l.paid_delta)}</td><td>${yen(l.bonus_delta)}</td><td>${yen(l.total_balance_after)}<div class="small">有償 ${yen(l.paid_balance_after)} / おまけ ${yen(l.bonus_balance_after)}</div></td><td>${escapeHtml(l.memo||"")}<div class="small mono">${escapeHtml(l.id||"")}</div></td></tr>`).join("") : `<tr><td colspan="7">台帳がありません。</td></tr>`;
+}
+async function runChargeTest() {
+  if (!confirm("DEMO会員に安全チャージテストを実行しますか？")) return;
+  try {
+    const paid = Number($("testPaidInput").value || 0);
+    const bonus = Number($("testBonusInput").value || 0);
+    const data = await postJson("/api/simple/charge-manual", {
+      customer_key: memberCode(), paid_amount: paid, bonus_amount: bonus, provider: $("providerInput").value,
+      external_payment_id: "STEP31-TEST-" + Date.now(), staff_name: "STEP31チェック",
+      memo: "STEP31-CHARGE 安全チャージテスト", confirmed_payment: $("confirmedPaymentInput").checked,
+      confirmed_policy: $("confirmedPolicyInput").checked, source: "step31_charge_check"
+    });
+    lastChargeLedgerId = data.ledger?.id || "";
+    $("chargeStatus").className = "status ok"; $("chargeStatus").textContent = JSON.stringify(data,null,2);
+    addCheck("PASS","安全チャージテスト",`有償 ${yen(paid)} / おまけ ${yen(bonus)}`);
+    await runReadCheck();
+  } catch(e) { $("chargeStatus").className = "status ng"; $("chargeStatus").textContent = e.message; addCheck("FAIL","安全チャージテスト",e.message); }
+}
+async function runReverseTest() {
+  if (!confirm("テストと同額をマイナス補正しますか？")) return;
+  try {
+    const paid = Math.abs(Number($("testPaidInput").value || 0));
+    const bonus = Math.abs(Number($("testBonusInput").value || 0));
+    const data = await postJson("/api/simple/charge-adjust", {
+      customer_key: memberCode(), paid_delta: -paid, bonus_delta: -bonus, reason_type: "charge_cancel",
+      provider: "test_cancel", related_ledger_id: lastChargeLedgerId || "", staff_name: "STEP31チェック",
+      memo: "STEP31-CHARGE テスト取消", confirmed_adjustment: true, source: "step31_charge_check_cancel"
+    });
+    $("chargeStatus").className = "status ok"; $("chargeStatus").textContent = JSON.stringify(data,null,2);
+    addCheck("PASS","テスト取消",`有償 -${yen(paid)} / おまけ -${yen(bonus)}`);
+    await runReadCheck();
+  } catch(e) { $("chargeStatus").className = "status ng"; $("chargeStatus").textContent = e.message; addCheck("FAIL","テスト取消",e.message); }
+}
+async function copyText(text) {
+  if (navigator.clipboard && window.isSecureContext) return navigator.clipboard.writeText(text);
+  const t=document.createElement("textarea"); t.value=text; document.body.appendChild(t); t.select(); document.execCommand("copy"); t.remove();
+}
+$("runReadButton").addEventListener("click", runReadCheck);
+$("runChargeButton").addEventListener("click", runChargeTest);
+$("runReverseButton").addEventListener("click", runReverseTest);
+$("copyReportButton").addEventListener("click", async()=>{ await copyText($("reportText").value); $("overallStatus").className="status ok"; $("overallStatus").textContent="結果をコピーしました。"; });
+$("fillDemoCodeButton").addEventListener("click",()=>{ $("adminCodeInput").value="dpro-bakery-demo-2026"; sessionStorage.setItem(DEFAULTS.adminStorageKey+"_"+shopCode(),$("adminCodeInput").value); $("overallStatus").className="status ok"; $("overallStatus").textContent="DEMO管理コードを入力しました。"; });
+$("toggleAdminCodeButton").addEventListener("click",()=>{ $("adminCodeInput").type = $("adminCodeInput").type === "password" ? "text" : "password"; });
+$("clearCodeButton").addEventListener("click",()=>{ sessionStorage.removeItem(DEFAULTS.adminStorageKey+"_"+shopCode()); $("adminCodeInput").value=""; $("overallStatus").className="status ok"; $("overallStatus").textContent="保存コードを削除しました。"; });
+const stored = sessionStorage.getItem(DEFAULTS.adminStorageKey+"_"+shopCode()); if (stored) $("adminCodeInput").value = stored;
+renderChecks();
+</script>
+</body>
+</html>
