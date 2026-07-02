@@ -1,0 +1,37 @@
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>DPROベーカリー | チャージ本番導入前チェックリスト</title><style>
+:root{--ink:#1c1917;--muted:#78716c;--line:#fed7aa;--main:#ea580c;--green:#16a34a;--blue:#2563eb;--red:#dc2626;--brown:#7c2d12;--shadow:0 20px 60px rgba(120,53,15,.10)}
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--ink);background:linear-gradient(135deg,#fff7ed,#fffaf0 55%,#fef3c7);min-height:100vh}.wrap{width:min(100% - 24px,1180px);margin:0 auto;padding:22px 0 58px}.hero{background:rgba(255,255,255,.96);border:1px solid var(--line);border-radius:30px;padding:26px;box-shadow:var(--shadow);display:grid;grid-template-columns:1.08fr .92fr;gap:18px;align-items:center;margin-bottom:16px}.hero-card{background:linear-gradient(135deg,#7c2d12,#9a3412);color:#fff;border-radius:24px;padding:20px;box-shadow:0 20px 44px rgba(124,45,18,.24)}.badge,.pill{display:inline-flex;width:fit-content;padding:6px 11px;border-radius:999px;font-size:12px;font-weight:950;border:1px solid #fed7aa;background:#ffedd5;color:#9a3412}.pill.green{background:#ecfdf5;color:#166534;border-color:#bbf7d0}.pill.blue{background:#dbeafe;color:#1d4ed8;border-color:#bfdbfe}.pill.red{background:#fee2e2;color:#991b1b;border-color:#fecaca}h1{margin:12px 0 10px;font-size:clamp(34px,5vw,64px);line-height:1.02;letter-spacing:-.08em}h2{margin:0;font-size:clamp(24px,3vw,34px);letter-spacing:-.06em;line-height:1.16}h3{margin:0 0 8px;font-size:20px;letter-spacing:-.04em}p,.small{color:var(--muted);line-height:1.75;font-weight:850}.hero-card p,.hero-card .small{color:rgba(255,255,255,.82)}.panel{background:rgba(255,255,255,.96);border:1px solid var(--line);border-radius:24px;padding:18px;margin-top:16px;box-shadow:0 14px 38px rgba(120,53,15,.07)}.panel-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:12px}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.card{background:#fff;border:1px solid var(--line);border-radius:20px;padding:16px}.card.ok{background:#ecfdf5;border-color:#bbf7d0}.card.info{background:#eff6ff;border-color:#bfdbfe}.card.warn{background:#fffbeb;border-color:#fde68a}button,a.btn{border:none;border-radius:999px;padding:11px 14px;background:var(--main);color:#fff;font-weight:950;text-decoration:none;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:7px}button.green,a.green{background:var(--green)}button.blue,a.blue{background:var(--blue)}button.red,a.red{background:var(--red)}button.ghost,a.ghost{background:#fff;color:#9a3412;border:1px solid #fdba74}.buttons{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}textarea{width:100%;min-height:260px;border:1px solid #fdba74;border-radius:16px;padding:12px;font:inherit;font-weight:800;color:#44403c;resize:vertical}.status{margin-top:12px;border-radius:16px;padding:12px;background:#ecfdf5;border:1px solid #bbf7d0;color:#166534;font-weight:900;white-space:pre-wrap}.step{display:grid;grid-template-columns:54px 1fr;gap:12px;border:1px solid var(--line);background:#fff7ed;border-radius:20px;padding:14px;margin-top:10px}.num{width:44px;height:44px;display:grid;place-items:center;border-radius:999px;background:#ea580c;color:#fff;font-weight:950}.check{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center;border:1px solid var(--line);background:#fff;border-radius:16px;padding:12px;margin-top:8px}.check input{width:22px;height:22px;accent-color:var(--green)}.url-box{font-size:12px;word-break:break-all;background:#fff7ed;border:1px solid #fed7aa;border-radius:14px;padding:10px;color:#57534e;font-weight:800}.footer{text-align:center;color:var(--muted);font-size:12px;font-weight:800;line-height:1.7;margin-top:24px}@media(max-width:860px){.hero,.grid,.grid3,.check{grid-template-columns:1fr}.panel-head{display:block}button,a.btn{width:100%}}
+</style></head><body><div class="wrap">
+<header class="hero"><div><div class="badge">STEP BAKERY-32-CHARGE / 本番導入前チェック</div><h1>チャージ導入前に<br>決めること</h1><p>チャージ機能はお金を扱うため、システムが動くだけでは本番導入OKにしません。店舗ごとの規約・返金方針・操作権限・決済確認方法を先に決めます。</p><div class="buttons"><button class="green" id="copyChecklist">チェックリストコピー</button><a class="btn blue" href="https://dpromstk2000-lab.github.io/bakery-line-system/charge-terms.html?v=30-charge" target="_blank">注意文案を開く</a></div></div><div class="hero-card"><h2>本番導入条件</h2><p>全項目を確認してから charge_enabled を本番店舗でONにします。</p></div></header>
+<section class="panel"><div class="panel-head"><div><h2>本番導入前チェック</h2><p class="small">チェック状態はこのブラウザに保存されます。</p></div><span id="judgeBadge" class="pill blue">未完了</span></div><div id="checkList"></div><div id="status" class="status">全項目を確認してください。</div></section>
+<section class="panel"><h2>コピー用チェックリスト</h2><textarea id="checkText" readonly></textarea></section>
+<div class="footer">DPRO SHOP / Bakery charge-production-checklist.html / STEP BAKERY-32-CHARGE</div></div><script>
+const KEY="DPRO_BAKERY_STEP32_CHARGE_PRODUCTION_CHECKS";
+const items=[
+["terms","チャージ利用規約を店舗ごとに確認した","有償残高・おまけ残高・返金・有効期限・利用範囲を説明できる。"],
+["refund","返金方針を決めた","原則返金不可、店舗都合、誤入金、二重入金などの例外を決める。"],
+["payment","支払い確認方法を決めた","現金、カード、PayPay、Squareなど、何を確認してから反映するか決める。"],
+["role","操作できるスタッフを決めた","誰がチャージ・取消・補正を操作できるか決める。"],
+["audit","台帳確認ルールを決めた","日次または週次でチャージ台帳を見る運用を決める。"],
+["limit","チャージ上限を決めた","1回上限、保有上限、最小チャージ金額を店舗ごとに決める。"],
+["display","お客様向け表示を確認した","wallet.htmlで有償残高・おまけ残高が表示される。"],
+["cancel","取消・補正テストを実施した","誤操作時に戻せることを確認する。"],
+["square","Square連携の有無を決めた","未連携なら手動チャージ運用。連携するなら別STEPで実装。"],
+["owner","オーナーが運用を理解した","ライト版とは別の上位オプションであることを理解済み。"]
+];
+let state={};try{state=JSON.parse(localStorage.getItem(KEY)||"{}");}catch{state={};}
+const $=id=>document.getElementById(id);
+function render(){
+ $("checkList").innerHTML=items.map(([k,t,d])=>`<label class="check"><input type="checkbox" data-k="${k}" ${state[k]?"checked":""}><div><b>${t}</b><div class="small">${d}</div></div><span class="pill ${state[k]?"green":"blue"}">${state[k]?"OK":"未確認"}</span></label>`).join("");
+ document.querySelectorAll("[data-k]").forEach(b=>b.addEventListener("change",()=>{state[b.dataset.k]=b.checked;localStorage.setItem(KEY,JSON.stringify(state));render();}));
+ const done=items.filter(([k])=>state[k]).length;
+ $("judgeBadge").className=done===items.length?"pill green":"pill blue";
+ $("judgeBadge").textContent=done===items.length?"本番導入候補OK":`未完了 ${done}/${items.length}`;
+ $("status").textContent=done===items.length?"本番導入前チェックは完了です。店舗ごとの最終合意後にcharge_enabledをONにしてください。":`未確認が残っています。${done}/${items.length}`;
+ $("checkText").value=makeText();
+}
+function makeText(){const lines=["STEP BAKERY-32-CHARGE 本番導入前チェックリスト","日時: "+new Date().toLocaleString("ja-JP"),""];items.forEach(([k,t,d])=>lines.push(`${state[k]?"OK":"未確認"} - ${t} - ${d}`));return lines.join("\n");}
+async function copyText(text){if(navigator.clipboard&&window.isSecureContext)return navigator.clipboard.writeText(text);const t=document.createElement("textarea");t.value=text;document.body.appendChild(t);t.select();document.execCommand("copy");t.remove();}
+$("copyChecklist").addEventListener("click",async()=>{await copyText($("checkText").value);$("status").textContent="チェックリストをコピーしました。";});
+render();
+</script></body></html>
