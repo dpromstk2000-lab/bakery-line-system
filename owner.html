@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>DPROベーカリー | owner.html</title>
+  <title>DPROベーカリーLINE | owner.html STEP BAKERY-31A</title>
   <style>
     :root {
       --bg: #fff7ed;
@@ -11,17 +11,22 @@
       --ink: #1c1917;
       --muted: #78716c;
       --line: #fed7aa;
+      --line2: #fdba74;
       --main: #b45309;
       --main2: #ea580c;
       --soft: #ffedd5;
+      --soft2: #fef3c7;
       --green: #16a34a;
       --red: #dc2626;
       --blue: #2563eb;
+      --dark: #292524;
       --shadow: 0 22px 70px rgba(120, 53, 15, .12);
       --radius: 24px;
     }
 
     * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
 
     body {
       margin: 0;
@@ -29,14 +34,14 @@
       color: var(--ink);
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       background:
-        radial-gradient(circle at 12% 0%, rgba(251, 146, 60, .20), transparent 34%),
+        radial-gradient(circle at 12% 0%, rgba(251, 146, 60, .22), transparent 34%),
         radial-gradient(circle at 90% 4%, rgba(245, 158, 11, .16), transparent 30%),
         linear-gradient(180deg, #fff7ed, #fffbeb 48%, #fef3c7);
       line-height: 1.65;
     }
 
     .wrap {
-      width: min(1220px, calc(100% - 28px));
+      width: min(1240px, calc(100% - 28px));
       margin: 22px auto 56px;
     }
 
@@ -47,7 +52,7 @@
       box-shadow: var(--shadow);
       padding: 28px;
       display: grid;
-      grid-template-columns: 1.25fr .75fr;
+      grid-template-columns: 1.2fr .8fr;
       gap: 22px;
       align-items: center;
       position: relative;
@@ -57,26 +62,31 @@
     .hero::after {
       content: "🍞";
       position: absolute;
-      right: 20px;
-      top: 10px;
-      font-size: 86px;
+      right: 18px;
+      top: 2px;
+      font-size: 96px;
       opacity: .10;
       pointer-events: none;
     }
 
     .badge {
       display: inline-flex;
+      align-items: center;
+      gap: 6px;
       border-radius: 999px;
       background: var(--soft);
       color: #9a3412;
       padding: 6px 12px;
       font-size: 12px;
       font-weight: 950;
+      white-space: nowrap;
     }
 
     .badge.green { background: #dcfce7; color: #166534; }
     .badge.red { background: #fee2e2; color: #991b1b; }
     .badge.blue { background: #dbeafe; color: #1d4ed8; }
+    .badge.dark { background: #292524; color: #fff7ed; }
+    .badge.gray { background: #f5f5f4; color: #57534e; }
 
     h1 {
       margin: 12px 0 10px;
@@ -106,7 +116,7 @@
 
     .hero-card {
       background:
-        radial-gradient(circle at 12% 10%, rgba(251, 191, 36, .18), transparent 30%),
+        radial-gradient(circle at 12% 10%, rgba(251, 191, 36, .20), transparent 30%),
         linear-gradient(135deg, #1c1917, #431407 58%, #9a3412);
       color: #fff7ed;
       border-radius: 28px;
@@ -130,18 +140,87 @@
       margin: 8px 0 10px;
     }
 
-    .hero-card .small {
-      color: #fed7aa;
+    .hero-card .small { color: #fed7aa; }
+
+    .owner-layout {
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      gap: 16px;
+      align-items: start;
+      margin-top: 16px;
     }
 
-    section.panel {
+    .side-index {
+      position: sticky;
+      top: 12px;
+      background: rgba(255,255,255,.94);
+      border: 1px solid var(--line);
+      box-shadow: 0 18px 52px rgba(120, 53, 15, .07);
+      border-radius: 24px;
+      padding: 16px;
+      max-height: calc(100vh - 24px);
+      overflow: auto;
+    }
+
+    .side-index-title {
+      font-size: 16px;
+      font-weight: 950;
+      margin-bottom: 4px;
+    }
+
+    .side-index small {
+      display: block;
+      color: var(--muted);
+      font-weight: 850;
+      margin-bottom: 12px;
+      line-height: 1.55;
+    }
+
+    .side-index nav { display: grid; gap: 7px; }
+
+    .side-index a {
+      color: #44403c;
+      text-decoration: none;
+      border: 1px solid #ffedd5;
+      background: #fffaf4;
+      border-radius: 14px;
+      padding: 10px 11px;
+      font-size: 13px;
+      font-weight: 950;
+    }
+
+    .side-index a.active,
+    .side-index a:hover {
+      color: #9a3412;
+      border-color: #fdba74;
+      background: #ffedd5;
+    }
+
+    .side-index a.nav-option {
+      color: #78716c;
+      background: #fafaf9;
+      border-color: #e7e5e4;
+    }
+
+    section.panel,
+    details {
       background: rgba(255,255,255,.95);
       border: 1px solid var(--line);
       box-shadow: 0 18px 52px rgba(120, 53, 15, .07);
       border-radius: var(--radius);
       padding: 22px;
-      margin: 16px 0;
+      margin: 0 0 16px;
+      scroll-margin-top: 16px;
     }
+
+    details summary {
+      cursor: pointer;
+      font-size: 20px;
+      font-weight: 950;
+      letter-spacing: -.04em;
+    }
+
+    .detail-body { margin-top: 16px; }
 
     .panel-head {
       display: flex;
@@ -157,6 +236,13 @@
       font-weight: 850;
     }
 
+    .note {
+      color: #57534e;
+      font-size: 13px;
+      font-weight: 850;
+      margin: 8px 0 0;
+    }
+
     label {
       display: block;
       font-size: 12px;
@@ -167,7 +253,7 @@
 
     input, textarea, select {
       width: 100%;
-      border: 1px solid #fdba74;
+      border: 1px solid var(--line2);
       background: #fff;
       border-radius: 14px;
       padding: 12px 13px;
@@ -194,9 +280,8 @@
       margin-top: 12px;
     }
 
-    .form-grid.three {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-    }
+    .form-grid.three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .form-grid.four { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 
     .button-row {
       display: flex;
@@ -219,189 +304,201 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 14px 28px rgba(180, 83, 9, .22);
+      gap: 6px;
       font-size: 14px;
+      box-shadow: 0 14px 28px rgba(180, 83, 9, .16);
     }
 
-    button.green, .button-link.green { background: var(--green); box-shadow: 0 14px 28px rgba(22, 163, 74, .18); }
-    button.blue, .button-link.blue { background: var(--blue); box-shadow: 0 14px 28px rgba(37, 99, 235, .18); }
-    button.red { background: var(--red); box-shadow: 0 14px 28px rgba(220, 38, 38, .16); }
-    button.dark, .button-link.dark { background: #1c1917; box-shadow: 0 14px 28px rgba(28, 25, 23, .18); }
+    button:hover, .button-link:hover { filter: brightness(.98); transform: translateY(-1px); }
+    button:disabled { opacity: .58; cursor: not-allowed; transform: none; }
 
-    button.ghost, .button-link.ghost {
+    button.green { background: var(--green); box-shadow: 0 14px 28px rgba(22, 163, 74, .16); }
+    button.blue { background: var(--blue); box-shadow: 0 14px 28px rgba(37, 99, 235, .16); }
+    button.red { background: var(--red); box-shadow: 0 14px 28px rgba(220, 38, 38, .16); }
+    button.dark { background: var(--dark); box-shadow: 0 14px 28px rgba(41, 37, 36, .16); }
+    button.ghost {
       background: #fff;
       color: #9a3412;
       border: 1px solid #fdba74;
       box-shadow: none;
     }
-
-    button.soft {
-      background: var(--soft);
-      color: #9a3412;
-      border: 1px solid #fed7aa;
+    button.gray {
+      background: #f5f5f4;
+      color: #44403c;
+      border: 1px solid #d6d3d1;
       box-shadow: none;
     }
 
-    button:disabled {
-      opacity: .52;
-      cursor: not-allowed;
-    }
-
     .status-box {
-      border: 1px solid var(--line);
-      border-radius: 16px;
+      margin-top: 14px;
+      border-radius: 18px;
+      border: 1px solid #fed7aa;
       background: #fff7ed;
-      padding: 12px 14px;
+      color: #7c2d12;
+      padding: 13px 14px;
+      white-space: pre-wrap;
       font-size: 13px;
       font-weight: 850;
-      white-space: pre-wrap;
-      word-break: break-word;
-      margin-top: 12px;
+      overflow: auto;
+      max-height: 360px;
     }
 
-    .status-box.ok { border-color: #bbf7d0; background: #f0fdf4; color: #166534; }
-    .status-box.warn { border-color: #fde68a; background: #fffbeb; color: #92400e; }
-    .status-box.ng { border-color: #fecaca; background: #fef2f2; color: #991b1b; }
-    .status-box.info { border-color: #bfdbfe; background: #eff6ff; color: #1e3a8a; }
+    .status-box.ok { background: #f0fdf4; color: #166534; border-color: #bbf7d0; }
+    .status-box.ng { background: #fef2f2; color: #991b1b; border-color: #fecaca; }
+    .status-box.warn { background: #fffbeb; color: #92400e; border-color: #fde68a; }
+    .status-box.info { background: #eff6ff; color: #1d4ed8; border-color: #bfdbfe; }
+
+    .quick-top {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .quick-card {
+      display: block;
+      text-decoration: none;
+      color: var(--ink);
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.94);
+      border-radius: 22px;
+      padding: 16px;
+      box-shadow: 0 14px 38px rgba(120, 53, 15, .06);
+    }
+
+    .quick-card strong {
+      display: block;
+      font-size: 17px;
+      line-height: 1.25;
+      letter-spacing: -.04em;
+      margin-bottom: 5px;
+    }
+
+    .quick-card span {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 850;
+    }
 
     .cards {
       display: grid;
       grid-template-columns: repeat(5, minmax(0, 1fr));
-      gap: 10px;
-      margin-top: 14px;
+      gap: 12px;
+      margin: 12px 0 4px;
     }
 
     .card {
-      background: #fff;
+      background: linear-gradient(180deg, #fff, #fff7ed);
       border: 1px solid var(--line);
       border-radius: 20px;
-      padding: 15px;
-      box-shadow: 0 12px 36px rgba(120, 53, 15, .05);
+      padding: 16px;
+      min-height: 104px;
     }
 
     .card .label {
+      color: #78716c;
       font-size: 12px;
-      color: var(--muted);
       font-weight: 950;
     }
 
     .card .value {
-      font-size: 24px;
-      line-height: 1.15;
-      letter-spacing: -.04em;
-      font-weight: 950;
-      margin-top: 5px;
-    }
-
-    .weekday-grid {
-      display: grid;
-      grid-template-columns: repeat(7, minmax(0, 1fr));
-      gap: 8px;
       margin-top: 8px;
-    }
-
-    .day-option {
-      border: 1px solid #fdba74;
-      border-radius: 14px;
-      background: #fff;
-      padding: 10px 8px;
+      font-size: 30px;
       font-weight: 950;
-      font-size: 13px;
-      text-align: center;
-      cursor: pointer;
-      user-select: none;
+      letter-spacing: -.05em;
+      line-height: 1;
     }
 
-    .day-option input {
-      display: none;
-    }
-
-    .day-option:has(input:checked) {
-      background: #fee2e2;
-      border-color: #ef4444;
-      color: #991b1b;
-      box-shadow: 0 0 0 4px rgba(239, 68, 68, .10);
-    }
-
-    .calendar-tools {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin: 12px 0;
-    }
-
-    .date-grid {
+    .task-board {
       display: grid;
-      grid-template-columns: repeat(7, minmax(0, 1fr));
-      gap: 7px;
-      margin-top: 10px;
-    }
-
-    .date-btn {
-      border: 1px solid #fdba74;
-      background: #fff;
-      color: #44403c;
-      box-shadow: none;
-      border-radius: 14px;
-      min-height: 58px;
-      padding: 6px;
-      display: block;
-      text-align: center;
-      font-size: 11px;
-      line-height: 1.2;
-    }
-
-    .date-btn .date-num {
-      display: block;
-      font-size: 16px;
-      font-weight: 950;
-      margin-bottom: 2px;
-    }
-
-    .date-btn.selected {
-      background: #fee2e2;
-      border-color: #ef4444;
-      color: #991b1b;
-      box-shadow: 0 0 0 4px rgba(239, 68, 68, .10);
-    }
-
-    .closed-list {
-      display: grid;
-      gap: 8px;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
       margin-top: 12px;
     }
 
-    .closed-row {
-      display: grid;
-      grid-template-columns: 140px minmax(0, 1fr) auto;
-      gap: 8px;
-      align-items: center;
-      background: #fff;
+    .task-card {
       border: 1px solid var(--line);
-      border-radius: 16px;
-      padding: 10px;
+      background: #fffaf4;
+      border-radius: 20px;
+      padding: 14px;
     }
+
+    .task-card.strong {
+      background: linear-gradient(135deg, #fff7ed, #ffedd5);
+      border-color: #fdba74;
+    }
+
+    .task-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 10px;
+      font-weight: 950;
+      font-size: 17px;
+      letter-spacing: -.03em;
+    }
+
+    .task-body {
+      margin-top: 6px;
+      color: #57534e;
+      font-size: 13px;
+      font-weight: 850;
+    }
+
+    .task-count {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 34px;
+      height: 34px;
+      padding: 0 9px;
+      border-radius: 999px;
+      background: #431407;
+      color: #fff7ed;
+      font-weight: 950;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      border-radius: 999px;
+      padding: 5px 10px;
+      background: #ffedd5;
+      color: #9a3412;
+      font-size: 12px;
+      font-weight: 950;
+      white-space: nowrap;
+    }
+
+    .pill.green { background: #dcfce7; color: #166534; }
+    .pill.blue { background: #dbeafe; color: #1d4ed8; }
+    .pill.red { background: #fee2e2; color: #991b1b; }
+    .pill.gray { background: #f5f5f4; color: #57534e; }
+    .pill.dark { background: #292524; color: #fff7ed; }
 
     .table-wrap {
+      width: 100%;
       overflow-x: auto;
-      border: 1px solid var(--line);
-      border-radius: 18px;
-      background: #fff;
       margin-top: 12px;
+      border-radius: 18px;
+      border: 1px solid var(--line);
+      background: #fff;
     }
 
     table {
-      border-collapse: collapse;
       width: 100%;
-      min-width: 780px;
-      font-size: 13px;
+      border-collapse: collapse;
+      min-width: 860px;
+      background: #fff;
     }
 
     th, td {
-      padding: 11px 12px;
       border-bottom: 1px solid #ffedd5;
+      padding: 11px 10px;
       text-align: left;
       vertical-align: top;
+      font-size: 13px;
     }
 
     th {
@@ -414,253 +511,115 @@
 
     tr:last-child td { border-bottom: 0; }
 
+    .mini-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+    }
+
+    .mini-actions button {
+      min-height: 36px;
+      padding: 8px 11px;
+      font-size: 12px;
+      box-shadow: none;
+    }
+
     .mono {
       font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
       font-size: 12px;
     }
 
-    .pill {
-      display: inline-flex;
-      align-items: center;
-      border-radius: 999px;
-      padding: 4px 9px;
-      background: #ffedd5;
-      color: #9a3412;
-      font-size: 12px;
-      font-weight: 950;
-      white-space: nowrap;
-    }
-
-    details {
-      border: 1px solid var(--line);
-      border-radius: 18px;
-      background: #fff;
-      margin: 14px 0;
-      overflow: hidden;
-    }
-
-    summary {
-      cursor: pointer;
-      padding: 14px 16px;
-      font-weight: 950;
-      background: #fff7ed;
-    }
-
-    details .detail-body {
-      padding: 14px 16px;
-      border-top: 1px solid var(--line);
-    }
-
-
-    html {
-      scroll-behavior: smooth;
-      scroll-padding-top: 18px;
-    }
-
-    .owner-layout {
+    .template-grid {
       display: grid;
-      grid-template-columns: 264px minmax(0, 1fr);
-      gap: 18px;
-      align-items: start;
-      margin-top: 18px;
-    }
-
-    .side-index {
-      position: sticky;
-      top: 14px;
-      z-index: 30;
-      align-self: start;
-      background: rgba(255,255,255,.96);
-      border: 1px solid var(--line);
-      border-radius: 24px;
-      box-shadow: 0 18px 52px rgba(120, 53, 15, .10);
-      padding: 16px;
-      max-height: calc(100vh - 28px);
-      overflow: auto;
-    }
-
-    .side-index-title {
-      font-size: 18px;
-      font-weight: 950;
-      letter-spacing: -.04em;
-      margin-bottom: 4px;
-    }
-
-    .side-index small {
-      display: block;
-      color: var(--muted);
-      font-weight: 850;
-      line-height: 1.5;
-      margin-bottom: 12px;
-    }
-
-    .side-index nav {
-      display: grid;
-      gap: 8px;
-    }
-
-    .side-index a {
-      display: block;
-      text-decoration: none;
-      color: var(--ink);
-      background: #fff7ed;
-      border: 1px solid #fed7aa;
-      border-radius: 14px;
-      padding: 10px 11px;
-      font-size: 13px;
-      font-weight: 950;
-      line-height: 1.25;
-      transition: .15s ease;
-    }
-
-    .side-index a:hover,
-    .side-index a.active {
-      background: linear-gradient(135deg, #16a34a, #15803d);
-      color: #fff;
-      border-color: #16a34a;
-      transform: translateY(-1px);
-    }
-
-    .side-index a.nav-main {
-      background: #ecfdf5;
-      border-color: #bbf7d0;
-      color: #166534;
-    }
-
-    .side-index a.nav-main:hover,
-    .side-index a.nav-main.active {
-      background: linear-gradient(135deg, #16a34a, #15803d);
-      color: #fff;
-    }
-
-    .side-index a.nav-option {
-      background: #eff6ff;
-      border-color: #bfdbfe;
-      color: #1d4ed8;
-    }
-
-    .side-index a.nav-option:hover,
-    .side-index a.nav-option.active {
-      background: linear-gradient(135deg, #2563eb, #1d4ed8);
-      color: #fff;
-    }
-
-    .compact-note {
-      margin-top: 12px;
-      padding: 10px 11px;
-      border-radius: 14px;
-      background: #fff7ed;
-      border: 1px solid var(--line);
-      color: #7c2d12;
-      font-size: 12px;
-      font-weight: 900;
-      line-height: 1.55;
-    }
-
-    .owner-main {
-      min-width: 0;
-    }
-
-    .quick-top {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
+      grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 10px;
-      margin-bottom: 14px;
+      margin-top: 12px;
     }
 
-    .quick-card {
-      display: block;
-      text-decoration: none;
-      color: var(--ink);
-      background: rgba(255,255,255,.96);
+    .template-button {
+      border-radius: 16px;
+      background: #fff;
+      color: #9a3412;
+      border: 1px solid #fdba74;
+      box-shadow: none;
+      justify-content: flex-start;
+      min-height: 58px;
+      text-align: left;
+      white-space: normal;
+    }
+
+    .weekday-grid, .date-grid {
+      display: grid;
+      grid-template-columns: repeat(7, minmax(0, 1fr));
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .day-option {
+      display: flex;
+      align-items: center;
+      gap: 8px;
       border: 1px solid var(--line);
-      border-radius: 18px;
-      padding: 14px;
-      box-shadow: 0 12px 32px rgba(120, 53, 15, .06);
-      min-height: 86px;
-    }
-
-    .quick-card strong {
-      display: block;
-      font-size: 15px;
-      font-weight: 950;
-      letter-spacing: -.03em;
-      margin-bottom: 4px;
-    }
-
-    .quick-card span {
-      display: block;
-      color: var(--muted);
-      font-size: 12px;
-      font-weight: 850;
-      line-height: 1.45;
-    }
-
-    .quick-card:hover {
-      border-color: #fdba74;
-      transform: translateY(-1px);
-    }
-
-
-    #startSection {
-      border: 2px solid #bbf7d0;
-      background:
-        radial-gradient(circle at 0% 0%, rgba(187,247,208,.44), transparent 30%),
-        #ffffff;
-    }
-
-    #connectionSection {
-      border-style: dashed;
-      opacity: .96;
-    }
-
-    #connectionSection .panel-head h2::after {
-      content: "（普段は触らない）";
+      background: #fffaf4;
+      border-radius: 14px;
+      padding: 10px;
+      cursor: pointer;
       font-size: 13px;
-      color: var(--muted);
-      margin-left: 8px;
-      letter-spacing: 0;
+      font-weight: 950;
+    }
+
+    .day-option input { width: auto; }
+
+    .closed-row {
+      display: grid;
+      grid-template-columns: 140px 1fr auto;
+      gap: 8px;
+      align-items: center;
+      border: 1px solid #ffedd5;
+      border-radius: 14px;
+      padding: 8px;
+      margin-top: 8px;
+      background: #fffaf4;
     }
 
     .footer {
       text-align: center;
-      color: var(--muted);
+      color: #78716c;
       font-size: 12px;
-      margin-top: 24px;
-      font-weight: 800;
+      font-weight: 850;
+      margin-top: 22px;
     }
+
+    .hidden { display: none !important; }
 
     @media (max-width: 1060px) {
       .hero { grid-template-columns: 1fr; }
-      .owner-layout { display: block; }
+      .owner-layout { grid-template-columns: 1fr; }
       .side-index {
-        position: sticky;
-        top: 0;
+        position: static;
         max-height: none;
-        margin: 12px 0 14px;
-        border-radius: 20px;
       }
       .side-index nav {
         display: flex;
-        gap: 8px;
         overflow-x: auto;
-        padding-bottom: 4px;
+        padding-bottom: 2px;
       }
       .side-index a {
         min-width: max-content;
         white-space: nowrap;
       }
-      .compact-note { display: none; }
       .quick-top { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      .form-grid, .form-grid.three { grid-template-columns: 1fr; }
+      .task-board { grid-template-columns: 1fr; }
+      .form-grid, .form-grid.three, .form-grid.four { grid-template-columns: 1fr; }
+      .template-grid { grid-template-columns: 1fr; }
       .date-grid, .weekday-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
     }
 
     @media (max-width: 560px) {
       .wrap { width: min(100% - 18px, 1220px); margin-top: 10px; }
       .hero { padding: 20px; border-radius: 22px; }
-      section.panel { padding: 16px; }
+      section.panel, details { padding: 16px; }
       button, .button-link { width: 100%; }
       .panel-head { display: block; }
       .quick-top { grid-template-columns: 1fr; }
@@ -674,25 +633,24 @@
   <div class="wrap">
     <header class="hero">
       <div>
-        <div class="badge">STEP BAKERY-30-CHARGE / チャージ上位オプション導線追加</div>
-        <h1>パン屋オーナー<br>管理画面</h1>
+        <div class="badge">STEP BAKERY-31A / 今日やること中心 owner.html</div>
+        <h1>パン屋オーナー<br>今日の管理画面</h1>
         <p class="lead">
-          最初に見るのは今日やることです。チャージは上位オプションとして分離し、安全版チャージ管理画面へ誘導します。
-          チャージは希望店舗向けの上位オプションとして下部にまとめています。
+          毎朝まず見る画面を「今日やること」に整理しました。取り置き確認、準備完了、受け渡し、ECOレスキュー文面、商品上限を上から順番に確認できます。
         </p>
         <div class="button-row">
-          <button class="green" type="button" id="loadAllButton">一括読込</button>
-          <button class="blue" type="button" id="openWalletButton">会員証を開く</button>
-          <button class="dark" type="button" id="openCashierButton">店員レジを開く</button>
-          <button class="blue" type="button" id="openStaffButton">スタッフ取り置き画面</button>
+          <button class="green" type="button" id="loadAllButton">今日の状況を一括読込</button>
+          <button class="blue" type="button" id="openStaffButtonTop">スタッフ画面を開く</button>
+          <button class="dark" type="button" id="openCashierButtonTop">店員レジを開く</button>
+          <button class="blue" type="button" id="openWalletButtonTop">お客様会員証を開く</button>
         </div>
       </div>
 
       <div class="hero-card">
-        <div class="title">ライト版のポイント</div>
-        <div class="big">オーナーが最初に見るべき「今日やること」を先頭にしました。</div>
+        <div class="title">営業で伝える一言</div>
+        <div class="big">パン屋さんは、毎朝この画面を見るだけ。</div>
         <div class="small">
-          接続設定や診断は初期設定に下げ、日常運用は取り置き・商品上限・ECOレスキューを中心にします。
+          未確認の取り置き、準備中、受け渡し待ち、夕方のECO案内まで、オーナーが迷わない順番に並べています。
         </div>
       </div>
     </header>
@@ -700,446 +658,474 @@
     <div class="owner-layout">
       <aside class="side-index" aria-label="オーナー管理メニュー">
         <div class="side-index-title">管理メニュー</div>
-        <small>必要な場所へすぐ移動できます。営業時は上から順番に見せると分かりやすいです。</small>
+        <small>営業時は上から順番に見せると分かりやすいです。チャージや診断は下部へ分離しています。</small>
         <nav>
           <a class="nav-main" href="#startSection">① 今日の開始</a>
-          <a class="nav-main" href="#summarySection">② 今日の状況</a>
+          <a class="nav-main" href="#todoSection">② 今日やること</a>
           <a class="nav-main" href="#preordersSection">③ 取り置き対応</a>
-          <a class="nav-main" href="#staffLinkSection">スタッフ画面</a>
-          <a class="nav-main" href="#productsSection">④ 商品・上限</a>
-          <a class="nav-main" href="#ecoSection">⑤ ECO文面</a>
-          <a href="#pickupSection">営業日・休業日</a>
+          <a class="nav-main" href="#staffSection">④ スタッフ/iPad</a>
+          <a class="nav-main" href="#ecoSection">⑤ ECOレスキュー</a>
+          <a class="nav-main" href="#productsSection">⑥ 商品・上限</a>
           <a href="#customersSection">顧客一覧</a>
-          <a class="nav-option" href="#chargeSection">チャージ オプション</a>
+          <a href="#pickupSection">営業日・休業日</a>
+          <a class="nav-option" href="#chargeSection">チャージ上位オプション</a>
           <a class="nav-option" href="#transactionsSection">決済履歴</a>
-          <a class="nav-option" href="#demoSection">DEMO設定</a>
+          <a class="nav-option" href="#demoSection">営業前DEMO</a>
           <a class="nav-option" href="#connectionSection">初期設定・接続</a>
           <a class="nav-option" href="#logsSection">診断ログ</a>
         </nav>
-        <div class="compact-note">初期設定は下部へ移動。普段は「今日の開始」→「取り置き対応」で使います。</div>
       </aside>
 
       <main class="owner-main">
-        <div class="quick-top" id="todaySection">
-          <a class="quick-card" href="#preordersSection"><strong>今日の取り置き</strong><span>準備中・受け渡しまで管理</span></a>
-          <a class="quick-card" href="#productsSection"><strong>商品上限</strong><span>人気パンの受け過ぎ防止</span></a>
+        <div class="quick-top">
+          <a class="quick-card" href="#todoSection"><strong>今日やること</strong><span>未確認・準備・受け渡しを確認</span></a>
+          <a class="quick-card" href="#preordersSection"><strong>今日の取り置き</strong><span>ステータス変更と文面コピー</span></a>
           <a class="quick-card" href="#ecoSection"><strong>ECOレスキュー</strong><span>夕方の売れ残り対策</span></a>
-          <a class="quick-card" href="#pickupSection"><strong>休業日設定</strong><span>定休日・臨時休業を反映</span></a>
+          <a class="quick-card" href="#productsSection"><strong>商品上限</strong><span>人気パンの受けすぎ防止</span></a>
         </div>
 
+        <section class="panel" id="startSection">
+          <div class="panel-head">
+            <div>
+              <h2>① 今日の管理を開始</h2>
+              <div class="small">管理コードを入れて「今日の状況を読む」を押します。接続設定ではなく、日常運用から始める画面です。</div>
+            </div>
+            <div class="badge green">日常運用</div>
+          </div>
 
+          <div class="form-grid three">
+            <div>
+              <label for="quickAdminCodeInput">管理コード</label>
+              <input id="quickAdminCodeInput" type="password" placeholder="管理コードを入力" autocomplete="off" />
+            </div>
+            <div>
+              <label for="quickStaffNameInput">担当スタッフ名</label>
+              <input id="quickStaffNameInput" value="管理スタッフ" autocomplete="off" />
+            </div>
+            <div>
+              <label for="quickShopCodeInput">店舗コード</label>
+              <input id="quickShopCodeInput" value="bakery_demo" autocomplete="off" />
+            </div>
+          </div>
 
-    <section class="panel" id="startSection">
-      <div class="panel-head">
-        <div>
-          <h2>今日の管理を開始</h2>
-          <div class="small">オーナーが普段触るのはここだけで十分です。管理コードを入れて「今日の状況を読む」を押します。</div>
-        </div>
-        <div class="badge green">日常運用</div>
-      </div>
+          <div class="button-row">
+            <button class="green" type="button" id="quickStartButton">今日の状況を読む</button>
+            <button class="ghost" type="button" id="saveQuickAdminButton">管理コードを一時保存</button>
+            <button class="ghost" type="button" id="openConnectionButton">初期設定を開く</button>
+          </div>
 
-      <div class="form-grid">
-        <div>
-          <label for="quickAdminCodeInput">管理コード</label>
-          <input id="quickAdminCodeInput" type="password" placeholder="管理コードを入力" autocomplete="off" />
-        </div>
-        <div>
-          <label for="quickStaffNameInput">担当スタッフ名</label>
-          <input id="quickStaffNameInput" value="管理スタッフ" autocomplete="off" />
-        </div>
-      </div>
+          <div id="quickStartStatus" class="status-box info">未読込です。営業デモでは、まずここに管理コードを入れて読み込みます。</div>
+        </section>
 
-      <div class="button-row">
-        <button class="green" type="button" id="quickStartButton">今日の状況を読む</button>
-        <button class="ghost" type="button" id="quickOpenSettingsButton">初期設定を開く</button>
-      </div>
+        <section class="panel" id="todoSection">
+          <div class="panel-head">
+            <div>
+              <h2>② 今日やること</h2>
+              <div class="small">ヨガ・ペットサロン・動物病院版の「今日やること」思想を、パン屋向けに移植しました。</div>
+            </div>
+            <button class="ghost" type="button" id="reloadTodoButton">再読込</button>
+          </div>
 
-      <div id="quickStartStatus" class="status-box info">接続設定ではなく、今日の運用から始めます。</div>
-    </section>
+          <div class="cards">
+            <div class="card">
+              <div class="label">未確認の取り置き</div>
+              <div class="value" id="cardPending">-</div>
+            </div>
+            <div class="card">
+              <div class="label">準備中</div>
+              <div class="value" id="cardPreparing">-</div>
+            </div>
+            <div class="card">
+              <div class="label">受け渡し待ち</div>
+              <div class="value" id="cardReady">-</div>
+            </div>
+            <div class="card">
+              <div class="label">今日の取り置き合計</div>
+              <div class="value" id="cardPreorders">-</div>
+            </div>
+            <div class="card">
+              <div class="label">ECO確認目安</div>
+              <div class="value" id="cardEcoSignal">-</div>
+            </div>
+          </div>
 
-    <section class="panel" id="staffLinkSection">
-      <div class="panel-head">
-        <div>
-          <h2>スタッフ用 取り置き画面</h2>
-          <div class="small">店頭スタッフやiPadでは、オーナー管理画面ではなく staff.html を使います。</div>
-        </div>
-        <div class="badge green">スタッフ用</div>
-      </div>
+          <div class="task-board" id="todoBoard">
+            <div class="task-card strong">
+              <div class="task-title"><span>今日の状況を読み込んでください</span><span class="task-count">-</span></div>
+              <div class="task-body">管理コードを入力後、「今日の状況を読む」を押すと、ここに優先タスクが表示されます。</div>
+            </div>
+          </div>
 
-      <div class="status-box ok">スタッフ画面は、今日の取り置き対応だけに絞っています。商品管理・チャージ・接続設定・DEMO設定は表示しません。</div>
+          <div id="summaryStatus" class="status-box info">まだ読み込んでいません。</div>
+        </section>
 
-      <div class="button-row">
-        <button class="green" type="button" id="openStaffButton2">スタッフ画面を開く</button>
-        <button class="ghost" type="button" id="copyStaffUrlButton">スタッフ画面URLコピー</button>
-      </div>
+        <section class="panel" id="preordersSection">
+          <div class="panel-head">
+            <div>
+              <h2>③ 今日の取り置き対応</h2>
+              <div class="small">準備中・準備完了・受け渡し済み・未受取まで、現場で押す順番にしています。</div>
+            </div>
+            <button class="ghost" type="button" id="reloadPreordersButton">取り置き再読込</button>
+          </div>
 
-      <div id="staffLinkStatus" class="status-box info">iPadやスマホで開いて、今日の取り置き確認に使います。</div>
-    </section>
+          <div class="button-row">
+            <button class="green" type="button" id="filterActiveButton">未完了だけ表示</button>
+            <button class="ghost" type="button" id="filterAllButton">全件表示</button>
+            <button class="blue" type="button" id="copyTodaySummaryButton">今日の取り置き一覧をコピー</button>
+          </div>
 
-    <section class="panel" id="summarySection">
-      <div class="panel-head">
-        <div>
-          <h2>今日の状況</h2>
-          <div class="small">ライト版では、会員・取り置き・ECOレスキューを中心に確認します。</div>
-        </div>
-        <button class="ghost" type="button" id="reloadSummaryButton">再読込</button>
-      </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>受取</th>
+                  <th>お客様</th>
+                  <th>商品</th>
+                  <th>金額</th>
+                  <th>状態</th>
+                  <th>操作</th>
+                </tr>
+              </thead>
+              <tbody id="preordersTbody">
+                <tr><td colspan="6">未読込です。</td></tr>
+              </tbody>
+            </table>
+          </div>
 
-      <div class="cards">
-        <div class="card">
-          <div class="label">会員数</div>
-          <div class="value" id="cardCustomers">-</div>
-        </div>
-        <div class="card">
-          <div class="label">オプション：今日のチャージ</div>
-          <div class="value" id="cardCharge">-</div>
-        </div>
-        <div class="card">
-          <div class="label">オプション：今日の決済</div>
-          <div class="value" id="cardPayment">-</div>
-        </div>
-        <div class="card">
-          <div class="label">オプション：未使用残高</div>
-          <div class="value" id="cardBalance">-</div>
-        </div>
-        <div class="card">
-          <div class="label">今日の取り置き</div>
-          <div class="value" id="cardPreorders">-</div>
-        </div>
-      </div>
+          <div id="preordersStatus" class="status-box info">今日の取り置き対応をここで行います。</div>
+        </section>
 
-      <div id="summaryStatus" class="status-box info">まだ読み込んでいません。</div>
+        <section class="panel" id="staffSection">
+          <div class="panel-head">
+            <div>
+              <h2>④ スタッフ/iPad画面</h2>
+              <div class="small">スタッフには owner.html ではなく staff.html を見せます。設定・チャージ・診断を隠して、取り置き対応だけに集中できます。</div>
+            </div>
+            <div class="badge green">現場用</div>
+          </div>
+          <div class="status-box ok">iPadやスマホで開いて、今日の取り置き確認に使います。営業デモでは「オーナー用」と「スタッフ用」を分けて見せると伝わりやすいです。</div>
+          <div class="button-row">
+            <button class="green" type="button" id="openStaffButton">スタッフ画面を開く</button>
+            <button class="ghost" type="button" id="copyStaffUrlButton">スタッフ画面URLコピー</button>
+          </div>
+          <div id="staffLinkStatus" class="status-box info">スタッフ画面URLをコピーしてiPadで開けます。</div>
+        </section>
 
-      <div class="status-box ok">営業時の主役：今日の取り置き・ECOレスキュー・顧客管理です。取り置きは「準備中」「準備完了」「受け渡し済み」まで見せられます。</div>
-    </section>
+        <section class="panel" id="ecoSection">
+          <div class="panel-head">
+            <div>
+              <h2>⑤ ECOレスキュー文面</h2>
+              <div class="small">夕方の売れ残り対策です。対象に合わせたLINE文面を作成してコピーできます。</div>
+            </div>
+            <div class="badge blue">売れ残り対策</div>
+          </div>
 
-    <section class="panel" id="chargeSection">
-      <div class="panel-head">
-        <div>
-          <h2>オプション機能：安全版チャージ</h2>
-          <div class="small">希望店舗だけに提案する上位オプションです。有償残高・おまけ残高・返金/補正台帳を分けて管理します。</div>
-        </div>
-      </div>
+          <div class="template-grid">
+            <button class="template-button" type="button" data-eco-template="gentle">やさしい案内<br><span class="small">常連さん向け</span></button>
+            <button class="template-button" type="button" data-eco-template="rain">雨の日案内<br><span class="small">来店が少ない日</span></button>
+            <button class="template-button" type="button" data-eco-template="closing">閉店前レスキュー<br><span class="small">夕方の在庫対策</span></button>
+          </div>
 
-      <div class="form-grid">
-        <div>
-          <label for="chargeMemberInput">会員コード / LINE ID</label>
-          <input id="chargeMemberInput" placeholder="例：DEMO-BK-001 / BK-XXXXXXXX" autocomplete="off" />
-        </div>
-        <div>
-          <label for="chargeAmountInput">チャージ金額</label>
-          <input id="chargeAmountInput" type="number" min="1" step="1" value="5000" />
-        </div>
-        <div>
-          <label for="chargeProviderInput">支払い確認方法</label>
-          <select id="chargeProviderInput">
-            <option value="store_cash">店頭現金</option>
-            <option value="store_card">店頭カード</option>
-            <option value="store_paypay">店頭PayPay等</option>
-            <option value="manual_admin">管理者確認</option>
-          </select>
-        </div>
-        <div>
-          <label for="chargeMemoInput">メモ</label>
-          <input id="chargeMemoInput" value="店頭支払い確認後の手動チャージ" autocomplete="off" />
-        </div>
-      </div>
+          <div class="form-grid four">
+            <div>
+              <label for="ecoProductInput">商品名</label>
+              <input id="ecoProductInput" value="ECOパン詰め合わせ" autocomplete="off" />
+            </div>
+            <div>
+              <label for="ecoQuantityInput">数量</label>
+              <input id="ecoQuantityInput" type="number" min="1" value="5" />
+            </div>
+            <div>
+              <label for="ecoPriceInput">価格</label>
+              <input id="ecoPriceInput" type="number" min="1" value="500" />
+            </div>
+            <div>
+              <label for="ecoTargetInput">対象</label>
+              <select id="ecoTargetInput">
+                <option value="all">全体向け</option>
+                <option value="regular">常連さん向け</option>
+                <option value="eco_yes">ECO案内希望者</option>
+                <option value="nearby">近所のお客様向け</option>
+              </select>
+            </div>
+          </div>
 
-      <div class="button-row">
-        <button class="ghost" type="button" data-charge-demo="DEMO-BK-001">佐藤さん</button>
-        <button class="ghost" type="button" data-charge-demo="DEMO-BK-002">田中さん</button>
-        <button class="ghost" type="button" data-charge-demo="DEMO-BK-003">山本さん</button>
-        <button class="green" type="button" id="manualChargeButton">簡易チャージ実行</button>
-        <button class="blue" type="button" id="openChargeAdminButton">安全版チャージ管理を開く</button>
-      </div>
+          <div class="button-row">
+            <button class="green" type="button" id="createEcoButton">ECO文面を作成</button>
+            <button class="blue" type="button" id="copyEcoButton">文面コピー</button>
+          </div>
 
-      <div id="manualChargeStatus" class="status-box info">ライト版では通常使いません。詳しい返金・取消・おまけ残高管理は「安全版チャージ管理」を使います。</div>
-    </section>
+          <textarea id="ecoMessageBox" placeholder="ここにECOレスキュー文面が表示されます。"></textarea>
+          <div id="ecoStatus" class="status-box info">未作成です。夕方の営業デモでは、ここで文面作成→コピーまで見せます。</div>
+        </section>
 
-    <section class="panel" id="pickupSection">
-      <div class="panel-head">
-        <div>
-          <h2>取り置き設定</h2>
-          <div class="small">定休日・受け取り時間・当日締切・2か月先までの臨時休業日を保存します。</div>
-        </div>
-        <button class="ghost" type="button" id="loadPickupButton">設定読込</button>
-      </div>
+        <section class="panel" id="productsSection">
+          <div class="panel-head">
+            <div>
+              <h2>⑥ 商品・取り置き上限</h2>
+              <div class="small">人気パンの受けすぎ防止です。商品ごとに取り置き受付ON/OFF、1日の上限、メモを変更できます。</div>
+            </div>
+            <button class="ghost" type="button" id="reloadProductsButton">商品再読込</button>
+          </div>
 
-      <label>定休日</label>
-      <div class="weekday-grid">
-        <label class="day-option"><input type="checkbox" name="closedWeekday" value="0" checked />日曜</label>
-        <label class="day-option"><input type="checkbox" name="closedWeekday" value="1" />月曜</label>
-        <label class="day-option"><input type="checkbox" name="closedWeekday" value="2" />火曜</label>
-        <label class="day-option"><input type="checkbox" name="closedWeekday" value="3" />水曜</label>
-        <label class="day-option"><input type="checkbox" name="closedWeekday" value="4" />木曜</label>
-        <label class="day-option"><input type="checkbox" name="closedWeekday" value="5" />金曜</label>
-        <label class="day-option"><input type="checkbox" name="closedWeekday" value="6" />土曜</label>
-      </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>順番</th>
+                  <th>商品</th>
+                  <th>価格</th>
+                  <th>受付</th>
+                  <th>1日上限</th>
+                  <th>メモ</th>
+                  <th>保存</th>
+                </tr>
+              </thead>
+              <tbody id="productsTbody">
+                <tr><td colspan="7">未読込です。</td></tr>
+              </tbody>
+            </table>
+          </div>
 
-      <div class="form-grid">
-        <div>
-          <label for="pickupTimesInput">受け取り可能時間</label>
-          <input id="pickupTimesInput" value="10:00,11:00,12:00,15:00,17:30" autocomplete="off" />
-        </div>
-        <div>
-          <label for="cutoffInput">当日取り置き締切</label>
-          <input id="cutoffInput" type="time" value="10:00" />
-        </div>
-        <div>
-          <label for="maxDaysAheadInput">何日先まで受付</label>
-          <input id="maxDaysAheadInput" type="number" min="1" max="62" value="7" />
-        </div>
-        <div>
-          <label for="maxOrdersInput">1日の最大取り置き件数</label>
-          <input id="maxOrdersInput" type="number" min="1" max="300" value="50" />
-        </div>
-      </div>
+          <div id="productsStatus" class="status-box info">商品設定は営業中でもすぐ調整できます。</div>
+        </section>
 
-      <h3 style="margin-top:18px;">臨時休業日・特別休業日</h3>
-      <div class="small">カレンダーで休みにしたい日を押してください。選んだ日は赤くなります。</div>
+        <section class="panel" id="customersSection">
+          <div class="panel-head">
+            <div>
+              <h2>顧客一覧</h2>
+              <div class="small">会員コード、ECO希望、チャージ対象などを確認します。</div>
+            </div>
+            <button class="ghost" type="button" id="reloadCustomersButton">顧客再読込</button>
+          </div>
 
-      <div class="calendar-tools">
-        <button class="ghost" type="button" id="buildCalendarButton">2か月分を再表示</button>
-        <button class="ghost" type="button" id="selectObonButton">お盆例</button>
-        <button class="ghost" type="button" id="selectNewYearButton">年末年始例</button>
-        <button class="red" type="button" id="clearClosedDaysButton">臨時休業クリア</button>
-      </div>
+          <div class="cards">
+            <div class="card">
+              <div class="label">会員数</div>
+              <div class="value" id="cardCustomers">-</div>
+            </div>
+            <div class="card">
+              <div class="label">今日のチャージ</div>
+              <div class="value" id="cardCharge">-</div>
+            </div>
+            <div class="card">
+              <div class="label">今日の決済</div>
+              <div class="value" id="cardPayment">-</div>
+            </div>
+            <div class="card">
+              <div class="label">未使用残高</div>
+              <div class="value" id="cardBalance">-</div>
+            </div>
+            <div class="card">
+              <div class="label">商品数</div>
+              <div class="value" id="cardProducts">-</div>
+            </div>
+          </div>
 
-      <div class="date-grid" id="specialClosedCalendar"></div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>名前</th>
+                  <th>会員コード</th>
+                  <th>残高</th>
+                  <th>ECO</th>
+                  <th>操作</th>
+                </tr>
+              </thead>
+              <tbody id="customersTbody">
+                <tr><td colspan="5">未読込です。</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
 
-      <h3 style="margin-top:16px;">選択中の臨時休業日</h3>
-      <div class="closed-list" id="specialClosedList">
-        <div class="status-box info">まだ選択していません。</div>
-      </div>
+        <details id="pickupSection">
+          <summary>営業日・休業日・受け取り時間</summary>
+          <div class="detail-body">
+            <div class="panel-head">
+              <div>
+                <h2>取り置き受付設定</h2>
+                <div class="small">定休日・受け取り時間・締切・臨時休業を保存します。</div>
+              </div>
+              <button class="ghost" type="button" id="loadPickupButton">設定読込</button>
+            </div>
 
-      <div class="button-row">
-        <button class="green" type="button" id="savePickupButton">取り置き設定を保存</button>
-      </div>
+            <label>定休日</label>
+            <div class="weekday-grid">
+              <label class="day-option"><input type="checkbox" name="closedWeekday" value="0" checked />日曜</label>
+              <label class="day-option"><input type="checkbox" name="closedWeekday" value="1" />月曜</label>
+              <label class="day-option"><input type="checkbox" name="closedWeekday" value="2" />火曜</label>
+              <label class="day-option"><input type="checkbox" name="closedWeekday" value="3" />水曜</label>
+              <label class="day-option"><input type="checkbox" name="closedWeekday" value="4" />木曜</label>
+              <label class="day-option"><input type="checkbox" name="closedWeekday" value="5" />金曜</label>
+              <label class="day-option"><input type="checkbox" name="closedWeekday" value="6" />土曜</label>
+            </div>
 
-      <div id="pickupStatus" class="status-box info">まだ読み込んでいません。</div>
-    </section>
+            <div class="form-grid four">
+              <div>
+                <label for="pickupTimesInput">受け取り可能時間</label>
+                <input id="pickupTimesInput" value="10:00,11:00,12:00,15:00,17:30" autocomplete="off" />
+              </div>
+              <div>
+                <label for="cutoffInput">当日取り置き締切</label>
+                <input id="cutoffInput" type="time" value="10:00" />
+              </div>
+              <div>
+                <label for="maxDaysAheadInput">何日先まで受付</label>
+                <input id="maxDaysAheadInput" type="number" min="1" max="62" value="7" />
+              </div>
+              <div>
+                <label for="maxOrdersInput">1日の最大取り置き件数</label>
+                <input id="maxOrdersInput" type="number" min="1" value="30" />
+              </div>
+            </div>
 
-    <section class="panel" id="productsSection">
-      <div class="panel-head">
-        <div>
-          <h2>商品管理・取り置き上限</h2>
-          <div class="small">商品ごとの取り置きON/OFF、1日上限、表示順を管理します。</div>
-        </div>
-        <button class="ghost" type="button" id="reloadProductsButton">商品を再読込</button>
-      </div>
+            <div class="button-row">
+              <button class="green" type="button" id="savePickupButton">取り置き設定を保存</button>
+              <button class="ghost" type="button" id="buildCalendarButton">2か月カレンダー作成</button>
+              <button class="ghost" type="button" id="selectObonButton">お盆例を選択</button>
+              <button class="ghost" type="button" id="selectNewYearButton">年末年始例を選択</button>
+              <button class="red" type="button" id="clearClosedDaysButton">臨時休業をクリア</button>
+            </div>
 
-      <div id="productsStatus" class="status-box info">未読込です。</div>
+            <div id="specialClosedCalendar" class="date-grid"></div>
+            <div id="specialClosedList"></div>
+            <div id="pickupStatus" class="status-box info">未読込です。</div>
+          </div>
+        </details>
 
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>表示順</th>
-              <th>商品</th>
-              <th>価格</th>
-              <th>取り置き</th>
-              <th>1日上限</th>
-              <th>メモ</th>
-              <th>操作</th>
-            </tr>
-          </thead>
-          <tbody id="productsTbody">
-            <tr><td colspan="7">未読込です。</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </section>
+        <details id="chargeSection">
+          <summary>チャージ上位オプション</summary>
+          <div class="detail-body">
+            <div class="status-box warn">チャージは通常プランの主役ではなく、常連さんが多い店舗向けの上位オプションとして見せます。本番店舗ではDEMOチャージを使わず、店頭支払い確認後の安全版手動チャージを使います。</div>
 
-    <section class="panel" id="ecoSection">
-      <div class="panel-head">
-        <div>
-          <h2>ECOレスキュー文面作成</h2>
-          <div class="small">夕方の売れ残りを、LINE公式に貼る文面として作成します。</div>
-        </div>
-      </div>
+            <div class="form-grid four">
+              <div>
+                <label for="chargeMemberInput">会員コード / LINE ID</label>
+                <input id="chargeMemberInput" placeholder="例：DEMO-BK-001 / BK-XXXXXXXX" autocomplete="off" />
+              </div>
+              <div>
+                <label for="chargeAmountInput">チャージ金額</label>
+                <input id="chargeAmountInput" type="number" min="1" step="1" value="5000" />
+              </div>
+              <div>
+                <label for="chargeProviderInput">支払い確認方法</label>
+                <select id="chargeProviderInput">
+                  <option value="store_cash">店頭現金</option>
+                  <option value="store_card">店頭カード</option>
+                  <option value="store_paypay">店頭PayPay等</option>
+                  <option value="manual_admin">管理者確認</option>
+                </select>
+              </div>
+              <div>
+                <label for="chargeMemoInput">メモ</label>
+                <input id="chargeMemoInput" value="店頭支払い確認後の手動チャージ" autocomplete="off" />
+              </div>
+            </div>
 
-      <div class="form-grid">
-        <div>
-          <label for="ecoProductInput">商品名</label>
-          <input id="ecoProductInput" value="ECOパン詰め合わせ" />
-        </div>
-        <div>
-          <label for="ecoQuantityInput">数量</label>
-          <input id="ecoQuantityInput" type="number" min="1" value="5" />
-        </div>
-        <div>
-          <label for="ecoPriceInput">価格</label>
-          <input id="ecoPriceInput" type="number" min="1" value="500" />
-        </div>
-        <div>
-          <label for="ecoTargetInput">対象</label>
-          <select id="ecoTargetInput">
-            <option value="weekday_evening">平日夕方に来られる人</option>
-            <option value="weekend_evening">土日祝夕方に来られる人</option>
-          </select>
-        </div>
-      </div>
+            <div class="button-row">
+              <button class="ghost" type="button" data-charge-demo="DEMO-BK-001">佐藤さん</button>
+              <button class="ghost" type="button" data-charge-demo="DEMO-BK-002">田中さん</button>
+              <button class="ghost" type="button" data-charge-demo="DEMO-BK-003">山本さん</button>
+              <button class="green" type="button" id="manualChargeButton">簡易チャージ実行</button>
+              <button class="blue" type="button" id="openChargeAdminButton">安全版チャージ管理を開く</button>
+            </div>
 
-      <div class="button-row">
-        <button class="green" type="button" id="createEcoButton">ECO文面を作成</button>
-        <button class="ghost" type="button" id="copyEcoButton">文面コピー</button>
-      </div>
+            <div id="manualChargeStatus" class="status-box info">必要な店舗だけに説明します。返金・取消・補正は専用の安全版チャージ管理画面を使います。</div>
+          </div>
+        </details>
 
-      <textarea id="ecoMessageBox" placeholder="ここにECOレスキュー文面が表示されます。"></textarea>
-      <div id="ecoStatus" class="status-box info">未作成です。</div>
-    </section>
+        <details id="transactionsSection">
+          <summary>決済・チャージ履歴</summary>
+          <div class="detail-body">
+            <div class="button-row">
+              <button class="ghost" type="button" id="reloadTransactionsButton">履歴再読込</button>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>日時</th>
+                    <th>種類</th>
+                    <th>会員</th>
+                    <th>金額</th>
+                    <th>残高</th>
+                    <th>メモ</th>
+                  </tr>
+                </thead>
+                <tbody id="transactionsTbody">
+                  <tr><td colspan="6">未読込です。</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </details>
 
-    <section class="panel" id="demoSection">
-      <div class="panel-head">
-        <div>
-          <h2>営業前DEMO設定</h2>
-          <div class="small">bakery_demo 専用です。本番店舗ではWorker側で拒否されます。</div>
-        </div>
-      </div>
-      <div class="button-row">
-        <button class="dark" type="button" id="demoSetupButton">営業前DEMO設定を実行</button>
-      </div>
-      <div id="demoSetupStatus" class="status-box info">本番店舗では実行しないでください。bakery_demo 以外では拒否されます。</div>
-    </section>
+        <details id="demoSection">
+          <summary>営業前DEMO設定</summary>
+          <div class="detail-body">
+            <div class="status-box warn">bakery_demo 専用です。本番店舗では拒否される設計です。商談前にサンプル会員・商品・今日の取り置きを整える用途です。</div>
+            <div class="button-row">
+              <button class="green" type="button" id="demoSetupButton">営業前DEMO設定を実行</button>
+              <button class="ghost" type="button" id="openSystemCheckButton">system-check.htmlを開く</button>
+            </div>
+            <div id="demoSetupStatus" class="status-box info">未実行です。</div>
+          </div>
+        </details>
 
-    <section class="panel" id="customersSection">
-      <div class="panel-head">
-        <div>
-          <h2>顧客一覧</h2>
-          <div class="small">本番手動チャージ時は、会員コードをコピーして使えます。</div>
-        </div>
-        <button class="ghost" type="button" id="reloadCustomersButton">再読込</button>
-      </div>
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>名前</th>
-              <th>会員コード</th>
-              <th>残高</th>
-              <th>ECO</th>
-              <th>操作</th>
-            </tr>
-          </thead>
-          <tbody id="customersTbody">
-            <tr><td colspan="5">未読込です。</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </section>
+        <details id="connectionSection">
+          <summary>初期設定・接続</summary>
+          <div class="detail-body">
+            <div class="form-grid three">
+              <div>
+                <label for="apiBaseInput">Worker API URL</label>
+                <input id="apiBaseInput" value="https://dpro-bakery-wallet-api.dpromstk2000.workers.dev" autocomplete="off" />
+              </div>
+              <div>
+                <label for="shopCodeInput">店舗コード</label>
+                <input id="shopCodeInput" value="bakery_demo" autocomplete="off" />
+              </div>
+              <div>
+                <label for="adminCodeInput">管理コード</label>
+                <input id="adminCodeInput" type="password" placeholder="管理コード" autocomplete="off" />
+              </div>
+              <div>
+                <label for="staffNameInput">担当スタッフ名</label>
+                <input id="staffNameInput" value="管理スタッフ" autocomplete="off" />
+              </div>
+            </div>
 
-    <section class="panel" id="preordersSection">
-      <div class="panel-head">
-        <div>
-          <h2>今日やること・取り置き一覧</h2>
-          <div class="small">受付済み・準備中・準備完了・受け渡し済み・キャンセルを管理します。</div>
-        </div>
-        <button class="ghost" type="button" id="reloadPreordersButton">再読込</button>
-      </div>
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>受取日</th>
-              <th>時間</th>
-              <th>名前</th>
-              <th>商品</th>
-              <th>金額</th>
-              <th>状態</th>
-              <th>操作</th>
-            </tr>
-          </thead>
-          <tbody id="preordersTbody">
-            <tr><td colspan="7">未読込です。</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </section>
+            <div class="button-row">
+              <button class="green" type="button" id="saveAdminButton">管理コードを一時保存</button>
+              <button class="blue" type="button" id="checkSafetyButton">安全チェック</button>
+              <button class="ghost" type="button" id="openProductionSetupButton">本番作成画面を開く</button>
+            </div>
 
-    <section class="panel" id="transactionsSection">
-      <div class="panel-head">
-        <div>
-          <h2>決済・チャージ履歴</h2>
-          <div class="small">残高決済・手動チャージ・DEMOチャージの履歴です。</div>
-        </div>
-        <button class="ghost" type="button" id="reloadTransactionsButton">再読込</button>
-      </div>
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>日時</th>
-              <th>種別</th>
-              <th>名前</th>
-              <th>金額</th>
-              <th>残高</th>
-              <th>メモ</th>
-            </tr>
-          </thead>
-          <tbody id="transactionsTbody">
-            <tr><td colspan="6">未読込です。</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </section>
+            <div class="button-row">
+              <span id="demoBadge" class="badge gray">未確認</span>
+            </div>
+            <div id="connectionStatus" class="status-box info">未接続です。</div>
+          </div>
+        </details>
 
-    <section class="panel" id="connectionSection">
-      <div class="panel-head">
-        <div>
-          <h2>初期設定・接続情報</h2>
-          <div class="small">通常は触りません。初回設定・接続確認・本番導入時だけ使います。</div>
-        </div>
-        <div id="demoBadge" class="badge blue">確認前</div>
-      </div>
-
-      <div class="form-grid">
-        <div>
-          <label for="apiBaseInput">Worker API URL</label>
-          <input id="apiBaseInput" value="https://dpro-bakery-wallet-api.dpromstk2000.workers.dev" autocomplete="off" />
-        </div>
-        <div>
-          <label for="shopCodeInput">店舗コード shop_code</label>
-          <input id="shopCodeInput" value="bakery_demo" autocomplete="off" />
-        </div>
-        <div>
-          <label for="adminCodeInput">管理コード</label>
-          <input id="adminCodeInput" type="password" placeholder="管理コードを入力" autocomplete="off" />
-        </div>
-        <div>
-          <label for="staffNameInput">担当スタッフ名</label>
-          <input id="staffNameInput" value="管理スタッフ" autocomplete="off" />
-        </div>
-      </div>
-
-      <div class="button-row">
-        <button class="green" type="button" id="saveAdminButton">管理コード保存</button>
-        <button class="ghost" type="button" id="checkSafetyButton">安全チェック</button>
-        <button class="ghost" type="button" id="openSystemCheckButton">system-check</button>
-        <button class="ghost" type="button" id="openProductionSetupButton">本番店舗作成</button>
-      </div>
-
-      <div id="connectionStatus" class="status-box info">未接続です。</div>
-    </section>
-
-
-    <details id="logsSection">
-      <summary>操作履歴・診断ログ</summary>
-      <div class="detail-body">
-        <div class="button-row">
-          <button class="ghost" type="button" id="reloadLogsButton">操作履歴を読む</button>
-          <button class="ghost" type="button" id="copyDiagButton">診断ログコピー</button>
-        </div>
-        <div id="logsBox" class="status-box info">未読込です。</div>
-        <div id="diagBox" class="status-box info">診断ログはここに表示されます。</div>
-      </div>
-    </details>
-
+        <details id="logsSection">
+          <summary>操作履歴・診断ログ</summary>
+          <div class="detail-body">
+            <div class="button-row">
+              <button class="ghost" type="button" id="reloadLogsButton">操作履歴を読む</button>
+              <button class="ghost" type="button" id="copyDiagButton">診断ログコピー</button>
+            </div>
+            <div id="logsBox" class="status-box info">未読込です。</div>
+            <div id="diagBox" class="status-box info">診断ログはここに表示されます。</div>
+          </div>
+        </details>
       </main>
     </div>
 
     <div class="footer">
-      DPRO SHOP / パン屋専用 左インデックス管理 / owner.html<br>
-      左インデックスで、取り置き・商品上限・ECO・顧客管理へすぐ移動できます。
+      DPROベーカリーLINE / owner.html STEP BAKERY-31A<br>
+      今日やること中心・取り置き対応・ECOレスキュー・商品上限を日常運用の主役に整理。
     </div>
   </div>
 
@@ -1151,13 +1137,11 @@
     let specialClosedDays = new Map();
     let lastEcoMessage = "";
     let diag = [];
+    let cachedData = null;
+    let showOnlyActive = true;
 
-    function clean(v) {
-      return String(v ?? "").trim();
-    }
-
-    function yen(v) {
-      return Number(v || 0).toLocaleString("ja-JP") + "円";
+    function clean(value) {
+      return String(value ?? "").trim();
     }
 
     function escapeHtml(value) {
@@ -1169,8 +1153,43 @@
         .replaceAll("'", "&#039;");
     }
 
+    function yen(value) {
+      return Number(value || 0).toLocaleString("ja-JP") + "円";
+    }
+
+    function todayJst() {
+      const now = new Date();
+      const formatter = new Intl.DateTimeFormat("en-CA", {
+        timeZone: "Asia/Tokyo",
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit"
+      });
+      return formatter.format(now);
+    }
+
+    function nowJstParts() {
+      const now = new Date();
+      const parts = new Intl.DateTimeFormat("ja-JP", {
+        timeZone: "Asia/Tokyo",
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: false
+      }).formatToParts(now);
+      const hour = Number(parts.find((p) => p.type === "hour")?.value || 0);
+      const minute = Number(parts.find((p) => p.type === "minute")?.value || 0);
+      return { hour, minute, total: hour * 60 + minute };
+    }
+
+    function timeToMinutes(value) {
+      const match = String(value || "").match(/^(\d{1,2}):(\d{2})/);
+      if (!match) return null;
+      return Number(match[1]) * 60 + Number(match[2]);
+    }
+
     function setStatus(id, message, tone = "info") {
       const el = $(id);
+      if (!el) return;
       el.className = "status-box " + tone;
       el.textContent = message;
     }
@@ -1182,50 +1201,61 @@
         data: data || null
       };
       diag.unshift(line);
-      $("diagBox").textContent = JSON.stringify(diag.slice(0, 20), null, 2);
-    }
-
-    function apiBase() {
-      return clean($("apiBaseInput").value || DEFAULT_API).replace(/\/+$/, "");
-    }
-
-    function shopCode() {
-      return clean($("shopCodeInput").value || "bakery_demo");
-    }
-
-    function adminCode() {
-      return clean($("adminCodeInput").value);
-    }
-
-    function staffName() {
-      return clean($("staffNameInput").value || "管理スタッフ");
-    }
-
-    function adminStorageKey() {
-      return "DPRO_BAKERY_ADMIN_CODE_" + shopCode();
+      const box = $("diagBox");
+      if (box) box.textContent = JSON.stringify(diag.slice(0, 30), null, 2);
     }
 
     function getParam(name) {
       return new URL(location.href).searchParams.get(name);
     }
 
+    function apiBase() {
+      return clean($("apiBaseInput")?.value || DEFAULT_API).replace(/\/+$/, "");
+    }
+
+    function shopCode() {
+      return clean($("shopCodeInput")?.value || $("quickShopCodeInput")?.value || "bakery_demo");
+    }
+
+    function adminCode() {
+      return clean($("adminCodeInput")?.value || $("quickAdminCodeInput")?.value || "");
+    }
+
+    function staffName() {
+      return clean($("staffNameInput")?.value || $("quickStaffNameInput")?.value || "管理スタッフ");
+    }
+
+    function adminStorageKey() {
+      return "DPRO_BAKERY_ADMIN_CODE_" + shopCode();
+    }
+
     function pageUrl(file) {
       return `${DEFAULT_PAGES}/${file}?shop_code=${encodeURIComponent(shopCode())}&api=${encodeURIComponent(apiBase())}`;
     }
 
+    function syncInputsFromQuick() {
+      if ($("quickAdminCodeInput") && $("adminCodeInput")) $("adminCodeInput").value = clean($("quickAdminCodeInput").value);
+      if ($("quickStaffNameInput") && $("staffNameInput")) $("staffNameInput").value = clean($("quickStaffNameInput").value || "管理スタッフ");
+      if ($("quickShopCodeInput") && $("shopCodeInput")) $("shopCodeInput").value = clean($("quickShopCodeInput").value || "bakery_demo");
+    }
+
+    function syncQuickFromInputs() {
+      if ($("quickAdminCodeInput") && $("adminCodeInput")) $("quickAdminCodeInput").value = clean($("adminCodeInput").value);
+      if ($("quickStaffNameInput") && $("staffNameInput")) $("quickStaffNameInput").value = clean($("staffNameInput").value || "管理スタッフ");
+      if ($("quickShopCodeInput") && $("shopCodeInput")) $("quickShopCodeInput").value = clean($("shopCodeInput").value || "bakery_demo");
+    }
+
     function authHeaders() {
-      const code = adminCode();
       return {
         "Content-Type": "application/json",
         "Accept": "application/json",
-        "X-DPRO-Admin-Code": code
+        "X-DPRO-Admin-Code": adminCode()
       };
     }
 
     async function apiFetch(path, options = {}) {
       const connector = path.includes("?") ? "&" : "?";
       const url = apiBase() + path + connector + "shop_code=" + encodeURIComponent(shopCode());
-
       const res = await fetch(url, {
         ...options,
         headers: {
@@ -1233,15 +1263,40 @@
           ...(options.auth ? authHeaders() : {})
         }
       });
-
       const text = await res.text();
       let data = null;
       try { data = text ? JSON.parse(text) : null; } catch { data = text; }
-
       if (!res.ok || data?.ok === false) {
         throw new Error(data?.message || data?.error || text || "APIエラーです。");
       }
+      return data;
+    }
 
+    async function stableAdminPost(path, body = {}) {
+      syncInputsFromQuick();
+      if (!adminCode()) throw new Error("管理コードを入力してください。");
+      const connector = path.includes("?") ? "&" : "?";
+      const url = apiBase() + path + connector + "shop_code=" + encodeURIComponent(shopCode());
+      const res = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "text/plain;charset=utf-8",
+          "Accept": "application/json"
+        },
+        body: JSON.stringify({
+          shop_code: shopCode(),
+          admin_code: adminCode(),
+          admin_token: adminCode(),
+          staff_name: staffName(),
+          ...body
+        })
+      });
+      const text = await res.text();
+      let data = null;
+      try { data = text ? JSON.parse(text) : null; } catch { data = text; }
+      if (!res.ok || data?.ok === false) {
+        throw new Error(data?.message || data?.error || text || "APIエラーです。");
+      }
       return data;
     }
 
@@ -1263,209 +1318,57 @@
     }
 
     function saveAdminCode() {
+      syncInputsFromQuick();
       sessionStorage.setItem(adminStorageKey(), adminCode());
-      setStatus("connectionStatus", "管理コードを保存しました。", "ok");
+      setStatus("quickStartStatus", "管理コードをこのタブ内に一時保存しました。", "ok");
+      setStatus("connectionStatus", "管理コードをこのタブ内に一時保存しました。", "ok");
     }
 
     function loadInitialParams() {
       const api = getParam("api");
-      const shop = getParam("shop_code");
-      if (api) $("apiBaseInput").value = api;
-      if (shop) $("shopCodeInput").value = shop;
-
+      const shop = getParam("shop_code") || getParam("shop");
+      if (api && $("apiBaseInput")) $("apiBaseInput").value = api;
+      if (shop) {
+        if ($("shopCodeInput")) $("shopCodeInput").value = shop;
+        if ($("quickShopCodeInput")) $("quickShopCodeInput").value = shop;
+      }
       const stored = sessionStorage.getItem(adminStorageKey());
       if (stored) {
-        $("adminCodeInput").value = stored;
+        if ($("adminCodeInput")) $("adminCodeInput").value = stored;
         if ($("quickAdminCodeInput")) $("quickAdminCodeInput").value = stored;
       }
+      syncQuickFromInputs();
     }
 
-    async function checkSafety() {
-      try {
-        if (!adminCode()) {
-          setStatus("connectionStatus", "管理コードを入力してください。", "warn");
-          return;
-        }
-
-        const data = await apiFetch("/api/admin/safety-check", { auth: true });
-        const isDemo = !!data.is_demo;
-
-        $("demoBadge").className = "badge " + (isDemo ? "green" : "red");
-        $("demoBadge").textContent = isDemo ? "DEMO店舗" : "本番店舗";
-
-        setStatus(
-          "connectionStatus",
-          JSON.stringify(data, null, 2),
-          isDemo ? "ok" : "warn"
-        );
-
-        logDiag("安全チェックOK", data);
-      } catch (e) {
-        setStatus("connectionStatus", e.message, "ng");
-        logDiag("安全チェックNG", { error: e.message });
-      }
+    async function loadStableAdminData(force = false) {
+      if (cachedData && !force) return cachedData;
+      const data = await stableAdminPost("/api/simple/admin-check", {
+        action: "read-check",
+        date: todayJst()
+      });
+      cachedData = data;
+      return data;
     }
 
-    async function loadSummary() {
-      try {
-        const data = await apiFetch("/api/admin/owner-summary", { auth: true });
-
-        $("cardCustomers").textContent = data.customers?.active ?? "-";
-        $("cardCharge").textContent = yen(data.wallet?.today_charge_amount);
-        $("cardPayment").textContent = yen(data.wallet?.today_payment_amount);
-        $("cardBalance").textContent = yen(data.wallet?.total_unused_balance);
-        $("cardPreorders").textContent = data.preorders?.today_count ?? "-";
-
-        setStatus("summaryStatus", "今日の状況を読み込みました。", "ok");
-        logDiag("サマリー読込OK", data);
-      } catch (e) {
-        setStatus("summaryStatus", e.message, "ng");
-        logDiag("サマリー読込NG", { error: e.message });
-      }
+    function getPreorderRows(data = cachedData) {
+      return data?.preorders?.rows || data?.preorders || [];
     }
 
-    async function loadCustomers() {
-      try {
-        const data = await apiFetch("/api/admin/customers?limit=100", { auth: true });
-        const rows = data.customers || [];
-
-        $("customersTbody").innerHTML = rows.length ? rows.map((c) => `
-          <tr>
-            <td>${escapeHtml(c.customer_name || c.line_display_name || "お客様")}</td>
-            <td class="mono">${escapeHtml(c.member_code || "")}</td>
-            <td>${yen(c.balance)}</td>
-            <td>${escapeHtml(c.eco_rescue_ok || "")}</td>
-            <td>
-              <button class="ghost" type="button" data-member-copy="${escapeHtml(c.member_code || "")}">会員コードコピー</button>
-              <button class="ghost" type="button" data-member-charge="${escapeHtml(c.member_code || "")}">チャージに使う</button>
-            </td>
-          </tr>
-        `).join("") : `<tr><td colspan="5">顧客がありません。</td></tr>`;
-
-        document.querySelectorAll("[data-member-copy]").forEach((button) => {
-          button.addEventListener("click", async () => {
-            await copyText(button.getAttribute("data-member-copy"));
-            setStatus("connectionStatus", "会員コードをコピーしました。", "ok");
-          });
-        });
-
-        document.querySelectorAll("[data-member-charge]").forEach((button) => {
-          button.addEventListener("click", () => {
-            $("chargeMemberInput").value = button.getAttribute("data-member-charge") || "";
-            setStatus("manualChargeStatus", "手動チャージ欄に会員コードを入れました。", "ok");
-            window.scrollTo({ top: $("manualChargeStatus").getBoundingClientRect().top + window.scrollY - 160, behavior: "smooth" });
-          });
-        });
-
-        logDiag("顧客一覧読込OK", { count: rows.length });
-      } catch (e) {
-        $("customersTbody").innerHTML = `<tr><td colspan="5">${escapeHtml(e.message)}</td></tr>`;
-        logDiag("顧客一覧読込NG", { error: e.message });
-      }
+    function getProductRows(data = cachedData) {
+      return data?.products?.rows || data?.products || [];
     }
 
-    async function loadTransactions() {
-      try {
-        const data = await apiFetch("/api/admin/transactions?limit=80", { auth: true });
-        const rows = data.transactions || [];
-
-        $("transactionsTbody").innerHTML = rows.length ? rows.map((t) => `
-          <tr>
-            <td>${escapeHtml(formatDateTime(t.created_at))}</td>
-            <td><span class="pill">${escapeHtml(t.type || t.transaction_type || "")}</span></td>
-            <td>${escapeHtml(t.customer_name || t.member_code || "")}</td>
-            <td>${yen(t.amount)}</td>
-            <td>${yen(t.balance_after)}</td>
-            <td>${escapeHtml(t.memo || t.source || "")}</td>
-          </tr>
-        `).join("") : `<tr><td colspan="6">履歴がありません。</td></tr>`;
-
-        logDiag("決済履歴読込OK", { count: rows.length });
-      } catch (e) {
-        $("transactionsTbody").innerHTML = `<tr><td colspan="6">${escapeHtml(e.message)}</td></tr>`;
-        logDiag("決済履歴読込NG", { error: e.message });
-      }
+    function getCustomerRows(data = cachedData) {
+      return data?.customers?.rows || data?.customers?.sample || [];
     }
 
-    async function loadProducts() {
-      try {
-        const data = await apiFetch("/api/admin/products", { auth: true });
-        const rows = data.products || [];
-
-        $("productsTbody").innerHTML = rows.length ? rows.map((p) => {
-          const key = p.product_code || p.id;
-          return `
-            <tr>
-              <td><input style="min-width:76px;" id="prod_order_${escapeHtml(key)}" type="number" value="${escapeHtml(p.display_order ?? 100)}"></td>
-              <td>
-                <strong>${escapeHtml(p.product_name || "-")}</strong>
-                <div class="small">${escapeHtml(p.product_code || "")}</div>
-                <div class="small">${escapeHtml(p.description || "")}</div>
-              </td>
-              <td>
-                <input style="min-width:110px;" id="prod_price_${escapeHtml(key)}" type="number" min="0" value="${escapeHtml(p.preorder_price || p.price || 0)}">
-              </td>
-              <td>
-                <label class="day-option" style="display:inline-flex;">
-                  <input id="prod_preorder_${escapeHtml(key)}" type="checkbox" ${p.is_preorder_available !== false ? "checked" : ""}>
-                  受付する
-                </label>
-              </td>
-              <td>
-                <input style="min-width:100px;" id="prod_limit_${escapeHtml(key)}" type="number" min="0" placeholder="無制限" value="${escapeHtml(p.daily_preorder_limit ?? "")}">
-              </td>
-              <td>
-                <input style="min-width:180px;" id="prod_note_${escapeHtml(key)}" value="${escapeHtml(p.preorder_admin_note || "")}">
-              </td>
-              <td>
-                <button class="green" type="button" data-product-save="${escapeHtml(key)}">保存</button>
-              </td>
-            </tr>
-          `;
-        }).join("") : `<tr><td colspan="7">商品がありません。</td></tr>`;
-
-        document.querySelectorAll("[data-product-save]").forEach((button) => {
-          button.addEventListener("click", () => saveProduct(button.getAttribute("data-product-save")));
-        });
-
-        setStatus("productsStatus", `商品を${rows.length}件読み込みました。`, "ok");
-        logDiag("商品一覧読込OK", { count: rows.length });
-      } catch (e) {
-        $("productsTbody").innerHTML = `<tr><td colspan="7">${escapeHtml(e.message)}</td></tr>`;
-        setStatus("productsStatus", e.message, "ng");
-        logDiag("商品一覧読込NG", { error: e.message });
-      }
-    }
-
-    async function saveProduct(key) {
-      try {
-        const body = {
-          product_code: key,
-          preorder_price: Number($("prod_price_" + key)?.value || 0),
-          is_preorder_available: $("prod_preorder_" + key)?.checked === true,
-          daily_preorder_limit: $("prod_limit_" + key)?.value || "",
-          display_order: Number($("prod_order_" + key)?.value || 100),
-          preorder_admin_note: $("prod_note_" + key)?.value || "",
-          staff_name: "管理スタッフ"
-        };
-
-        const data = await apiFetch("/api/admin/products/update", {
-          method: "POST",
-          auth: true,
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(body)
-        });
-
-        setStatus("productsStatus", data.message || "商品設定を保存しました。", "ok");
-        await loadProducts();
-      } catch (e) {
-        setStatus("productsStatus", e.message || "商品設定の保存に失敗しました。", "ng");
-      }
+    function getTransactionRows(data = cachedData) {
+      return data?.transactions?.rows || data?.transactions || [];
     }
 
     function statusLabel(status) {
       const map = {
-        pending: "受付済み",
+        pending: "未確認",
         preparing: "準備中",
         ready: "準備完了",
         picked_up: "受け渡し済み",
@@ -1475,43 +1378,88 @@
       return map[status] || status || "-";
     }
 
-    function preorderActionButtons(p) {
-      const id = p.id;
-      const current = p.status || "pending";
-      const actions = [
-        ["preparing", "準備中"],
-        ["ready", "準備完了"],
-        ["picked_up", "受け渡し済み"],
-        ["cancelled", "キャンセル"],
-        ["no_show", "未受取"]
-      ].filter(([status]) => status !== current);
+    function statusPillClass(status) {
+      if (status === "pending") return "pill red";
+      if (status === "preparing") return "pill blue";
+      if (status === "ready") return "pill green";
+      if (status === "picked_up") return "pill gray";
+      if (status === "cancelled" || status === "no_show") return "pill red";
+      return "pill";
+    }
 
-      return actions.map(([status, label]) =>
-        `<button class="ghost" type="button" data-preorder-id="${escapeHtml(id)}" data-preorder-status="${escapeHtml(status)}">${escapeHtml(label)}</button>`
-      ).join("");
+    function itemText(preorder) {
+      const items = Array.isArray(preorder.items) ? preorder.items : [];
+      if (!items.length) return clean(preorder.item_text || preorder.memo || "商品未設定");
+      return items.map((item) => {
+        const name = item.product_name || item.name || item.product_code || item.code || "商品";
+        const qty = item.quantity || item.qty || 1;
+        return `${name} × ${qty}`;
+      }).join(" / ");
+    }
+
+    function isDoneStatus(status) {
+      return ["picked_up", "cancelled", "no_show"].includes(status);
+    }
+
+    function isTodayPreorder(preorder) {
+      return !preorder.pickup_date || preorder.pickup_date === todayJst();
+    }
+
+    function isPastPickup(preorder) {
+      if (!isTodayPreorder(preorder)) return false;
+      const minutes = timeToMinutes(preorder.pickup_time);
+      if (minutes === null) return false;
+      return minutes + 20 < nowJstParts().total;
+    }
+
+    function preorderLineMessage(preorder, type = "ready") {
+      const customer = preorder.customer_name || "お客様";
+      const shop = "DPROベーカリー";
+      const pickup = `${preorder.pickup_date || todayJst()} ${preorder.pickup_time || ""}`.trim();
+      const items = itemText(preorder);
+      if (type === "preparing") {
+        return `${customer} 様\n${shop}です。\nご注文のパンを確認しました。\n\n内容：${items}\n受け取り予定：${pickup}\n\n準備ができましたら、あらためてご連絡します。`;
+      }
+      if (type === "ready") {
+        return `${customer} 様\n${shop}です。\nご注文のパンの準備ができました。\n\n内容：${items}\n受け取り予定：${pickup}\n\nご来店をお待ちしております。`;
+      }
+      if (type === "remind") {
+        return `${customer} 様\n${shop}です。\n本日お取り置きのパンについてご連絡です。\n\n内容：${items}\n受け取り予定：${pickup}\n\nご都合が変わる場合は、お早めにお知らせください。`;
+      }
+      return `${customer} 様\n${shop}です。\nお取り置き内容のご連絡です。\n\n内容：${items}\n受け取り予定：${pickup}`;
+    }
+
+    function preorderActionButtons(preorder) {
+      const id = preorder.id;
+      const status = preorder.status || "pending";
+      const actions = [];
+      if (status !== "preparing" && !isDoneStatus(status)) actions.push(["preparing", "準備中"]);
+      if (status !== "ready" && !isDoneStatus(status)) actions.push(["ready", "準備完了"]);
+      if (status !== "picked_up") actions.push(["picked_up", "受け渡し済み"]);
+      if (status !== "no_show") actions.push(["no_show", "未受取"]);
+      if (status !== "cancelled") actions.push(["cancelled", "取消"]);
+      const statusButtons = actions.map(([nextStatus, label]) => {
+        const cls = nextStatus === "ready" ? "green" : nextStatus === "picked_up" ? "dark" : nextStatus === "cancelled" || nextStatus === "no_show" ? "red" : "ghost";
+        return `<button class="${cls}" type="button" data-preorder-id="${escapeHtml(id)}" data-preorder-status="${escapeHtml(nextStatus)}">${escapeHtml(label)}</button>`;
+      }).join("");
+      return `${statusButtons}<button class="blue" type="button" data-copy-line="${escapeHtml(id)}">LINE文面</button>`;
     }
 
     async function changePreorderStatus(preorderId, status) {
       try {
         const label = statusLabel(status);
         if (!confirm(`取り置きステータスを「${label}」に変更しますか？`)) return;
-
-        const data = await apiFetch("/api/admin/preorders/status", {
-          method: "POST",
-          auth: true,
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            preorder_id: preorderId,
-            status,
-            staff_name: "管理スタッフ",
-            memo: "owner.html STEP BAKERY-18から更新"
-          })
+        const data = await stableAdminPost("/api/simple/preorder-status", {
+          preorder_id: preorderId,
+          status,
+          memo: "owner.html STEP BAKERY-31A 今日やること画面から更新"
         });
-
+        cachedData = null;
+        setStatus("preordersStatus", data.message || "取り置きステータスを更新しました。", "ok");
         setStatus("summaryStatus", data.message || "取り置きステータスを更新しました。", "ok");
-        await Promise.allSettled([loadPreorders(), loadSummary()]);
+        await loadAll(true);
       } catch (e) {
-        setStatus("summaryStatus", e.message || "ステータス更新に失敗しました。", "ng");
+        setStatus("preordersStatus", e.message || "ステータス更新に失敗しました。", "ng");
       }
     }
 
@@ -1521,57 +1469,306 @@
           changePreorderStatus(button.getAttribute("data-preorder-id"), button.getAttribute("data-preorder-status"));
         });
       });
+      document.querySelectorAll("[data-copy-line]").forEach((button) => {
+        button.addEventListener("click", async () => {
+          const id = button.getAttribute("data-copy-line");
+          const preorder = getPreorderRows().find((p) => String(p.id) === String(id));
+          if (!preorder) return;
+          const message = preorderLineMessage(preorder, preorder.status === "ready" ? "ready" : "remind");
+          await copyText(message);
+          setStatus("preordersStatus", "LINE送信用文面をコピーしました。", "ok");
+        });
+      });
     }
 
-    async function loadPreorders() {
+    function renderTodayTasks(rows) {
+      const todayRows = rows.filter(isTodayPreorder);
+      const pending = todayRows.filter((p) => (p.status || "pending") === "pending");
+      const preparing = todayRows.filter((p) => (p.status || "") === "preparing");
+      const ready = todayRows.filter((p) => (p.status || "") === "ready");
+      const late = todayRows.filter((p) => !isDoneStatus(p.status || "pending") && isPastPickup(p));
+      const active = todayRows.filter((p) => !isDoneStatus(p.status || "pending"));
+      const hour = nowJstParts().hour;
+      const ecoSignal = hour >= 15 ? "確認" : "夕方";
+
+      $("cardPending").textContent = pending.length;
+      $("cardPreparing").textContent = preparing.length;
+      $("cardReady").textContent = ready.length;
+      $("cardPreorders").textContent = todayRows.length;
+      $("cardEcoSignal").textContent = ecoSignal;
+
+      const tasks = [];
+      tasks.push({
+        title: "未確認の取り置き",
+        count: pending.length,
+        body: pending.length ? "まず内容を確認し、作り始めるものは「準備中」にします。" : "未確認の取り置きはありません。",
+        strong: pending.length > 0,
+        href: "#preordersSection"
+      });
+      tasks.push({
+        title: "準備中の商品",
+        count: preparing.length,
+        body: preparing.length ? "準備ができたら「準備完了」にして、必要ならLINE文面をコピーします。" : "準備中の商品はありません。",
+        strong: preparing.length > 0,
+        href: "#preordersSection"
+      });
+      tasks.push({
+        title: "受け渡し待ち",
+        count: ready.length,
+        body: ready.length ? "来店時に「受け渡し済み」を押します。" : "受け渡し待ちはありません。",
+        strong: ready.length > 0,
+        href: "#preordersSection"
+      });
+      tasks.push({
+        title: "受け取り時間を過ぎた可能性",
+        count: late.length,
+        body: late.length ? "未受取またはリマインド文面コピーを確認してください。" : "大きな遅れはありません。",
+        strong: late.length > 0,
+        href: "#preordersSection"
+      });
+      tasks.push({
+        title: "夕方のECOレスキュー",
+        count: hour >= 15 ? "!" : "-",
+        body: hour >= 15 ? "夕方の在庫状況を見て、ECO文面を作成できます。" : "15時以降に在庫が多ければECO文面を作成します。",
+        strong: hour >= 15,
+        href: "#ecoSection"
+      });
+      tasks.push({
+        title: "今日の未完了合計",
+        count: active.length,
+        body: active.length ? "未完了の取り置きをスタッフ画面でも確認できます。" : "今日の取り置き対応は完了しています。",
+        strong: active.length > 0,
+        href: "#staffSection"
+      });
+
+      $("todoBoard").innerHTML = tasks.map((task) => `
+        <a class="task-card ${task.strong ? "strong" : ""}" href="${task.href}" style="text-decoration:none;color:inherit;">
+          <div class="task-title"><span>${escapeHtml(task.title)}</span><span class="task-count">${escapeHtml(task.count)}</span></div>
+          <div class="task-body">${escapeHtml(task.body)}</div>
+        </a>
+      `).join("");
+    }
+
+    function renderPreorders(rows = getPreorderRows()) {
+      const todayRows = rows.filter(isTodayPreorder);
+      const displayRows = showOnlyActive ? todayRows.filter((p) => !isDoneStatus(p.status || "pending")) : todayRows;
+      const sorted = [...displayRows].sort((a, b) => String(a.pickup_time || "").localeCompare(String(b.pickup_time || "")));
+      $("preordersTbody").innerHTML = sorted.length ? sorted.map((p) => {
+        const status = p.status || "pending";
+        const opacity = isDoneStatus(status) ? "opacity:.62;" : "";
+        const late = !isDoneStatus(status) && isPastPickup(p);
+        return `
+          <tr style="${opacity}">
+            <td>
+              <strong>${escapeHtml(p.pickup_time || "")}</strong>
+              <div class="small">${escapeHtml(p.pickup_date || todayJst())}</div>
+              ${late ? `<div class="pill red">時間確認</div>` : ""}
+            </td>
+            <td>
+              <strong>${escapeHtml(p.customer_name || p.member_code || "お客様")}</strong>
+              <div class="small mono">${escapeHtml(p.member_code || "")}</div>
+            </td>
+            <td>${escapeHtml(itemText(p))}</td>
+            <td>${yen(p.total_amount)}</td>
+            <td><span class="${statusPillClass(status)}">${escapeHtml(statusLabel(status))}</span></td>
+            <td><div class="mini-actions">${preorderActionButtons(p)}</div></td>
+          </tr>
+        `;
+      }).join("") : `<tr><td colspan="6">今日の取り置きはありません。</td></tr>`;
+      bindPreorderActionButtons();
+      setStatus("preordersStatus", `${showOnlyActive ? "未完了" : "全件"}の今日の取り置きを${sorted.length}件表示しています。`, "ok");
+    }
+
+    function renderProducts(rows = getProductRows()) {
+      $("cardProducts").textContent = rows.length;
+      $("productsTbody").innerHTML = rows.length ? rows.map((p) => {
+        const key = p.product_code || p.id;
+        return `
+          <tr>
+            <td><input class="mono" style="min-width:76px;" id="prod_order_${escapeHtml(key)}" type="number" value="${escapeHtml(p.display_order ?? 100)}"></td>
+            <td>
+              <strong>${escapeHtml(p.product_name || "-")}</strong>
+              <div class="small mono">${escapeHtml(p.product_code || "")}</div>
+              <div class="small">${escapeHtml(p.description || "")}</div>
+            </td>
+            <td><input style="min-width:110px;" id="prod_price_${escapeHtml(key)}" type="number" min="0" value="${escapeHtml(p.preorder_price || p.price || 0)}"></td>
+            <td>
+              <label class="day-option" style="display:inline-flex;">
+                <input id="prod_preorder_${escapeHtml(key)}" type="checkbox" ${p.is_preorder_available !== false ? "checked" : ""}>受付
+              </label>
+            </td>
+            <td><input style="min-width:100px;" id="prod_limit_${escapeHtml(key)}" type="number" min="0" placeholder="無制限" value="${escapeHtml(p.daily_preorder_limit ?? "")}"></td>
+            <td><input style="min-width:180px;" id="prod_note_${escapeHtml(key)}" value="${escapeHtml(p.preorder_admin_note || "")}"></td>
+            <td><button class="green" type="button" data-product-save="${escapeHtml(key)}">保存</button></td>
+          </tr>
+        `;
+      }).join("") : `<tr><td colspan="7">商品がありません。</td></tr>`;
+      document.querySelectorAll("[data-product-save]").forEach((button) => {
+        button.addEventListener("click", () => saveProduct(button.getAttribute("data-product-save")));
+      });
+      setStatus("productsStatus", `商品を${rows.length}件読み込みました。`, "ok");
+    }
+
+    async function saveProduct(key) {
       try {
-        const data = await apiFetch("/api/admin/preorders?limit=80", { auth: true });
-        const rows = data.preorders || [];
-
-        $("preordersTbody").innerHTML = rows.length ? rows.map((p) => {
-          const itemText = Array.isArray(p.items)
-            ? p.items.map((i) => `${i.product_name || i.name || i.product_code || "商品"} × ${i.quantity || i.qty || 1}`).join(" / ")
-            : JSON.stringify(p.items || "");
-
-          const status = p.status || "pending";
-          const isDone = ["picked_up", "cancelled", "no_show"].includes(status);
-
-          return `
-            <tr style="${isDone ? "opacity:.62;" : ""}">
-              <td>${escapeHtml(p.pickup_date || "")}</td>
-              <td>${escapeHtml(p.pickup_time || "")}</td>
-              <td>${escapeHtml(p.customer_name || p.member_code || "")}</td>
-              <td>${escapeHtml(itemText)}</td>
-              <td>${yen(p.total_amount)}</td>
-              <td><span class="pill">${escapeHtml(statusLabel(status))}</span></td>
-              <td><div class="button-row" style="margin-top:0;">${preorderActionButtons(p)}</div></td>
-            </tr>
-          `;
-        }).join("") : `<tr><td colspan="7">取り置き予約がありません。</td></tr>`;
-
-        bindPreorderActionButtons();
-        logDiag("取り置き一覧読込OK", { count: rows.length });
+        const data = await stableAdminPost("/api/simple/product-update", {
+          product_code: key,
+          preorder_price: Number($("prod_price_" + key)?.value || 0),
+          is_preorder_available: $("prod_preorder_" + key)?.checked === true,
+          daily_preorder_limit: $("prod_limit_" + key)?.value || "",
+          display_order: Number($("prod_order_" + key)?.value || 100),
+          preorder_admin_note: $("prod_note_" + key)?.value || "",
+          staff_name: staffName()
+        });
+        cachedData = null;
+        setStatus("productsStatus", data.message || "商品設定を保存しました。", "ok");
+        await loadAll(true);
       } catch (e) {
-        $("preordersTbody").innerHTML = `<tr><td colspan="7">${escapeHtml(e.message)}</td></tr>`;
-        logDiag("取り置き一覧読込NG", { error: e.message });
+        setStatus("productsStatus", e.message || "商品設定の保存に失敗しました。", "ng");
+      }
+    }
+
+    function renderCustomers(rows = getCustomerRows()) {
+      $("customersTbody").innerHTML = rows.length ? rows.map((c) => `
+        <tr>
+          <td>${escapeHtml(c.customer_name || c.line_display_name || "お客様")}</td>
+          <td class="mono">${escapeHtml(c.member_code || "")}</td>
+          <td>${yen(c.balance ?? c.total_balance)}</td>
+          <td>${escapeHtml(c.eco_rescue_ok || c.eco_notify_enabled || "")}</td>
+          <td>
+            <div class="mini-actions">
+              <button class="ghost" type="button" data-member-copy="${escapeHtml(c.member_code || "")}">会員コードコピー</button>
+              <button class="ghost" type="button" data-member-charge="${escapeHtml(c.member_code || "")}">チャージ欄へ</button>
+            </div>
+          </td>
+        </tr>
+      `).join("") : `<tr><td colspan="5">顧客がありません。</td></tr>`;
+
+      document.querySelectorAll("[data-member-copy]").forEach((button) => {
+        button.addEventListener("click", async () => {
+          await copyText(button.getAttribute("data-member-copy"));
+          setStatus("connectionStatus", "会員コードをコピーしました。", "ok");
+        });
+      });
+
+      document.querySelectorAll("[data-member-charge]").forEach((button) => {
+        button.addEventListener("click", () => {
+          $("chargeMemberInput").value = button.getAttribute("data-member-charge") || "";
+          setStatus("manualChargeStatus", "手動チャージ欄に会員コードを入れました。", "ok");
+          location.hash = "#chargeSection";
+        });
+      });
+    }
+
+    function renderTransactions(rows = getTransactionRows()) {
+      $("transactionsTbody").innerHTML = rows.length ? rows.map((t) => `
+        <tr>
+          <td>${escapeHtml(formatDateTime(t.created_at))}</td>
+          <td><span class="pill gray">${escapeHtml(t.type || t.transaction_type || "")}</span></td>
+          <td>${escapeHtml(t.customer_name || t.member_code || "")}</td>
+          <td>${yen(t.amount)}</td>
+          <td>${yen(t.balance_after)}</td>
+          <td>${escapeHtml(t.memo || t.source || "")}</td>
+        </tr>
+      `).join("") : `<tr><td colspan="6">履歴がありません。</td></tr>`;
+    }
+
+    function renderSummary(data) {
+      const customers = data.customers?.active ?? data.customers?.count ?? getCustomerRows(data).length;
+      const preorders = data.summary?.preorders?.today_count ?? data.preorders?.count ?? getPreorderRows(data).filter(isTodayPreorder).length;
+      const charge = data.summary?.wallet?.today_charge_amount ?? data.wallet?.today_charge_amount ?? 0;
+      const payment = data.summary?.wallet?.today_payment_amount ?? data.wallet?.today_payment_amount ?? 0;
+      const balance = data.summary?.wallet?.total_unused_balance ?? data.wallet?.total_unused_balance ?? 0;
+      $("cardCustomers").textContent = customers ?? "-";
+      $("cardCharge").textContent = yen(charge);
+      $("cardPayment").textContent = yen(payment);
+      $("cardBalance").textContent = yen(balance);
+      $("cardPreorders").textContent = preorders ?? "-";
+    }
+
+    function renderAll(data) {
+      const preorders = getPreorderRows(data);
+      const products = getProductRows(data);
+      const customers = getCustomerRows(data);
+      const transactions = getTransactionRows(data);
+      renderSummary(data);
+      renderTodayTasks(preorders);
+      renderPreorders(preorders);
+      renderProducts(products);
+      renderCustomers(customers);
+      renderTransactions(transactions);
+    }
+
+    async function loadAll(force = false) {
+      try {
+        syncInputsFromQuick();
+        if (!adminCode()) {
+          setStatus("quickStartStatus", "管理コードを入力してください。", "warn");
+          return;
+        }
+        setStatus("quickStartStatus", "読み込み中です...", "info");
+        const data = await loadStableAdminData(force);
+        renderAll(data);
+        setStatus("quickStartStatus", "今日の状況を読み込みました。", "ok");
+        setStatus("summaryStatus", "今日やることを更新しました。", "ok");
+        const isDemo = data.safety?.is_demo === true;
+        $("demoBadge").className = "badge " + (isDemo ? "green" : "red");
+        $("demoBadge").textContent = isDemo ? "DEMO店舗" : "本番店舗";
+        logDiag("STEP BAKERY-31A 一括読込OK", { shop_code: shopCode(), preorders: getPreorderRows(data).length });
+      } catch (e) {
+        setStatus("quickStartStatus", e.message, "ng");
+        setStatus("summaryStatus", e.message, "ng");
+        logDiag("一括読込NG", { error: e.message });
+      }
+    }
+
+    async function loadCustomers() {
+      try {
+        const data = await loadStableAdminData(true);
+        renderSummary(data);
+        renderCustomers(getCustomerRows(data));
+        setStatus("connectionStatus", "顧客一覧を読み込みました。", "ok");
+      } catch (e) {
+        $("customersTbody").innerHTML = `<tr><td colspan="5">${escapeHtml(e.message)}</td></tr>`;
+      }
+    }
+
+    async function loadTransactions() {
+      try {
+        const data = await loadStableAdminData(true);
+        renderTransactions(getTransactionRows(data));
+      } catch (e) {
+        $("transactionsTbody").innerHTML = `<tr><td colspan="6">${escapeHtml(e.message)}</td></tr>`;
+      }
+    }
+
+    async function checkSafety() {
+      try {
+        syncInputsFromQuick();
+        if (!adminCode()) {
+          setStatus("connectionStatus", "管理コードを入力してください。", "warn");
+          return;
+        }
+        const data = await apiFetch("/api/admin/safety-check", { auth: true });
+        const isDemo = !!data.is_demo;
+        $("demoBadge").className = "badge " + (isDemo ? "green" : "red");
+        $("demoBadge").textContent = isDemo ? "DEMO店舗" : "本番店舗";
+        setStatus("connectionStatus", JSON.stringify(data, null, 2), isDemo ? "ok" : "warn");
+        logDiag("安全チェックOK", data);
+      } catch (e) {
+        setStatus("connectionStatus", e.message, "ng");
+        logDiag("安全チェックNG", { error: e.message });
       }
     }
 
     async function loadLogs() {
       try {
         const data = await apiFetch("/api/admin/audit-logs?limit=50", { auth: true });
-        $("logsBox").textContent = JSON.stringify(data.logs || [], null, 2);
+        $("logsBox").textContent = JSON.stringify(data.logs || data || [], null, 2);
         $("logsBox").className = "status-box ok";
       } catch (e) {
         setStatus("logsBox", e.message, "ng");
       }
-    }
-
-    function formatDateTime(value) {
-      if (!value) return "";
-      const d = new Date(value);
-      if (Number.isNaN(d.getTime())) return String(value);
-      return d.toLocaleString("ja-JP");
     }
 
     async function manualCharge() {
@@ -1586,223 +1783,43 @@
           setStatus("manualChargeStatus", "チャージ金額を入力してください。", "warn");
           return;
         }
-
-        const confirmed = confirm(`${member} に ${yen(amount)} を手動チャージします。\n店頭で支払い確認済みですか？`);
-        if (!confirmed) return;
-
-        $("manualChargeButton").disabled = true;
-        $("manualChargeButton").textContent = "チャージ中...";
-
+        const ok = confirm("店頭で支払い確認済みとして、手動チャージを登録しますか？");
+        if (!ok) return;
         const data = await stableAdminPost("/api/simple/charge-manual", {
           customer_key: member,
           paid_amount: amount,
-          bonus_rate: 0.05,
           provider: $("chargeProviderInput").value,
-          staff_name: staffName(),
           memo: clean($("chargeMemoInput").value),
           confirmed_payment: true,
           confirmed_policy: true,
-          source: "owner_html_step30_charge"
+          source: "owner_html_step_bakery_31a"
         });
-
-        setStatus("manualChargeStatus", JSON.stringify(data, null, 2), "ok");
-        await Promise.all([loadSummary(), loadCustomers(), loadTransactions()]);
+        cachedData = null;
+        setStatus("manualChargeStatus", data.message || "手動チャージを登録しました。", "ok");
+        await loadAll(true);
       } catch (e) {
         setStatus("manualChargeStatus", e.message, "ng");
-      } finally {
-        $("manualChargeButton").disabled = false;
-        $("manualChargeButton").textContent = "簡易チャージ実行";
       }
     }
 
-    function getClosedWeekdays() {
-      return Array.from(document.querySelectorAll('input[name="closedWeekday"]:checked'))
-        .map((el) => Number(el.value));
+    function formatDateTime(value) {
+      if (!value) return "";
+      const d = new Date(value);
+      if (Number.isNaN(d.getTime())) return String(value);
+      return d.toLocaleString("ja-JP");
     }
 
-    function setClosedWeekdays(values) {
-      const set = new Set((values || []).map(Number));
-      document.querySelectorAll('input[name="closedWeekday"]').forEach((el) => {
-        el.checked = set.has(Number(el.value));
-      });
-    }
-
-    function getPickupTimes() {
-      return clean($("pickupTimesInput").value)
-        .split(",")
-        .map((s) => s.trim())
-        .filter(Boolean);
-    }
-
-    function formatDateJst(date) {
-      return new Intl.DateTimeFormat("en-CA", {
-        timeZone: "Asia/Tokyo",
-        year: "numeric",
-        month: "2-digit",
-        day: "2-digit"
-      }).format(date);
-    }
-
-    function weekdayLabel(dateString) {
-      const labels = ["日", "月", "火", "水", "木", "金", "土"];
-      const d = new Date(dateString + "T00:00:00+09:00");
-      return labels[d.getDay()] || "";
-    }
-
-    function buildSpecialClosedCalendar() {
-      const grid = $("specialClosedCalendar");
-      const start = new Date();
-      start.setHours(0, 0, 0, 0);
-
-      const days = [];
-      for (let i = 0; i < 62; i++) {
-        const d = new Date(start.getTime());
-        d.setDate(start.getDate() + i);
-        const date = formatDateJst(d);
-        days.push({ date, day: d.getDate(), weekday: weekdayLabel(date) });
+    function ecoTemplateText(type) {
+      const product = clean($("ecoProductInput").value || "ECOパン詰め合わせ");
+      const qty = Number($("ecoQuantityInput").value || 5);
+      const price = yen($("ecoPriceInput").value || 500);
+      if (type === "rain") {
+        return `本日は雨のため、夕方のパンを少しだけECO価格でご用意しています。\n\n${product}：${qty}個限定\n価格：${price}\n\nお近くにお越しの際は、ぜひお立ち寄りください。`;
       }
-
-      grid.innerHTML = days.map((d) => {
-        const selected = specialClosedDays.has(d.date);
-        return `
-          <button class="date-btn ${selected ? "selected" : ""}" type="button" data-special-date="${escapeHtml(d.date)}">
-            <span class="date-num">${escapeHtml(String(d.day))}</span>
-            <span>${escapeHtml(d.weekday)}</span>
-          </button>
-        `;
-      }).join("");
-
-      document.querySelectorAll("[data-special-date]").forEach((button) => {
-        button.addEventListener("click", () => {
-          const date = button.getAttribute("data-special-date");
-          if (specialClosedDays.has(date)) {
-            specialClosedDays.delete(date);
-          } else {
-            specialClosedDays.set(date, "臨時休業");
-          }
-          renderSpecialClosedDays();
-          buildSpecialClosedCalendar();
-        });
-      });
-    }
-
-    function renderSpecialClosedDays() {
-      const rows = Array.from(specialClosedDays.entries()).sort((a, b) => a[0].localeCompare(b[0]));
-      const list = $("specialClosedList");
-
-      if (!rows.length) {
-        list.innerHTML = '<div class="status-box info">まだ選択していません。</div>';
-        return;
+      if (type === "closing") {
+        return `本日限定のECOレスキューのお知らせです。\n\n${product}：${qty}個限定\n価格：${price}\n\n閉店前までのお受け取りでご用意できます。食品ロス削減にご協力いただけるとうれしいです。`;
       }
-
-      list.innerHTML = rows.map(([date, reason]) => `
-        <div class="closed-row">
-          <strong>${escapeHtml(date)}（${escapeHtml(weekdayLabel(date))}）</strong>
-          <input value="${escapeHtml(reason)}" data-reason-date="${escapeHtml(date)}" />
-          <button class="ghost" type="button" data-remove-date="${escapeHtml(date)}">削除</button>
-        </div>
-      `).join("");
-
-      document.querySelectorAll("[data-reason-date]").forEach((input) => {
-        input.addEventListener("input", () => {
-          specialClosedDays.set(input.getAttribute("data-reason-date"), input.value || "臨時休業");
-        });
-      });
-
-      document.querySelectorAll("[data-remove-date]").forEach((button) => {
-        button.addEventListener("click", () => {
-          specialClosedDays.delete(button.getAttribute("data-remove-date"));
-          renderSpecialClosedDays();
-          buildSpecialClosedCalendar();
-        });
-      });
-    }
-
-    function getSpecialClosedDays() {
-      return Array.from(specialClosedDays.entries())
-        .sort((a, b) => a[0].localeCompare(b[0]))
-        .map(([date, reason]) => ({ date, reason: reason || "臨時休業" }));
-    }
-
-    function selectObonExample() {
-      const y = new Date().getFullYear();
-      [`${y}-08-13`, `${y}-08-14`, `${y}-08-15`].forEach((date) => specialClosedDays.set(date, "お盆休み"));
-      renderSpecialClosedDays();
-      buildSpecialClosedCalendar();
-    }
-
-    function selectNewYearExample() {
-      const y = new Date().getFullYear();
-      [`${y}-12-31`, `${y + 1}-01-01`, `${y + 1}-01-02`, `${y + 1}-01-03`].forEach((date) => specialClosedDays.set(date, "年末年始休み"));
-      renderSpecialClosedDays();
-      buildSpecialClosedCalendar();
-    }
-
-    async function loadPickupSettings() {
-      try {
-        const data = await apiFetch("/api/admin/pickup-settings", { auth: true });
-        const rule = data.rule || {};
-
-        if (rule.closed_weekdays) setClosedWeekdays(rule.closed_weekdays);
-        if (rule.pickup_times) $("pickupTimesInput").value = rule.pickup_times.join(",");
-        if (rule.same_day_cutoff_time) $("cutoffInput").value = String(rule.same_day_cutoff_time).slice(0, 5);
-        if (rule.max_days_ahead) $("maxDaysAheadInput").value = rule.max_days_ahead;
-        if (rule.max_orders_per_day) $("maxOrdersInput").value = rule.max_orders_per_day;
-
-        specialClosedDays.clear();
-        (data.special_closed_days || []).forEach((d) => {
-          const date = d.closed_date || d.date;
-          if (date) specialClosedDays.set(date, d.reason || "臨時休業");
-        });
-
-        renderSpecialClosedDays();
-        buildSpecialClosedCalendar();
-
-        setStatus("pickupStatus", "取り置き設定を読み込みました。", "ok");
-        logDiag("取り置き設定読込OK", data);
-      } catch (e) {
-        setStatus("pickupStatus", e.message + "\n\nWorkerをSTEP BAKERY-13版に更新してから再度試してください。", "ng");
-        logDiag("取り置き設定読込NG", { error: e.message });
-      }
-    }
-
-    async function savePickupSettings() {
-      try {
-        const payload = {
-          shop_code: shopCode(),
-          closed_weekdays: getClosedWeekdays(),
-          pickup_times: getPickupTimes(),
-          same_day_cutoff_time: clean($("cutoffInput").value || "10:00"),
-          max_days_ahead: Number($("maxDaysAheadInput").value || 7),
-          max_orders_per_day: Number($("maxOrdersInput").value || 50),
-          special_closed_days: getSpecialClosedDays(),
-          staff_name: staffName(),
-          memo: "owner.html STEP BAKERY-13から保存"
-        };
-
-        if (!payload.pickup_times.length) {
-          setStatus("pickupStatus", "受け取り可能時間を1つ以上入れてください。", "warn");
-          return;
-        }
-
-        $("savePickupButton").disabled = true;
-        $("savePickupButton").textContent = "保存中...";
-
-        const data = await apiFetch("/api/admin/pickup-settings", {
-          method: "POST",
-          auth: true,
-          body: JSON.stringify(payload)
-        });
-
-        setStatus("pickupStatus", JSON.stringify(data, null, 2), "ok");
-        logDiag("取り置き設定保存OK", data);
-      } catch (e) {
-        setStatus("pickupStatus", e.message + "\n\nWorkerをSTEP BAKERY-13版に更新してから再度試してください。", "ng");
-        logDiag("取り置き設定保存NG", { error: e.message });
-      } finally {
-        $("savePickupButton").disabled = false;
-        $("savePickupButton").textContent = "取り置き設定を保存";
-      }
+      return `いつもありがとうございます。\n本日、少しだけECOパンをご用意できます。\n\n${product}：${qty}個限定\n価格：${price}\n\nご希望の場合は、このLINEに返信してください。`;
     }
 
     async function createEcoMessage() {
@@ -1819,19 +1836,20 @@
             staff_name: staffName()
           })
         });
-
         lastEcoMessage = data.message_text || data.message || JSON.stringify(data, null, 2);
         $("ecoMessageBox").value = lastEcoMessage;
         setStatus("ecoStatus", "ECOレスキュー文面を作成しました。", "ok");
       } catch (e) {
-        setStatus("ecoStatus", e.message, "ng");
+        const fallback = ecoTemplateText("gentle");
+        lastEcoMessage = fallback;
+        $("ecoMessageBox").value = fallback;
+        setStatus("ecoStatus", "APIでの文面作成に失敗したため、画面内テンプレートを表示しました。\n" + e.message, "warn");
       }
     }
 
     async function runDemoSetup() {
       const ok = confirm("bakery_demo の営業前DEMO設定を実行します。本番店舗では拒否されます。\n実行しますか？");
       if (!ok) return;
-
       try {
         const data = await apiFetch("/api/admin/demo/sales-setup", {
           method: "POST",
@@ -1842,339 +1860,255 @@
             staff_name: staffName()
           })
         });
-
+        cachedData = null;
         setStatus("demoSetupStatus", JSON.stringify(data, null, 2), "ok");
-        await loadAll();
+        await loadAll(true);
       } catch (e) {
         setStatus("demoSetupStatus", e.message, "ng");
       }
     }
 
-
-    async function quickStart() {
-      const quickCode = $("quickAdminCodeInput") ? clean($("quickAdminCodeInput").value) : "";
-      const quickStaff = $("quickStaffNameInput") ? clean($("quickStaffNameInput").value) : "";
-
-      if (quickCode) $("adminCodeInput").value = quickCode;
-      if (quickStaff) $("staffNameInput").value = quickStaff;
-
-      if (!adminCode()) {
-        setStatus("quickStartStatus", "管理コードを入力してください。", "warn");
-        return;
-      }
-
-      saveAdminCode();
-      setStatus("quickStartStatus", "読み込み中です。", "info");
-      await loadAll();
-      setStatus("quickStartStatus", "今日の状況を読み込みました。下の取り置き対応から確認できます。", "ok");
-    }
-
-    async function loadAll() {
-      await checkSafety();
-      await Promise.allSettled([
-        loadSummary(),
-        loadCustomers(),
-        loadTransactions(),
-        loadPreorders(),
-        loadProducts(),
-        loadPickupSettings()
-      ]);
-    }
-
-    // =========================================================
-    // STEP25 安定通信版 overrides
-    // 既存の管理コードヘッダー方式ではなく、simple endpoint を使う
-    // =========================================================
-
-    async function loadSummary() {
+    async function loadPickupSettings() {
       try {
-        const data = await loadStableAdminData(true);
-
-        $("cardCustomers").textContent = data.summary?.customers?.active ?? "-";
-        $("cardCharge").textContent = yen(data.summary?.wallet?.today_charge_amount);
-        $("cardPayment").textContent = yen(data.summary?.wallet?.today_payment_amount);
-        $("cardBalance").textContent = yen(data.summary?.wallet?.total_unused_balance);
-        $("cardPreorders").textContent = data.summary?.preorders?.today_count ?? "-";
-
-        setStatus("summaryStatus", "今日の状況を読み込みました。", "ok");
-        logDiag("サマリー読込OK STEP25", data.summary);
-      } catch (e) {
-        setStatus("summaryStatus", e.message, "ng");
-        logDiag("サマリー読込NG STEP25", { error: e.message });
-      }
-    }
-
-    async function loadCustomers() {
-      try {
-        const data = await loadStableAdminData(false);
-        const rows = data.customers?.sample || [];
-
-        $("customersTbody").innerHTML = rows.length ? rows.map((c) => `
-          <tr>
-            <td>${escapeHtml(c.customer_name || c.line_display_name || "お客様")}</td>
-            <td class="mono">${escapeHtml(c.member_code || "")}</td>
-            <td>${yen(c.balance)}</td>
-            <td>${escapeHtml(c.eco_rescue_ok || "")}</td>
-            <td>
-              <button class="ghost" type="button" data-member-copy="${escapeHtml(c.member_code || "")}">会員コードコピー</button>
-              <button class="ghost" type="button" data-member-charge="${escapeHtml(c.member_code || "")}">チャージに使う</button>
-            </td>
-          </tr>
-        `).join("") : `<tr><td colspan="5">顧客がありません。</td></tr>`;
-
-        document.querySelectorAll("[data-member-copy]").forEach((button) => {
-          button.addEventListener("click", async () => {
-            await copyText(button.getAttribute("data-member-copy"));
-            setStatus("connectionStatus", "会員コードをコピーしました。", "ok");
-          });
+        const data = await apiFetch("/api/admin/pickup-settings", { auth: true });
+        const rule = data.rule || data.pickup_rule || data.settings || {};
+        const closed = Array.isArray(rule.closed_weekdays) ? rule.closed_weekdays : [];
+        document.querySelectorAll("input[name='closedWeekday']").forEach((input) => {
+          input.checked = closed.includes(Number(input.value));
         });
-
-        document.querySelectorAll("[data-member-charge]").forEach((button) => {
-          button.addEventListener("click", () => {
-            $("chargeMemberInput").value = button.getAttribute("data-member-charge") || "";
-            setStatus("manualChargeStatus", "手動チャージ欄に会員コードを入れました。", "ok");
-            window.scrollTo({ top: $("manualChargeSection").offsetTop - 20, behavior: "smooth" });
-          });
+        if (Array.isArray(rule.pickup_times)) $("pickupTimesInput").value = rule.pickup_times.join(",");
+        if (rule.cutoff_time) $("cutoffInput").value = rule.cutoff_time;
+        if (rule.max_days_ahead) $("maxDaysAheadInput").value = rule.max_days_ahead;
+        if (rule.max_orders_per_day) $("maxOrdersInput").value = rule.max_orders_per_day;
+        specialClosedDays.clear();
+        (data.special_closed_days || []).forEach((d) => {
+          const date = d.closed_date || d.date;
+          if (date) specialClosedDays.set(date, d.reason || "臨時休業");
         });
-
-        logDiag("顧客一覧読込OK STEP25", { count: rows.length });
+        renderSpecialClosedDays();
+        buildSpecialClosedCalendar();
+        setStatus("pickupStatus", "取り置き設定を読み込みました。", "ok");
       } catch (e) {
-        $("customersTbody").innerHTML = `<tr><td colspan="5">${escapeHtml(e.message)}</td></tr>`;
-        logDiag("顧客一覧読込NG STEP25", { error: e.message });
+        setStatus("pickupStatus", e.message, "ng");
       }
     }
 
-    async function loadTransactions() {
+    async function savePickupSettings() {
       try {
-        const data = await loadStableAdminData(false);
-        const rows = data.transactions?.rows || [];
-
-        $("transactionsTbody").innerHTML = rows.length ? rows.map((t) => `
-          <tr>
-            <td>${escapeHtml(formatDateTime(t.created_at))}</td>
-            <td><span class="pill">${escapeHtml(t.type || t.transaction_type || "")}</span></td>
-            <td>${escapeHtml(t.customer_name || t.member_code || "")}</td>
-            <td>${yen(t.amount)}</td>
-            <td>${yen(t.balance_after)}</td>
-            <td>${escapeHtml(t.memo || t.source || "")}</td>
-          </tr>
-        `).join("") : `<tr><td colspan="6">履歴がありません。</td></tr>`;
-
-        logDiag("決済履歴読込OK STEP25", { count: rows.length });
-      } catch (e) {
-        $("transactionsTbody").innerHTML = `<tr><td colspan="6">${escapeHtml(e.message)}</td></tr>`;
-        logDiag("決済履歴読込NG STEP25", { error: e.message });
-      }
-    }
-
-    async function loadProducts() {
-      try {
-        const data = await loadStableAdminData(false);
-        const rows = data.products?.rows || [];
-
-        $("productsTbody").innerHTML = rows.length ? rows.map((p) => {
-          const key = p.product_code || p.id;
-          return `
-            <tr>
-              <td><input style="min-width:76px;" id="prod_order_${escapeHtml(key)}" type="number" value="${escapeHtml(p.display_order ?? 100)}"></td>
-              <td>
-                <strong>${escapeHtml(p.product_name || "-")}</strong>
-                <div class="small">${escapeHtml(p.product_code || "")}</div>
-                <div class="small">${escapeHtml(p.description || "")}</div>
-              </td>
-              <td>
-                <input style="min-width:110px;" id="prod_price_${escapeHtml(key)}" type="number" min="0" value="${escapeHtml(p.preorder_price || p.price || 0)}">
-              </td>
-              <td>
-                <label class="day-option" style="display:inline-flex;">
-                  <input id="prod_preorder_${escapeHtml(key)}" type="checkbox" ${p.is_preorder_available !== false ? "checked" : ""}>
-                  受付する
-                </label>
-              </td>
-              <td>
-                <input style="min-width:100px;" id="prod_limit_${escapeHtml(key)}" type="number" min="0" placeholder="無制限" value="${escapeHtml(p.daily_preorder_limit ?? "")}">
-              </td>
-              <td>
-                <input style="min-width:180px;" id="prod_note_${escapeHtml(key)}" value="${escapeHtml(p.preorder_admin_note || "")}">
-              </td>
-              <td>
-                <button class="green" type="button" data-product-save="${escapeHtml(key)}">保存</button>
-              </td>
-            </tr>
-          `;
-        }).join("") : `<tr><td colspan="7">商品がありません。</td></tr>`;
-
-        document.querySelectorAll("[data-product-save]").forEach((button) => {
-          button.addEventListener("click", () => saveProduct(button.getAttribute("data-product-save")));
+        const payload = {
+          closed_weekdays: Array.from(document.querySelectorAll("input[name='closedWeekday']:checked")).map((input) => Number(input.value)),
+          pickup_times: clean($("pickupTimesInput").value).split(",").map((s) => clean(s)).filter(Boolean),
+          cutoff_time: clean($("cutoffInput").value || "10:00"),
+          max_days_ahead: Number($("maxDaysAheadInput").value || 7),
+          max_orders_per_day: Number($("maxOrdersInput").value || 30),
+          special_closed_days: Array.from(specialClosedDays.entries()).map(([closed_date, reason]) => ({ closed_date, reason })),
+          staff_name: staffName(),
+          memo: "owner.html STEP BAKERY-31Aから保存"
+        };
+        if (!payload.pickup_times.length) {
+          setStatus("pickupStatus", "受け取り可能時間を1つ以上入れてください。", "warn");
+          return;
+        }
+        $("savePickupButton").disabled = true;
+        $("savePickupButton").textContent = "保存中...";
+        const data = await apiFetch("/api/admin/pickup-settings", {
+          method: "POST",
+          auth: true,
+          body: JSON.stringify(payload)
         });
-
-        setStatus("productsStatus", `商品を${rows.length}件読み込みました。`, "ok");
-        logDiag("商品一覧読込OK STEP25", { count: rows.length });
+        setStatus("pickupStatus", JSON.stringify(data, null, 2), "ok");
+        logDiag("取り置き設定保存OK", data);
       } catch (e) {
-        $("productsTbody").innerHTML = `<tr><td colspan="7">${escapeHtml(e.message)}</td></tr>`;
-        setStatus("productsStatus", e.message, "ng");
-        logDiag("商品一覧読込NG STEP25", { error: e.message });
+        setStatus("pickupStatus", e.message, "ng");
+        logDiag("取り置き設定保存NG", { error: e.message });
+      } finally {
+        $("savePickupButton").disabled = false;
+        $("savePickupButton").textContent = "取り置き設定を保存";
       }
     }
 
-    async function saveProduct(key) {
-      try {
-        const data = await stableAdminPost("/api/simple/product-update", {
-          product_code: key,
-          preorder_price: Number($("prod_price_" + key)?.value || 0),
-          is_preorder_available: $("prod_preorder_" + key)?.checked === true,
-          daily_preorder_limit: $("prod_limit_" + key)?.value || "",
-          display_order: Number($("prod_order_" + key)?.value || 100),
-          preorder_admin_note: $("prod_note_" + key)?.value || "",
-          staff_name: "管理スタッフ"
+    function buildSpecialClosedCalendar() {
+      const box = $("specialClosedCalendar");
+      if (!box) return;
+      const today = new Date(todayJst() + "T00:00:00+09:00");
+      const days = [];
+      for (let i = 0; i < 62; i++) {
+        const d = new Date(today.getTime() + i * 86400000);
+        const value = new Intl.DateTimeFormat("en-CA", {
+          timeZone: "Asia/Tokyo",
+          year: "numeric",
+          month: "2-digit",
+          day: "2-digit"
+        }).format(d);
+        const label = `${d.getMonth() + 1}/${d.getDate()}`;
+        const checked = specialClosedDays.has(value);
+        days.push(`
+          <label class="day-option">
+            <input type="checkbox" data-special-day="${value}" ${checked ? "checked" : ""}>
+            ${label}
+          </label>
+        `);
+      }
+      box.innerHTML = days.join("");
+      document.querySelectorAll("[data-special-day]").forEach((input) => {
+        input.addEventListener("change", () => {
+          const date = input.getAttribute("data-special-day");
+          if (input.checked) specialClosedDays.set(date, "臨時休業");
+          else specialClosedDays.delete(date);
+          renderSpecialClosedDays();
         });
-
-        stableAdminCache = null;
-        setStatus("productsStatus", data.message || "商品設定を保存しました。", "ok");
-        await loadProducts();
-      } catch (e) {
-        setStatus("productsStatus", e.message || "商品設定の保存に失敗しました。", "ng");
-      }
+      });
     }
 
-    async function changePreorderStatus(preorderId, status) {
-      try {
-        const label = statusLabel(status);
-        if (!confirm(`取り置きステータスを「${label}」に変更しますか？`)) return;
-
-        const data = await stableAdminPost("/api/simple/preorder-status", {
-          preorder_id: preorderId,
-          status,
-          staff_name: "管理スタッフ",
-          memo: "owner.html STEP BAKERY-25から更新"
+    function renderSpecialClosedDays() {
+      const box = $("specialClosedList");
+      if (!box) return;
+      const rows = Array.from(specialClosedDays.entries()).sort(([a], [b]) => a.localeCompare(b));
+      box.innerHTML = rows.length ? rows.map(([date, reason]) => `
+        <div class="closed-row">
+          <div class="mono">${escapeHtml(date)}</div>
+          <input value="${escapeHtml(reason)}" data-closed-reason="${escapeHtml(date)}">
+          <button class="red" type="button" data-remove-closed="${escapeHtml(date)}">削除</button>
+        </div>
+      `).join("") : `<div class="status-box info">臨時休業日は未選択です。</div>`;
+      document.querySelectorAll("[data-closed-reason]").forEach((input) => {
+        input.addEventListener("change", () => specialClosedDays.set(input.getAttribute("data-closed-reason"), clean(input.value || "臨時休業")));
+      });
+      document.querySelectorAll("[data-remove-closed]").forEach((button) => {
+        button.addEventListener("click", () => {
+          specialClosedDays.delete(button.getAttribute("data-remove-closed"));
+          renderSpecialClosedDays();
+          buildSpecialClosedCalendar();
         });
-
-        stableAdminCache = null;
-        setStatus("summaryStatus", data.message || "取り置きステータスを更新しました。", "ok");
-        await Promise.allSettled([loadPreorders(), loadSummary()]);
-      } catch (e) {
-        setStatus("summaryStatus", e.message || "ステータス更新に失敗しました。", "ng");
-      }
+      });
     }
 
-    async function loadPreorders() {
-      try {
-        const data = await loadStableAdminData(true);
-        const rows = data.preorders?.rows || [];
-
-        $("preordersTbody").innerHTML = rows.length ? rows.map((p) => {
-          const itemText = Array.isArray(p.items)
-            ? p.items.map((i) => `${i.product_name || i.name || i.product_code || "商品"} × ${i.quantity || i.qty || 1}`).join(" / ")
-            : JSON.stringify(p.items || "");
-
-          const status = p.status || "pending";
-          const isDone = ["picked_up", "cancelled", "no_show"].includes(status);
-
-          return `
-            <tr style="${isDone ? "opacity:.62;" : ""}">
-              <td>${escapeHtml(p.pickup_date || "")}</td>
-              <td>${escapeHtml(p.pickup_time || "")}</td>
-              <td>${escapeHtml(p.customer_name || p.member_code || "")}</td>
-              <td>${escapeHtml(itemText)}</td>
-              <td>${yen(p.total_amount)}</td>
-              <td><span class="pill">${escapeHtml(statusLabel(status))}</span></td>
-              <td><div class="button-row" style="margin-top:0;">${preorderActionButtons(p)}</div></td>
-            </tr>
-          `;
-        }).join("") : `<tr><td colspan="7">取り置き予約がありません。</td></tr>`;
-
-        bindPreorderActionButtons();
-        logDiag("取り置き一覧読込OK STEP25", { count: rows.length });
-      } catch (e) {
-        $("preordersTbody").innerHTML = `<tr><td colspan="7">${escapeHtml(e.message)}</td></tr>`;
-        logDiag("取り置き一覧読込NG STEP25", { error: e.message });
+    function selectDateRange(startMonth, startDay, count, reason) {
+      const year = new Date().getFullYear();
+      for (let i = 0; i < count; i++) {
+        const d = new Date(Date.UTC(year, startMonth - 1, startDay + i));
+        const value = `${d.getUTCFullYear()}-${String(d.getUTCMonth() + 1).padStart(2, "0")}-${String(d.getUTCDate()).padStart(2, "0")}`;
+        specialClosedDays.set(value, reason);
       }
+      renderSpecialClosedDays();
+      buildSpecialClosedCalendar();
+    }
+
+    function copyTodaySummary() {
+      const rows = getPreorderRows().filter(isTodayPreorder).sort((a, b) => String(a.pickup_time || "").localeCompare(String(b.pickup_time || "")));
+      const text = rows.length ? rows.map((p) => {
+        return `${p.pickup_time || ""} ${p.customer_name || p.member_code || "お客様"} / ${itemText(p)} / ${statusLabel(p.status || "pending")}`;
+      }).join("\n") : "今日の取り置きはありません。";
+      return copyText(`本日の取り置き一覧\n${todayJst()}\n\n${text}`);
     }
 
     function bindEvents() {
-      $("saveAdminButton").addEventListener("click", saveAdminCode);
-      $("quickStartButton").addEventListener("click", quickStart);
-      $("quickOpenSettingsButton").addEventListener("click", () => { location.hash = "#connectionSection"; });
-      $("checkSafetyButton").addEventListener("click", checkSafety);
-      $("loadAllButton").addEventListener("click", loadAll);
-      $("reloadSummaryButton").addEventListener("click", loadSummary);
+      $("loadAllButton").addEventListener("click", () => loadAll(true));
+      $("quickStartButton").addEventListener("click", () => loadAll(true));
+      $("reloadTodoButton").addEventListener("click", () => loadAll(true));
+      $("reloadPreordersButton").addEventListener("click", () => loadAll(true));
+      $("reloadProductsButton").addEventListener("click", () => loadAll(true));
       $("reloadCustomersButton").addEventListener("click", loadCustomers);
       $("reloadTransactionsButton").addEventListener("click", loadTransactions);
-      $("reloadPreordersButton").addEventListener("click", loadPreorders);
-      $("reloadProductsButton").addEventListener("click", loadProducts);
-      $("reloadLogsButton").addEventListener("click", loadLogs);
-      $("manualChargeButton").addEventListener("click", manualCharge);
-      $("loadPickupButton").addEventListener("click", loadPickupSettings);
-      $("savePickupButton").addEventListener("click", savePickupSettings);
-      $("buildCalendarButton").addEventListener("click", buildSpecialClosedCalendar);
-      $("selectObonButton").addEventListener("click", selectObonExample);
-      $("selectNewYearButton").addEventListener("click", selectNewYearExample);
-      $("clearClosedDaysButton").addEventListener("click", () => {
-        specialClosedDays.clear();
-        renderSpecialClosedDays();
-        buildSpecialClosedCalendar();
+      $("saveQuickAdminButton").addEventListener("click", saveAdminCode);
+      $("saveAdminButton").addEventListener("click", saveAdminCode);
+      $("checkSafetyButton").addEventListener("click", checkSafety);
+      $("openConnectionButton").addEventListener("click", () => { location.hash = "#connectionSection"; $("connectionSection").open = true; });
+
+      $("filterActiveButton").addEventListener("click", () => { showOnlyActive = true; renderPreorders(); });
+      $("filterAllButton").addEventListener("click", () => { showOnlyActive = false; renderPreorders(); });
+      $("copyTodaySummaryButton").addEventListener("click", async () => {
+        await copyTodaySummary();
+        setStatus("preordersStatus", "今日の取り置き一覧をコピーしました。", "ok");
       });
+
+      $("openStaffButtonTop").addEventListener("click", () => window.open(pageUrl("staff.html"), "_blank"));
+      $("openCashierButtonTop").addEventListener("click", () => window.open(pageUrl("cashier.html"), "_blank"));
+      $("openWalletButtonTop").addEventListener("click", () => window.open(pageUrl("wallet.html"), "_blank"));
+      $("openStaffButton").addEventListener("click", () => window.open(pageUrl("staff.html"), "_blank"));
+      $("copyStaffUrlButton").addEventListener("click", async () => {
+        await copyText(pageUrl("staff.html"));
+        setStatus("staffLinkStatus", "スタッフ画面URLをコピーしました。", "ok");
+      });
+      $("openChargeAdminButton").addEventListener("click", () => window.open(pageUrl("charge-admin.html") + "&v=31a", "_blank"));
+      $("openSystemCheckButton").addEventListener("click", () => window.open(pageUrl("system-check.html"), "_blank"));
+      $("openProductionSetupButton").addEventListener("click", () => window.open(`${DEFAULT_PAGES}/production-setup.html`, "_blank"));
+
       $("createEcoButton").addEventListener("click", createEcoMessage);
       $("copyEcoButton").addEventListener("click", async () => {
         await copyText($("ecoMessageBox").value || lastEcoMessage);
         setStatus("ecoStatus", "ECOレスキュー文面をコピーしました。", "ok");
       });
+      document.querySelectorAll("[data-eco-template]").forEach((button) => {
+        button.addEventListener("click", () => {
+          const type = button.getAttribute("data-eco-template");
+          lastEcoMessage = ecoTemplateText(type);
+          $("ecoMessageBox").value = lastEcoMessage;
+          setStatus("ecoStatus", "画面内テンプレートを作成しました。", "ok");
+        });
+      });
+
+      $("manualChargeButton").addEventListener("click", manualCharge);
+      document.querySelectorAll("[data-charge-demo]").forEach((button) => {
+        button.addEventListener("click", () => {
+          $("chargeMemberInput").value = button.getAttribute("data-charge-demo");
+          setStatus("manualChargeStatus", "会員コードを入力しました。", "ok");
+        });
+      });
+
       $("demoSetupButton").addEventListener("click", runDemoSetup);
+      $("reloadLogsButton").addEventListener("click", loadLogs);
       $("copyDiagButton").addEventListener("click", async () => {
         await copyText(JSON.stringify(diag, null, 2));
         setStatus("connectionStatus", "診断ログをコピーしました。", "ok");
       });
 
-      $("openWalletButton").addEventListener("click", () => window.open(pageUrl("wallet.html"), "_blank"));
-      $("openCashierButton").addEventListener("click", () => window.open(pageUrl("cashier.html"), "_blank"));
-      $("openStaffButton").addEventListener("click", () => window.open(pageUrl("staff.html"), "_blank"));
-      $("openStaffButton2").addEventListener("click", () => window.open(pageUrl("staff.html"), "_blank"));
-      $("copyStaffUrlButton").addEventListener("click", async () => {
-        await copyText(pageUrl("staff.html"));
-        setStatus("staffLinkStatus", "スタッフ画面URLをコピーしました。", "ok");
+      $("loadPickupButton").addEventListener("click", loadPickupSettings);
+      $("savePickupButton").addEventListener("click", savePickupSettings);
+      $("buildCalendarButton").addEventListener("click", buildSpecialClosedCalendar);
+      $("selectObonButton").addEventListener("click", () => selectDateRange(8, 13, 3, "お盆休み"));
+      $("selectNewYearButton").addEventListener("click", () => {
+        const nowYear = new Date().getFullYear();
+        [
+          `${nowYear}-12-30`, `${nowYear}-12-31`, `${nowYear + 1}-01-01`, `${nowYear + 1}-01-02`, `${nowYear + 1}-01-03`
+        ].forEach((d) => specialClosedDays.set(d, "年末年始休業"));
+        renderSpecialClosedDays();
+        buildSpecialClosedCalendar();
       });
-      $("openSystemCheckButton").addEventListener("click", () => window.open(pageUrl("system-check.html"), "_blank"));
-      $("openProductionSetupButton").addEventListener("click", () => window.open(`${DEFAULT_PAGES}/production-setup.html`, "_blank"));
-      $("openChargeAdminButton").addEventListener("click", () => window.open(pageUrl("charge-admin.html") + "&v=30-charge", "_blank"));
-
-      document.querySelectorAll("[data-charge-demo]").forEach((button) => {
-        button.addEventListener("click", () => {
-          $("chargeMemberInput").value = button.getAttribute("data-charge-demo");
-        });
+      $("clearClosedDaysButton").addEventListener("click", () => {
+        specialClosedDays.clear();
+        renderSpecialClosedDays();
+        buildSpecialClosedCalendar();
       });
 
-      $("shopCodeInput").addEventListener("change", () => {
-        const stored = sessionStorage.getItem(adminStorageKey());
-        $("adminCodeInput").value = stored || "";
+      ["quickAdminCodeInput", "quickStaffNameInput", "quickShopCodeInput"].forEach((id) => {
+        $(id)?.addEventListener("change", syncInputsFromQuick);
+      });
+      ["adminCodeInput", "staffNameInput", "shopCodeInput"].forEach((id) => {
+        $(id)?.addEventListener("change", syncQuickFromInputs);
       });
     }
 
-
     function setupSideIndex() {
       const links = Array.from(document.querySelectorAll(".side-index a[href^='#']"));
-      const targets = links
-        .map((link) => document.querySelector(link.getAttribute("href")))
-        .filter(Boolean);
-
+      const targets = links.map((link) => document.querySelector(link.getAttribute("href"))).filter(Boolean);
       links.forEach((link) => {
         link.addEventListener("click", () => {
+          const target = document.querySelector(link.getAttribute("href"));
+          if (target?.tagName === "DETAILS") target.open = true;
           links.forEach((l) => l.classList.remove("active"));
           link.classList.add("active");
         });
       });
-
       const onScroll = () => {
         let current = targets[0];
         targets.forEach((target) => {
           const rect = target.getBoundingClientRect();
-          if (rect.top <= 120) current = target;
+          if (rect.top <= 130) current = target;
         });
         if (!current) return;
-        links.forEach((link) => {
-          link.classList.toggle("active", link.getAttribute("href") === "#" + current.id);
-        });
+        links.forEach((link) => link.classList.toggle("active", link.getAttribute("href") === "#" + current.id));
       };
-
       window.addEventListener("scroll", onScroll, { passive: true });
       onScroll();
     }
@@ -2185,7 +2119,7 @@
       buildSpecialClosedCalendar();
       renderSpecialClosedDays();
       setupSideIndex();
-      logDiag("owner.html initialized", { shop_code: shopCode(), api: apiBase() });
+      logDiag("owner.html STEP BAKERY-31A initialized", { shop_code: shopCode(), api: apiBase() });
     }
 
     init();
