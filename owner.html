@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>DPROベーカリーLINE | owner.html STEP BAKERY-31A</title>
+  <title>DPROベーカリーLINE | owner.html STEP BAKERY-31A-R1</title>
   <style>
     :root {
       --bg: #fff7ed;
@@ -41,8 +41,8 @@
     }
 
     .wrap {
-      width: min(1240px, calc(100% - 28px));
-      margin: 22px auto 56px;
+      width: min(1180px, calc(100% - 28px));
+      margin: 18px auto 48px;
     }
 
     .hero {
@@ -50,9 +50,9 @@
       border: 1px solid var(--line);
       border-radius: 32px;
       box-shadow: var(--shadow);
-      padding: 28px;
+      padding: 22px 24px;
       display: grid;
-      grid-template-columns: 1.2fr .8fr;
+      grid-template-columns: 1.25fr .75fr;
       gap: 22px;
       align-items: center;
       position: relative;
@@ -90,7 +90,7 @@
 
     h1 {
       margin: 12px 0 10px;
-      font-size: clamp(32px, 5vw, 56px);
+      font-size: clamp(30px, 4.2vw, 48px);
       line-height: 1.02;
       letter-spacing: -.05em;
     }
@@ -120,7 +120,7 @@
         linear-gradient(135deg, #1c1917, #431407 58%, #9a3412);
       color: #fff7ed;
       border-radius: 28px;
-      padding: 22px;
+      padding: 18px;
       box-shadow: 0 24px 70px rgba(67, 20, 7, .26);
       position: relative;
       z-index: 1;
@@ -144,7 +144,7 @@
 
     .owner-layout {
       display: grid;
-      grid-template-columns: 260px 1fr;
+      grid-template-columns: 230px 1fr;
       gap: 16px;
       align-items: start;
       margin-top: 16px;
@@ -156,8 +156,8 @@
       background: rgba(255,255,255,.94);
       border: 1px solid var(--line);
       box-shadow: 0 18px 52px rgba(120, 53, 15, .07);
-      border-radius: 24px;
-      padding: 16px;
+      border-radius: 20px;
+      padding: 12px;
       max-height: calc(100vh - 24px);
       overflow: auto;
     }
@@ -172,20 +172,20 @@
       display: block;
       color: var(--muted);
       font-weight: 850;
-      margin-bottom: 12px;
-      line-height: 1.55;
+      margin-bottom: 8px;
+      line-height: 1.45;
     }
 
-    .side-index nav { display: grid; gap: 7px; }
+    .side-index nav { display: grid; gap: 5px; }
 
     .side-index a {
       color: #44403c;
       text-decoration: none;
       border: 1px solid #ffedd5;
       background: #fffaf4;
-      border-radius: 14px;
-      padding: 10px 11px;
-      font-size: 13px;
+      border-radius: 12px;
+      padding: 8px 9px;
+      font-size: 12px;
       font-weight: 950;
     }
 
@@ -392,7 +392,7 @@
       border: 1px solid var(--line);
       border-radius: 20px;
       padding: 16px;
-      min-height: 104px;
+      min-height: 88px;
     }
 
     .card .label {
@@ -403,10 +403,16 @@
 
     .card .value {
       margin-top: 8px;
-      font-size: 30px;
+      font-size: 28px;
       font-weight: 950;
       letter-spacing: -.05em;
       line-height: 1;
+    }
+
+    .card .value.value-small {
+      font-size: 18px;
+      letter-spacing: -.02em;
+      color: #78716c;
     }
 
     .task-board {
@@ -443,6 +449,19 @@
       color: #57534e;
       font-size: 13px;
       font-weight: 850;
+    }
+
+    .task-next {
+      display: inline-flex;
+      align-items: center;
+      margin-top: 10px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: #fff;
+      border: 1px solid #fdba74;
+      color: #9a3412;
+      font-size: 12px;
+      font-weight: 950;
     }
 
     .task-count {
@@ -633,10 +652,10 @@
   <div class="wrap">
     <header class="hero">
       <div>
-        <div class="badge">STEP BAKERY-31A / 今日やること中心 owner.html</div>
+        <div class="badge">STEP BAKERY-31A-R1 / 今日やること中心 owner.html</div>
         <h1>パン屋オーナー<br>今日の管理画面</h1>
         <p class="lead">
-          毎朝まず見る画面を「今日やること」に整理しました。取り置き確認、準備完了、受け渡し、ECOレスキュー文面、商品上限を上から順番に確認できます。
+          毎朝まず見る画面を「今日やること」に整理しました。管理コード保存後は自動で読み込み、取り置き確認、準備完了、受け渡し、ECOレスキュー文面、商品上限を上から順番に確認できます。
         </p>
         <div class="button-row">
           <button class="green" type="button" id="loadAllButton">今日の状況を一括読込</button>
@@ -658,7 +677,7 @@
     <div class="owner-layout">
       <aside class="side-index" aria-label="オーナー管理メニュー">
         <div class="side-index-title">管理メニュー</div>
-        <small>営業時は上から順番に見せると分かりやすいです。チャージや診断は下部へ分離しています。</small>
+        <small>上から順番に見るだけで今日の対応が分かります。</small>
         <nav>
           <a class="nav-main" href="#startSection">① 今日の開始</a>
           <a class="nav-main" href="#todoSection">② 今日やること</a>
@@ -688,7 +707,7 @@
           <div class="panel-head">
             <div>
               <h2>① 今日の管理を開始</h2>
-              <div class="small">管理コードを入れて「今日の状況を読む」を押します。接続設定ではなく、日常運用から始める画面です。</div>
+              <div class="small">管理コードを入れて保存すると、自動で今日の状況を読み込みます。接続設定ではなく、日常運用から始める画面です。</div>
             </div>
             <div class="badge green">日常運用</div>
           </div>
@@ -696,7 +715,7 @@
           <div class="form-grid three">
             <div>
               <label for="quickAdminCodeInput">管理コード</label>
-              <input id="quickAdminCodeInput" type="password" placeholder="管理コードを入力" autocomplete="off" />
+              <input id="quickAdminCodeInput" type="password" placeholder="DEMOは1234" autocomplete="off" />
             </div>
             <div>
               <label for="quickStaffNameInput">担当スタッフ名</label>
@@ -710,11 +729,11 @@
 
           <div class="button-row">
             <button class="green" type="button" id="quickStartButton">今日の状況を読む</button>
-            <button class="ghost" type="button" id="saveQuickAdminButton">管理コードを一時保存</button>
+            <button class="ghost" type="button" id="saveQuickAdminButton">管理コードを保存して読込</button>
             <button class="ghost" type="button" id="openConnectionButton">初期設定を開く</button>
           </div>
 
-          <div id="quickStartStatus" class="status-box info">未読込です。営業デモでは、まずここに管理コードを入れて読み込みます。</div>
+          <div id="quickStartStatus" class="status-box info">まだ読み込んでいません。DEMOは管理コード 1234 を入れて「保存して読込」を押します。</div>
         </section>
 
         <section class="panel" id="todoSection">
@@ -729,34 +748,35 @@
           <div class="cards">
             <div class="card">
               <div class="label">未確認の取り置き</div>
-              <div class="value" id="cardPending">-</div>
+              <div class="value value-small" id="cardPending">未読込</div>
             </div>
             <div class="card">
               <div class="label">準備中</div>
-              <div class="value" id="cardPreparing">-</div>
+              <div class="value value-small" id="cardPreparing">未読込</div>
             </div>
             <div class="card">
               <div class="label">受け渡し待ち</div>
-              <div class="value" id="cardReady">-</div>
+              <div class="value value-small" id="cardReady">未読込</div>
             </div>
             <div class="card">
               <div class="label">今日の取り置き合計</div>
-              <div class="value" id="cardPreorders">-</div>
+              <div class="value value-small" id="cardPreorders">未読込</div>
             </div>
             <div class="card">
               <div class="label">ECO確認目安</div>
-              <div class="value" id="cardEcoSignal">-</div>
+              <div class="value value-small" id="cardEcoSignal">未読込</div>
             </div>
           </div>
 
           <div class="task-board" id="todoBoard">
             <div class="task-card strong">
-              <div class="task-title"><span>今日の状況を読み込んでください</span><span class="task-count">-</span></div>
-              <div class="task-body">管理コードを入力後、「今日の状況を読む」を押すと、ここに優先タスクが表示されます。</div>
+              <div class="task-title"><span>まだ読み込んでいません</span><span class="task-count">開始</span></div>
+              <div class="task-body">管理コードを保存すると自動で読み込み、ここに今日の優先タスクと次に押すボタンが表示されます。</div>
+              <div class="task-next">次に押す：管理コードを保存して読込</div>
             </div>
           </div>
 
-          <div id="summaryStatus" class="status-box info">まだ読み込んでいません。</div>
+          <div id="summaryStatus" class="status-box info">未読込です。読み込み後に「今日は取り置きなし」か「対応が必要」を明確に表示します。</div>
         </section>
 
         <section class="panel" id="preordersSection">
@@ -787,7 +807,7 @@
                 </tr>
               </thead>
               <tbody id="preordersTbody">
-                <tr><td colspan="6">未読込です。</td></tr>
+                <tr><td colspan="6">まだ読み込んでいません。</td></tr>
               </tbody>
             </table>
           </div>
@@ -1055,7 +1075,7 @@
                   </tr>
                 </thead>
                 <tbody id="transactionsTbody">
-                  <tr><td colspan="6">未読込です。</td></tr>
+                  <tr><td colspan="6">まだ読み込んでいません。</td></tr>
                 </tbody>
               </table>
             </div>
@@ -1124,8 +1144,8 @@
     </div>
 
     <div class="footer">
-      DPROベーカリーLINE / owner.html STEP BAKERY-31A<br>
-      今日やること中心・取り置き対応・ECOレスキュー・商品上限を日常運用の主役に整理。
+      DPROベーカリーLINE / owner.html STEP BAKERY-31A-R1<br>
+      今日やること中心・自動読込・空表示改善・ECOレスキュー・商品上限を日常運用の主役に整理。
     </div>
   </div>
 
@@ -1317,11 +1337,16 @@
       return true;
     }
 
-    function saveAdminCode() {
+    async function saveAdminCode() {
       syncInputsFromQuick();
+      if (!adminCode()) {
+        setStatus("quickStartStatus", "管理コードを入力してください。DEMOは 1234 です。", "warn");
+        return;
+      }
       sessionStorage.setItem(adminStorageKey(), adminCode());
-      setStatus("quickStartStatus", "管理コードをこのタブ内に一時保存しました。", "ok");
+      setStatus("quickStartStatus", "管理コードを保存しました。続けて今日の状況を自動で読み込みます。", "info");
       setStatus("connectionStatus", "管理コードをこのタブ内に一時保存しました。", "ok");
+      await loadAll(true);
     }
 
     function loadInitialParams() {
@@ -1452,7 +1477,7 @@
         const data = await stableAdminPost("/api/simple/preorder-status", {
           preorder_id: preorderId,
           status,
-          memo: "owner.html STEP BAKERY-31A 今日やること画面から更新"
+          memo: "owner.html STEP BAKERY-31A-R1 今日やること画面から更新"
         });
         cachedData = null;
         setStatus("preordersStatus", data.message || "取り置きステータスを更新しました。", "ok");
@@ -1489,19 +1514,41 @@
       const late = todayRows.filter((p) => !isDoneStatus(p.status || "pending") && isPastPickup(p));
       const active = todayRows.filter((p) => !isDoneStatus(p.status || "pending"));
       const hour = nowJstParts().hour;
-      const ecoSignal = hour >= 15 ? "確認" : "夕方";
+      const ecoSignal = hour >= 15 ? "ECO確認" : "15時以降";
 
+      $("cardPending").classList.remove("value-small");
+      $("cardPreparing").classList.remove("value-small");
+      $("cardReady").classList.remove("value-small");
+      $("cardPreorders").classList.remove("value-small");
+      $("cardEcoSignal").classList.remove("value-small");
       $("cardPending").textContent = pending.length;
       $("cardPreparing").textContent = preparing.length;
       $("cardReady").textContent = ready.length;
       $("cardPreorders").textContent = todayRows.length;
       $("cardEcoSignal").textContent = ecoSignal;
 
+      if (!todayRows.length) {
+        $("todoBoard").innerHTML = `
+          <a class="task-card strong" href="#productsSection" style="text-decoration:none;color:inherit;">
+            <div class="task-title"><span>今日は取り置きなし</span><span class="task-count">0</span></div>
+            <div class="task-body">取り置き対応はありません。営業デモでは、商品上限・ECOレスキュー・顧客一覧を見せると分かりやすいです。</div>
+            <div class="task-next">次に押す：商品・上限を確認</div>
+          </a>
+          <a class="task-card" href="#ecoSection" style="text-decoration:none;color:inherit;">
+            <div class="task-title"><span>夕方のECOレスキュー</span><span class="task-count">${hour >= 15 ? "確認" : "待機"}</span></div>
+            <div class="task-body">夕方の在庫が多い時だけ、LINE送信用の文面を作成してコピーできます。</div>
+            <div class="task-next">次に押す：ECO文面を作成</div>
+          </a>
+        `;
+        return;
+      }
+
       const tasks = [];
       tasks.push({
         title: "未確認の取り置き",
         count: pending.length,
         body: pending.length ? "まず内容を確認し、作り始めるものは「準備中」にします。" : "未確認の取り置きはありません。",
+        action: pending.length ? "準備中にする" : "次の確認へ",
         strong: pending.length > 0,
         href: "#preordersSection"
       });
@@ -1509,6 +1556,7 @@
         title: "準備中の商品",
         count: preparing.length,
         body: preparing.length ? "準備ができたら「準備完了」にして、必要ならLINE文面をコピーします。" : "準備中の商品はありません。",
+        action: preparing.length ? "準備完了を押す" : "次の確認へ",
         strong: preparing.length > 0,
         href: "#preordersSection"
       });
@@ -1516,6 +1564,7 @@
         title: "受け渡し待ち",
         count: ready.length,
         body: ready.length ? "来店時に「受け渡し済み」を押します。" : "受け渡し待ちはありません。",
+        action: ready.length ? "受け渡し済み" : "次の確認へ",
         strong: ready.length > 0,
         href: "#preordersSection"
       });
@@ -1523,13 +1572,15 @@
         title: "受け取り時間を過ぎた可能性",
         count: late.length,
         body: late.length ? "未受取またはリマインド文面コピーを確認してください。" : "大きな遅れはありません。",
+        action: late.length ? "LINE文面コピー" : "様子を見る",
         strong: late.length > 0,
         href: "#preordersSection"
       });
       tasks.push({
         title: "夕方のECOレスキュー",
-        count: hour >= 15 ? "!" : "-",
+        count: hour >= 15 ? "確認" : "待機",
         body: hour >= 15 ? "夕方の在庫状況を見て、ECO文面を作成できます。" : "15時以降に在庫が多ければECO文面を作成します。",
+        action: hour >= 15 ? "ECO文面作成" : "15時以降に確認",
         strong: hour >= 15,
         href: "#ecoSection"
       });
@@ -1537,6 +1588,7 @@
         title: "今日の未完了合計",
         count: active.length,
         body: active.length ? "未完了の取り置きをスタッフ画面でも確認できます。" : "今日の取り置き対応は完了しています。",
+        action: active.length ? "スタッフ画面を開く" : "完了",
         strong: active.length > 0,
         href: "#staffSection"
       });
@@ -1545,6 +1597,7 @@
         <a class="task-card ${task.strong ? "strong" : ""}" href="${task.href}" style="text-decoration:none;color:inherit;">
           <div class="task-title"><span>${escapeHtml(task.title)}</span><span class="task-count">${escapeHtml(task.count)}</span></div>
           <div class="task-body">${escapeHtml(task.body)}</div>
+          <div class="task-next">次に押す：${escapeHtml(task.action)}</div>
         </a>
       `).join("");
     }
@@ -1576,7 +1629,19 @@
         `;
       }).join("") : `<tr><td colspan="6">今日の取り置きはありません。</td></tr>`;
       bindPreorderActionButtons();
-      setStatus("preordersStatus", `${showOnlyActive ? "未完了" : "全件"}の今日の取り置きを${sorted.length}件表示しています。`, "ok");
+      setStatus("preordersStatus", sorted.length ? `${showOnlyActive ? "未完了" : "全件"}の今日の取り置きを${sorted.length}件表示しています。` : "今日の取り置きはありません。営業デモでは商品上限・ECO文面・顧客一覧を見せると分かりやすいです。", "ok");
+    }
+
+    function productAdminNote(product) {
+      const raw = clean(product.preorder_admin_note || "");
+      if (raw && !/STEP\s*BAKERY/i.test(raw)) return raw;
+      const name = clean(`${product.product_name || ""} ${product.product_code || ""} ${product.description || ""}`);
+      if (/食パン|bread|shokupan/i.test(name)) return "予約・常連向け";
+      if (/クロワッサン|croissant/i.test(name)) return "午前中の人気商品";
+      if (/サンド|sand/i.test(name)) return "ランチ前に確認";
+      if (/メロン|melon/i.test(name)) return "夕方ECO候補";
+      if (/あん|餡|anpan/i.test(name)) return "午後も売れやすい商品";
+      return "取り置きおすすめ";
     }
 
     function renderProducts(rows = getProductRows()) {
@@ -1598,7 +1663,7 @@
               </label>
             </td>
             <td><input style="min-width:100px;" id="prod_limit_${escapeHtml(key)}" type="number" min="0" placeholder="無制限" value="${escapeHtml(p.daily_preorder_limit ?? "")}"></td>
-            <td><input style="min-width:180px;" id="prod_note_${escapeHtml(key)}" value="${escapeHtml(p.preorder_admin_note || "")}"></td>
+            <td><input style="min-width:180px;" id="prod_note_${escapeHtml(key)}" value="${escapeHtml(productAdminNote(p))}"></td>
             <td><button class="green" type="button" data-product-save="${escapeHtml(key)}">保存</button></td>
           </tr>
         `;
@@ -1710,11 +1775,11 @@
         const data = await loadStableAdminData(force);
         renderAll(data);
         setStatus("quickStartStatus", "今日の状況を読み込みました。", "ok");
-        setStatus("summaryStatus", "今日やることを更新しました。", "ok");
+        setStatus("summaryStatus", getPreorderRows(data).filter(isTodayPreorder).length ? "今日やることを更新しました。必要な対応を上から確認してください。" : "今日は取り置きなしです。商品・顧客・ECO文面の確認に進めます。", "ok");
         const isDemo = data.safety?.is_demo === true;
         $("demoBadge").className = "badge " + (isDemo ? "green" : "red");
         $("demoBadge").textContent = isDemo ? "DEMO店舗" : "本番店舗";
-        logDiag("STEP BAKERY-31A 一括読込OK", { shop_code: shopCode(), preorders: getPreorderRows(data).length });
+        logDiag("STEP BAKERY-31A-R1 一括読込OK", { shop_code: shopCode(), preorders: getPreorderRows(data).length });
       } catch (e) {
         setStatus("quickStartStatus", e.message, "ng");
         setStatus("summaryStatus", e.message, "ng");
@@ -1903,7 +1968,7 @@
           max_orders_per_day: Number($("maxOrdersInput").value || 30),
           special_closed_days: Array.from(specialClosedDays.entries()).map(([closed_date, reason]) => ({ closed_date, reason })),
           staff_name: staffName(),
-          memo: "owner.html STEP BAKERY-31Aから保存"
+          memo: "owner.html STEP BAKERY-31A-R1から保存"
         };
         if (!payload.pickup_times.length) {
           setStatus("pickupStatus", "受け取り可能時間を1つ以上入れてください。", "warn");
@@ -2119,7 +2184,7 @@
       buildSpecialClosedCalendar();
       renderSpecialClosedDays();
       setupSideIndex();
-      logDiag("owner.html STEP BAKERY-31A initialized", { shop_code: shopCode(), api: apiBase() });
+      logDiag("owner.html STEP BAKERY-31A-R1 initialized", { shop_code: shopCode(), api: apiBase() });
     }
 
     init();
