@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  <title>DPROベーカリー | wallet.html STEP BAKERY-31D</title>
+  <title>DPROベーカリー | wallet.html STEP BAKERY-31D-R1-R1</title>
   <style>
     :root {
       --bg: #fff7ed;
@@ -791,7 +791,7 @@
 <body>
   <div class="wrap">
     <header class="hero">
-      <div class="badge">STEP BAKERY-31D / いつものパン・前回取り置き対応</div>
+      <div class="badge">STEP BAKERY-31D-R1-R1 / いつものパン・定休日表示改善</div>
       <h1>LINEデジタル<br>会員証</h1>
       <p class="lead">
         人気パンの取り置き、ECOレスキュー通知、常連様向け会員証をLINEの中でまとめます。常連さんは「いつものパン」「前回と同じ内容」からすぐ取り置きできます。
@@ -1048,8 +1048,8 @@
     </details>
 
     <div class="footer">
-      DPRO SHOP / パン屋専用LIFFライト版会員証 / wallet.html STEP BAKERY-31D<br>
-      いつものパン・前回取り置き・予約中の取り置き確認まで、お客様側の再注文導線を強化しています。
+      DPRO SHOP / パン屋専用LIFFライト版会員証 / wallet.html STEP BAKERY-31D-R1-R1<br>
+      いつものパン・前回取り置き・定休日を避けた予約導線まで、お客様側の再注文導線を強化しています。
     </div>
   </div>
 
@@ -1255,7 +1255,7 @@
         currentSettings = settings;
         pickupRule = pickup.rule || null;
         specialClosedDays = pickup.special_closed_days || [];
-        specialClosedMap = new Map(specialClosedDays.map((d) => [d.closed_date || d.date, d.reason || "臨時休業"]));
+        specialClosedMap = new Map(specialClosedDays.map((d) => [normalizeDateKey(d.closed_date || d.date), d.reason || "臨時休業"]).filter(([date]) => date));
         currentProducts = (products.products || []).filter((p) => p.is_preorder_available !== false);
 
         renderShopStatus();
@@ -1313,8 +1313,89 @@
       return labels[Number(value)] || "";
     }
 
+    function normalizeDateKey(value) {
+      const raw = clean(value);
+      if (!raw) return "";
+      const m = raw.match(/^(\d{4}-\d{2}-\d{2})/);
+      if (m) return m[1];
+      const d = new Date(raw);
+      if (!Number.isNaN(d.getTime())) return formatDateJST(d);
+      return raw.slice(0, 10);
+    }
+
+    function normalizeWeekdayList(value) {
+      if (Array.isArray(value)) {
+        return value
+          .flatMap((v) => normalizeWeekdayList(v))
+          .filter((v, i, arr) => Number.isInteger(v) && v >= 0 && v <= 6 && arr.indexOf(v) === i);
+      }
+
+      if (value === null || value === undefined || value === "") return [];
+
+      if (typeof value === "number") {
+        return Number.isInteger(value) && value >= 0 && value <= 6 ? [value] : [];
+      }
+
+      const raw = String(value).trim();
+      if (!raw) return [];
+
+      try {
+        const parsed = JSON.parse(raw);
+        if (parsed !== raw) return normalizeWeekdayList(parsed);
+      } catch {}
+
+      const map = {
+        sun: 0, sunday: 0, 日: 0, 日曜: 0, 日曜日: 0,
+        mon: 1, monday: 1, 月: 1, 月曜: 1, 月曜日: 1,
+        tue: 2, tuesday: 2, 火: 2, 火曜: 2, 火曜日: 2,
+        wed: 3, wednesday: 3, 水: 3, 水曜: 3, 水曜日: 3,
+        thu: 4, thursday: 4, 木: 4, 木曜: 4, 木曜日: 4,
+        fri: 5, friday: 5, 金: 5, 金曜: 5, 金曜日: 5,
+        sat: 6, saturday: 6, 土: 6, 土曜: 6, 土曜日: 6
+      };
+
+      return raw
+        .replace(/[\[\]{}"']/g, "")
+        .split(/[\s,、/／|]+/)
+        .map((part) => part.trim())
+        .filter(Boolean)
+        .map((part) => {
+          if (/^\d+$/.test(part)) return Number(part);
+          return map[part.toLowerCase()] ?? map[part] ?? NaN;
+        })
+        .filter((v, i, arr) => Number.isInteger(v) && v >= 0 && v <= 6 && arr.indexOf(v) === i);
+    }
+
+    function closedWeekdays() {
+      const normalized = normalizeWeekdayList(pickupRule?.closed_weekdays);
+      return normalized.length ? normalized : [];
+    }
+
+    function refreshSelectedPickupToAvailable(messagePrefix = "") {
+      const date = $("pickupDateInput").value || selectedPickupDate;
+      if (date && dateStatus(date).ok) return true;
+
+      const next = firstAvailableDate();
+      if (next) {
+        selectedPickupDate = next;
+        $("pickupDateInput").value = next;
+        renderPickupDateGrid();
+        updatePickupStatus();
+        loadAvailabilityForDate(next);
+        if (messagePrefix) {
+          setStatus("preorderStatus", `${messagePrefix}
+次に受付できる ${next}（${weekdayLabel(next)}）へ切り替えました。`, "warn");
+        }
+        return false;
+      }
+
+      setStatus("preorderStatus", "受付できる日がありません。別の日程を店舗へ確認してください。", "warn");
+      $("preorderButton").disabled = true;
+      return false;
+    }
+
     function renderHolidaySummary() {
-      const closed = Array.isArray(pickupRule?.closed_weekdays) ? pickupRule.closed_weekdays.map(Number) : [0];
+      const closed = closedWeekdays();
       const closedText = closed.length
         ? closed.map(weekdayNameFromNumber).filter(Boolean).join(" / ")
         : "定休日なし";
@@ -1322,7 +1403,7 @@
 
       const rows = (specialClosedDays || [])
         .map((d) => ({
-          date: d.closed_date || d.date,
+          date: normalizeDateKey(d.closed_date || d.date),
           reason: d.reason || "臨時休業"
         }))
         .filter((d) => d.date)
@@ -1356,9 +1437,9 @@
 
       const d = new Date(dateString + "T00:00:00+09:00");
       const weekday = d.getDay();
-      const closedWeekdays = Array.isArray(pickupRule?.closed_weekdays) ? pickupRule.closed_weekdays.map(Number) : [0];
+      const closedList = closedWeekdays();
 
-      if (closedWeekdays.includes(weekday)) {
+      if (closedList.includes(weekday)) {
         return { ok: false, reason: "定休日" };
       }
 
@@ -1399,6 +1480,7 @@
       selectedPickupDate = first;
       $("pickupDateInput").value = first;
       $("pickupDateInput").min = todayJST();
+      $("pickupDateInput").max = first ? formatDateJST(new Date(new Date(todayJST() + "T00:00:00+09:00").getTime() + maxDaysAhead() * 24 * 60 * 60 * 1000)) : "";
 
       renderPickupDateGrid();
       updatePickupStatus();
@@ -1451,7 +1533,7 @@
       const date = $("pickupDateInput").value || selectedPickupDate;
       const st = dateStatus(date);
       const times = pickupTimes().join(" / ");
-      const closed = Array.isArray(pickupRule?.closed_weekdays) ? pickupRule.closed_weekdays.join(",") : "0";
+      const closed = closedWeekdays().join(",") || "なし";
       const cutoff = String(pickupRule?.same_day_cutoff_time || "10:00").slice(0,5);
 
       if (!date) {
@@ -2150,7 +2232,7 @@
       const date = $("pickupDateInput").value || selectedPickupDate;
       const st = dateStatus(date);
       if (!st.ok) {
-        setStatus("preorderStatus", `${date} は ${st.reason} のため取り置きできません。`, "warn");
+        refreshSelectedPickupToAvailable(`${date} は ${st.reason} のため取り置きできません。別の日を選んでください。`);
         return;
       }
 
@@ -2177,7 +2259,7 @@
           payment_method: "store",
           total_amount: total,
           items,
-          memo: "wallet.html STEP BAKERY-31D いつものパン導線から取り置き予約"
+          memo: "wallet.html STEP BAKERY-31D-R1-R1 いつものパン導線から取り置き予約"
         });
 
         preorderItems = {};
@@ -2185,7 +2267,12 @@
         await loadCustomerPreorderSummary();
         setStatus("preorderStatus", "取り置き予約を受け付けました。\n合計 " + yen(total) + " / 受け取り " + date + " " + ($("pickupTimeInput").value || "-"), "ok");
       } catch (e) {
-        setStatus("preorderStatus", e.message || "取り置き予約に失敗しました。", "ng");
+        const msg = e.message || "取り置き予約に失敗しました。";
+        if (msg.includes("定休日") || msg.includes("臨時休業") || msg.includes("受付終了") || msg.includes("取り置きできません")) {
+          refreshSelectedPickupToAvailable(msg + "\n別の日を選んでから、もう一度予約してください。");
+        } else {
+          setStatus("preorderStatus", msg, "ng");
+        }
       } finally {
         $("preorderButton").disabled = false;
         $("preorderButton").textContent = "取り置き予約する";
@@ -2275,9 +2362,13 @@
 
       $("pickupDateInput").addEventListener("change", () => {
         const date = $("pickupDateInput").value;
-        if (dateStatus(date).ok) {
+        const st = dateStatus(date);
+        if (st.ok) {
           selectedPickupDate = date;
           loadAvailabilityForDate(date);
+        } else {
+          refreshSelectedPickupToAvailable(`${date} は ${st.reason} のため選べません。`);
+          return;
         }
         renderPickupDateGrid();
         updatePickupStatus();
