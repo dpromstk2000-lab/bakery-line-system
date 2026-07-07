@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>DPROベーカリーLINE | owner.html STEP BAKERY-31A-R1</title>
+  <title>DPROベーカリーLINE | owner.html STEP BAKERY-31C</title>
   <style>
     :root {
       --bg: #fff7ed;
@@ -609,6 +609,60 @@
       margin-top: 22px;
     }
 
+
+    .demo-scenario-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin: 12px 0;
+    }
+
+    .demo-scenario-card {
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      background: linear-gradient(180deg, #fff, #fff7ed);
+      padding: 14px;
+    }
+
+    .demo-scenario-card strong {
+      display: block;
+      font-size: 17px;
+      font-weight: 950;
+      letter-spacing: -.04em;
+      margin-bottom: 5px;
+    }
+
+    .demo-scenario-card span {
+      color: #57534e;
+      font-size: 12px;
+      font-weight: 850;
+      line-height: 1.7;
+    }
+
+    .demo-checklist {
+      display: grid;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .demo-checkitem {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      border: 1px solid #ffedd5;
+      background: #fffaf4;
+      border-radius: 16px;
+      padding: 10px;
+      color: #57534e;
+      font-size: 13px;
+      font-weight: 850;
+    }
+
+    .demo-checkitem b {
+      color: #7c2d12;
+      white-space: nowrap;
+    }
+
     .hidden { display: none !important; }
 
     @media (max-width: 1060px) {
@@ -641,8 +695,8 @@
       section.panel, details { padding: 16px; }
       button, .button-link { width: 100%; }
       .panel-head { display: block; }
-      .quick-top { grid-template-columns: 1fr; }
-      .cards, .date-grid, .weekday-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .quick-top, .demo-scenario-grid { grid-template-columns: 1fr; }
+      .cards, .date-grid, .weekday-grid, .demo-scenario-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .closed-row { grid-template-columns: 1fr; }
     }
   </style>
@@ -652,13 +706,14 @@
   <div class="wrap">
     <header class="hero">
       <div>
-        <div class="badge">STEP BAKERY-31A-R1 / 今日やること中心 owner.html</div>
+        <div class="badge">STEP BAKERY-31C / 営業前DEMO強化 owner.html</div>
         <h1>パン屋オーナー<br>今日の管理画面</h1>
         <p class="lead">
-          毎朝まず見る画面を「今日やること」に整理しました。管理コード保存後は自動で読み込み、取り置き確認、準備完了、受け渡し、ECOレスキュー文面、商品上限を上から順番に確認できます。
+          毎朝まず見る画面に加えて、商談前のDEMO準備を強化しました。管理コード保存後は自動で読み込み、営業前DEMOボタンで「今日の取り置き3件」と「夕方ECO候補」を作れます。
         </p>
         <div class="button-row">
           <button class="green" type="button" id="loadAllButton">今日の状況を一括読込</button>
+          <button class="ghost" type="button" id="demoSetupTopButton">営業前DEMOを作る</button>
           <button class="blue" type="button" id="openStaffButtonTop">スタッフ画面を開く</button>
           <button class="dark" type="button" id="openCashierButtonTop">店員レジを開く</button>
           <button class="blue" type="button" id="openWalletButtonTop">お客様会員証を開く</button>
@@ -669,7 +724,7 @@
         <div class="title">営業で伝える一言</div>
         <div class="big">パン屋さんは、毎朝この画面を見るだけ。</div>
         <div class="small">
-          未確認の取り置き、準備中、受け渡し待ち、夕方のECO案内まで、オーナーが迷わない順番に並べています。
+          未確認の取り置き、準備中、受け渡し待ち、夕方のECO案内まで、営業前に見栄えする状態へ整えられます。
         </div>
       </div>
     </header>
@@ -689,7 +744,7 @@
           <a href="#pickupSection">営業日・休業日</a>
           <a class="nav-option" href="#chargeSection">チャージ上位オプション</a>
           <a class="nav-option" href="#transactionsSection">決済履歴</a>
-          <a class="nav-option" href="#demoSection">営業前DEMO</a>
+          <a class="nav-main" href="#demoSection">営業前DEMO</a>
           <a class="nav-option" href="#connectionSection">初期設定・接続</a>
           <a class="nav-option" href="#logsSection">診断ログ</a>
         </nav>
@@ -1082,15 +1137,41 @@
           </div>
         </details>
 
-        <details id="demoSection">
+        <details id="demoSection" open>
           <summary>営業前DEMO設定</summary>
           <div class="detail-body">
-            <div class="status-box warn">bakery_demo 専用です。本番店舗では拒否される設計です。商談前にサンプル会員・商品・今日の取り置きを整える用途です。</div>
+            <div class="status-box warn">
+              bakery_demo 専用です。本番店舗では拒否される設計です。商談前に「今日の取り置き3件」「準備中・準備完了の動き」「夕方ECO候補」をまとめて整えます。
+            </div>
+
+            <div class="demo-scenario-grid">
+              <div class="demo-scenario-card">
+                <strong>① 今日の取り置き3件</strong>
+                <span>10:00・12:00・17:30 の取り置きを作ります。未確認、準備中、受け渡し待ちの3状態を見せやすくします。</span>
+              </div>
+              <div class="demo-scenario-card">
+                <strong>② スタッフ/iPad用</strong>
+                <span>staff.htmlで「作る・袋詰め」「渡すだけ」の流れが分かるよう、ステータス付きデータにします。</span>
+              </div>
+              <div class="demo-scenario-card">
+                <strong>③ 夕方ECO候補</strong>
+                <span>売れ残りそうなパンのLINE文面を作成し、ECOレスキュー提案まで一気に見せられる状態にします。</span>
+              </div>
+            </div>
+
             <div class="button-row">
-              <button class="green" type="button" id="demoSetupButton">営業前DEMO設定を実行</button>
+              <button class="green" type="button" id="demoSetupButton">営業前DEMOを作成する</button>
+              <button class="blue" type="button" id="demoEcoButton">ECO候補文面だけ作成</button>
               <button class="ghost" type="button" id="openSystemCheckButton">system-check.htmlを開く</button>
             </div>
-            <div id="demoSetupStatus" class="status-box info">未実行です。</div>
+
+            <div class="demo-checklist">
+              <div class="demo-checkitem"><b>DEMOコード</b><span>管理コードは 1234。店舗コードは bakery_demo のまま使います。</span></div>
+              <div class="demo-checkitem"><b>作成後</b><span>今日やること、取り置き一覧、スタッフ画面、ECO文面を自動で確認できる状態にします。</span></div>
+              <div class="demo-checkitem"><b>本番安全</b><span>本番店舗ではWorker側で営業前DEMO設定が拒否される設計です。</span></div>
+            </div>
+
+            <div id="demoSetupStatus" class="status-box info">未実行です。商談前に「営業前DEMOを作成する」を押してください。</div>
           </div>
         </details>
 
@@ -1144,7 +1225,7 @@
     </div>
 
     <div class="footer">
-      DPROベーカリーLINE / owner.html STEP BAKERY-31A-R1<br>
+      DPROベーカリーLINE / owner.html STEP BAKERY-31C<br>
       今日やること中心・自動読込・空表示改善・ECOレスキュー・商品上限を日常運用の主役に整理。
     </div>
   </div>
@@ -1477,7 +1558,7 @@
         const data = await stableAdminPost("/api/simple/preorder-status", {
           preorder_id: preorderId,
           status,
-          memo: "owner.html STEP BAKERY-31A-R1 今日やること画面から更新"
+          memo: "owner.html STEP BAKERY-31C 今日やること画面から更新"
         });
         cachedData = null;
         setStatus("preordersStatus", data.message || "取り置きステータスを更新しました。", "ok");
@@ -1779,7 +1860,7 @@
         const isDemo = data.safety?.is_demo === true;
         $("demoBadge").className = "badge " + (isDemo ? "green" : "red");
         $("demoBadge").textContent = isDemo ? "DEMO店舗" : "本番店舗";
-        logDiag("STEP BAKERY-31A-R1 一括読込OK", { shop_code: shopCode(), preorders: getPreorderRows(data).length });
+        logDiag("STEP BAKERY-31C 一括読込OK", { shop_code: shopCode(), preorders: getPreorderRows(data).length });
       } catch (e) {
         setStatus("quickStartStatus", e.message, "ng");
         setStatus("summaryStatus", e.message, "ng");
@@ -1912,22 +1993,226 @@
       }
     }
 
-    async function runDemoSetup() {
-      const ok = confirm("bakery_demo の営業前DEMO設定を実行します。本番店舗では拒否されます。\n実行しますか？");
-      if (!ok) return;
+    function firstActiveProducts(limit = 3) {
+      const products = getProductRows(cachedData)
+        .filter((p) => p && p.is_active !== false && p.is_preorder_available !== false)
+        .sort((a, b) => Number(a.display_order || 999) - Number(b.display_order || 999));
+      return products.slice(0, limit);
+    }
+
+    function demoPreorderPlans(products) {
+      const fallback = [
+        { product_code: "salt_bread", product_name: "ふわもち塩パン", price: 420 },
+        { product_code: "croissant", product_name: "発酵バタークロワッサン", price: 280 },
+        { product_code: "sandwich", product_name: "お昼の具だくさんサンド", price: 520 }
+      ];
+      const p = [0, 1, 2].map((idx) => products[idx] || fallback[idx]);
+      return [
+        {
+          line_user_id: "DEMO-31C-MATSUMOTO",
+          customer_name: "松本 栞",
+          phone: "090-0000-3101",
+          pickup_time: "10:00",
+          status_after_create: "pending",
+          item: p[0],
+          quantity: 3,
+          memo: "朝の人気パン取り置き。未確認デモ用。"
+        },
+        {
+          line_user_id: "DEMO-31C-TANAKA",
+          customer_name: "田中 実",
+          phone: "090-0000-3102",
+          pickup_time: "12:00",
+          status_after_create: "preparing",
+          item: p[1],
+          quantity: 2,
+          memo: "昼受け取り。スタッフが準備中にした状態。"
+        },
+        {
+          line_user_id: "DEMO-31C-SATO",
+          customer_name: "佐藤 奈々",
+          phone: "090-0000-3103",
+          pickup_time: "17:30",
+          status_after_create: "ready",
+          item: p[2],
+          quantity: 1,
+          memo: "夕方受け取り。準備完了LINE文面コピーのデモ用。"
+        }
+      ];
+    }
+
+    async function publicPost(path, body = {}) {
+      const connector = path.includes("?") ? "&" : "?";
+      const url = apiBase() + path + connector + "shop_code=" + encodeURIComponent(shopCode());
+      const res = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json"
+        },
+        body: JSON.stringify({ shop_code: shopCode(), ...body })
+      });
+      const text = await res.text();
+      let data = null;
+      try { data = text ? JSON.parse(text) : null; } catch { data = text; }
+      if (!res.ok || data?.ok === false) throw new Error(data?.message || data?.error || text || "APIエラーです。");
+      return data;
+    }
+
+    async function createDemoCustomer(plan) {
+      const data = await publicPost("/api/customer/register", {
+        customer_name: plan.customer_name,
+        name: plan.customer_name,
+        phone: plan.phone,
+        line_user_id: plan.line_user_id,
+        line_display_name: plan.customer_name,
+        buying_habit: "weekly",
+        visit_purpose: "preorder",
+        eco_rescue_ok: "weekday_evening"
+      });
+      return data.customer || data;
+    }
+
+    async function createDemoPreorder(plan, customer) {
+      const item = plan.item || {};
+      const productCode = clean(item.product_code || item.code || item.id || "");
+      const productName = clean(item.product_name || item.name || "人気パン");
+      const price = Number(item.preorder_price ?? item.price ?? 0) || 300;
+      const quantity = Math.max(1, Number(plan.quantity || 1));
+      const totalAmount = price * quantity;
+      const data = await publicPost("/api/preorders/create", {
+        member_code: customer.member_code,
+        customer_id: customer.id,
+        line_user_id: customer.line_user_id || plan.line_user_id,
+        pickup_date: todayJst(),
+        pickup_time: plan.pickup_time,
+        payment_status: "unpaid",
+        payment_method: "店頭支払い",
+        memo: plan.memo,
+        total_amount: totalAmount,
+        items: [{
+          product_code: productCode,
+          product_name: productName,
+          name: productName,
+          quantity,
+          qty: quantity,
+          price,
+          unit_price: price,
+          subtotal: totalAmount
+        }]
+      });
+      const preorder = data.preorder || data.row || data.rows?.[0] || data;
+      if (plan.status_after_create && plan.status_after_create !== "pending" && preorder?.id) {
+        await stableAdminPost("/api/simple/preorder-status", {
+          preorder_id: preorder.id,
+          status: plan.status_after_create,
+          memo: plan.memo
+        });
+      }
+      return preorder;
+    }
+
+    async function ensureDemoPreorders() {
+      const data = await loadStableAdminData(true);
+      const todayRows = getPreorderRows(data).filter(isTodayPreorder).filter((p) => !["cancelled", "no_show", "picked_up"].includes(p.status));
+      if (todayRows.length >= 3) {
+        return { created: 0, skipped: true, message: "今日の取り置きがすでに3件以上あるため、追加作成はスキップしました。" };
+      }
+
+      const products = firstActiveProducts(3);
+      const plans = demoPreorderPlans(products);
+      const existingNames = new Set(todayRows.map((p) => clean(p.customer_name)));
+      const created = [];
+
+      for (const plan of plans) {
+        if (existingNames.has(plan.customer_name)) continue;
+        try {
+          const customer = await createDemoCustomer(plan);
+          const preorder = await createDemoPreorder(plan, customer);
+          created.push({ customer: plan.customer_name, status: plan.status_after_create, preorder_id: preorder?.id || null });
+        } catch (e) {
+          created.push({ customer: plan.customer_name, error: e.message });
+        }
+      }
+
+      return { created: created.length, rows: created };
+    }
+
+    async function createDemoEcoCandidate(silent = false) {
       try {
-        const data = await apiFetch("/api/admin/demo/sales-setup", {
+        if ($("ecoProductInput")) $("ecoProductInput").value = "夕方ECOパン詰め合わせ";
+        if ($("ecoQuantityInput")) $("ecoQuantityInput").value = "6";
+        if ($("ecoPriceInput")) $("ecoPriceInput").value = "500";
+        if ($("ecoTargetInput")) $("ecoTargetInput").value = "weekday_evening";
+        const data = await apiFetch("/api/admin/eco/create-message", {
           method: "POST",
           auth: true,
           body: JSON.stringify({
             shop_code: shopCode(),
-            confirm_text: "BAKERY DEMO RESET",
+            product_name: "夕方ECOパン詰め合わせ",
+            quantity: 6,
+            price: 500,
+            target_eco: "weekday_evening",
             staff_name: staffName()
           })
         });
+        lastEcoMessage = data.message_text || data.message || JSON.stringify(data, null, 2);
+        if ($("ecoMessageBox")) $("ecoMessageBox").value = lastEcoMessage;
+        if (!silent) setStatus("demoSetupStatus", "夕方ECO候補文面を作成しました。", "ok");
+        setStatus("ecoStatus", "夕方ECO候補文面を作成しました。", "ok");
+        return { ok: true, message_text: lastEcoMessage };
+      } catch (e) {
+        const fallback = ecoTemplateText("rescue");
+        lastEcoMessage = fallback;
+        if ($("ecoMessageBox")) $("ecoMessageBox").value = fallback;
+        setStatus("ecoStatus", "APIでのECO作成に失敗したため、画面内テンプレートを表示しました。", "warn");
+        if (!silent) setStatus("demoSetupStatus", "ECO候補は画面テンプレートで作成しました。" + e.message, "warn");
+        return { ok: false, fallback: true, error: e.message };
+      }
+    }
+
+    async function runDemoSetup() {
+      syncInputsFromQuick();
+      if (!adminCode()) {
+        setStatus("demoSetupStatus", "管理コードを入力してください。DEMOは 1234 です。", "warn");
+        return;
+      }
+      const ok = confirm("STEP BAKERY-31C の営業前DEMOを作成します。\n今日の取り置き3件と夕方ECO候補を準備します。\n実行しますか？");
+      if (!ok) return;
+      try {
+        setStatus("demoSetupStatus", "営業前DEMOを作成中です。商品・顧客・取り置き・ECO候補を整えています...", "info");
+        let baseResult = null;
+        try {
+          baseResult = await apiFetch("/api/admin/demo/sales-setup", {
+            method: "POST",
+            auth: true,
+            body: JSON.stringify({
+              shop_code: shopCode(),
+              confirm_text: "BAKERY DEMO RESET 31C",
+              staff_name: staffName()
+            })
+          });
+        } catch (e) {
+          baseResult = { ok: false, fallback_reason: e.message };
+        }
+
         cachedData = null;
-        setStatus("demoSetupStatus", JSON.stringify(data, null, 2), "ok");
         await loadAll(true);
+        const preorderResult = await ensureDemoPreorders();
+        const ecoResult = await createDemoEcoCandidate(true);
+        cachedData = null;
+        await loadAll(true);
+
+        const summary = {
+          ok: true,
+          step: "STEP BAKERY-31C",
+          message: "営業前DEMOを作成しました。owner.html と staff.html で今日の取り置き・ECO候補を確認してください。",
+          base_setup: baseResult,
+          demo_preorders: preorderResult,
+          eco_candidate: ecoResult
+        };
+        setStatus("demoSetupStatus", JSON.stringify(summary, null, 2), "ok");
+        document.getElementById("todoSection")?.scrollIntoView({ behavior: "smooth", block: "start" });
       } catch (e) {
         setStatus("demoSetupStatus", e.message, "ng");
       }
@@ -1968,7 +2253,7 @@
           max_orders_per_day: Number($("maxOrdersInput").value || 30),
           special_closed_days: Array.from(specialClosedDays.entries()).map(([closed_date, reason]) => ({ closed_date, reason })),
           staff_name: staffName(),
-          memo: "owner.html STEP BAKERY-31A-R1から保存"
+          memo: "owner.html STEP BAKERY-31Cから保存"
         };
         if (!payload.pickup_times.length) {
           setStatus("pickupStatus", "受け取り可能時間を1つ以上入れてください。", "warn");
@@ -2122,6 +2407,8 @@
       });
 
       $("demoSetupButton").addEventListener("click", runDemoSetup);
+      $("demoSetupTopButton")?.addEventListener("click", () => { document.getElementById("demoSection")?.scrollIntoView({ behavior: "smooth", block: "start" }); });
+      $("demoEcoButton")?.addEventListener("click", () => createDemoEcoCandidate(false));
       $("reloadLogsButton").addEventListener("click", loadLogs);
       $("copyDiagButton").addEventListener("click", async () => {
         await copyText(JSON.stringify(diag, null, 2));
@@ -2184,7 +2471,7 @@
       buildSpecialClosedCalendar();
       renderSpecialClosedDays();
       setupSideIndex();
-      logDiag("owner.html STEP BAKERY-31A-R1 initialized", { shop_code: shopCode(), api: apiBase() });
+      logDiag("owner.html STEP BAKERY-31C initialized", { shop_code: shopCode(), api: apiBase() });
     }
 
     init();
