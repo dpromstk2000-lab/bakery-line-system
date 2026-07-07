@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  <title>DPROベーカリー | wallet.html DEMO会員表示修正版</title>
+  <title>DPROベーカリー | wallet.html STEP BAKERY-31D</title>
   <style>
     :root {
       --bg: #fff7ed;
@@ -550,6 +550,71 @@
       text-align: center;
     }
 
+    .repeat-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .repeat-card {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 14px;
+      display: grid;
+      gap: 8px;
+    }
+
+    .repeat-card.highlight {
+      background: #f0fdf4;
+      border-color: #86efac;
+    }
+
+    .repeat-card strong {
+      font-size: 17px;
+      letter-spacing: -.03em;
+    }
+
+    .repeat-card span, .repeat-card p {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 850;
+      margin: 0;
+    }
+
+    .mini-list {
+      display: grid;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .mini-row {
+      display: grid;
+      grid-template-columns: 86px 1fr auto;
+      gap: 8px;
+      align-items: center;
+      border: 1px solid var(--line);
+      background: #fff7ed;
+      border-radius: 14px;
+      padding: 10px;
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 999px;
+      padding: 4px 8px;
+      background: #dbeafe;
+      color: #1d4ed8;
+      font-size: 11px;
+      font-weight: 950;
+      white-space: nowrap;
+    }
+
     .charge-grid {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -627,7 +692,7 @@
       .hero { padding: 20px; border-radius: 24px; }
       section.panel { padding: 16px; }
       .panel-head { display: block; }
-      .grid, .charge-grid { grid-template-columns: 1fr; }
+      .grid, .charge-grid, .repeat-grid { grid-template-columns: 1fr; }
   
     .holiday-summary {
       display: grid;
@@ -726,14 +791,15 @@
 <body>
   <div class="wrap">
     <header class="hero">
-      <div class="badge">STEP BAKERY-30-CHARGE / 取り置き上限対応</div>
+      <div class="badge">STEP BAKERY-31D / いつものパン・前回取り置き対応</div>
       <h1>LINEデジタル<br>会員証</h1>
       <p class="lead">
-        人気パンの取り置き、ECOレスキュー通知、常連様向け会員証をLINEの中でまとめます。取り置きは商品ごとの上限・残数にも対応します。
+        人気パンの取り置き、ECOレスキュー通知、常連様向け会員証をLINEの中でまとめます。常連さんは「いつものパン」「前回と同じ内容」からすぐ取り置きできます。
       </p>
       <div class="button-row">
         <button class="green" data-scroll="#walletPanel" type="button">会員証</button>
         <button class="blue" data-scroll="#preorderPanel" type="button">取り置き</button>
+        <button class="green" data-scroll="#repeatPanel" type="button">いつものパン</button>
         <button class="dark" data-scroll="#ecoPanel" type="button">ECO通知</button>
       </div>
       <div id="shopStatus" class="status-box info">店舗設定を読み込み中です。</div>
@@ -811,6 +877,36 @@
         <button class="ghost" id="reloadMeButton" type="button">残高再読込</button>
       </div>
       <div id="walletStatus" class="status-box info">会員証を表示しています。</div>
+    </section>
+
+
+    <section class="panel hidden" id="repeatPanel">
+      <div class="panel-head">
+        <div>
+          <h2>いつものパン</h2>
+          <div class="small">前回の取り置きや、よく買うパンからすぐに数量を入れられます。</div>
+        </div>
+        <div class="badge green">常連さん向け</div>
+      </div>
+
+      <div class="repeat-grid">
+        <div class="repeat-card highlight" id="lastPreorderCard">
+          <strong>前回と同じ内容</strong>
+          <p>会員証を表示すると、前回の取り置き内容を読み込みます。</p>
+          <button class="green" id="repeatLastButton" type="button" disabled>前回と同じ内容を入れる</button>
+        </div>
+        <div class="repeat-card" id="favoriteBreadCard">
+          <strong>よく買うパン</strong>
+          <p>履歴からよく買う商品を自動でまとめます。</p>
+          <button class="blue" id="applyFavoriteButton" type="button" disabled>いつものパンを入れる</button>
+        </div>
+      </div>
+
+      <h3>予約中・最近の取り置き</h3>
+      <div class="mini-list" id="customerPreorderList">
+        <div class="status-box info">会員証を表示すると、予約中の取り置きと前回履歴を確認できます。</div>
+      </div>
+      <div id="repeatStatus" class="status-box info">常連さんは毎回商品を探さずに、ここからすぐ取り置きできます。</div>
     </section>
 
     <section class="panel hidden" id="preorderPanel">
@@ -952,8 +1048,8 @@
     </details>
 
     <div class="footer">
-      DPRO SHOP / パン屋専用LIFFライト版会員証 / wallet.html<br>
-      定休日・臨時休業・受け取り時間に加え、チャージ上位オプションの残高内訳も表示します。
+      DPRO SHOP / パン屋専用LIFFライト版会員証 / wallet.html STEP BAKERY-31D<br>
+      いつものパン・前回取り置き・予約中の取り置き確認まで、お客様側の再注文導線を強化しています。
     </div>
   </div>
 
@@ -972,6 +1068,7 @@
     let currentCustomer = null;
     let currentProducts = [];
     let currentAvailabilityDate = "";
+    let customerPreorderSummary = null;
     let preorderItems = {};
     let selectedCharge = 1000;
     let selectedPickupDate = "";
@@ -1396,6 +1493,167 @@
       }
     }
 
+
+    function productCodeOf(product) {
+      return String(product?.product_code || product?.id || product?.code || "");
+    }
+
+    function normalizeItemForPreorder(item = {}) {
+      return {
+        product_code: clean(item.product_code || item.code || item.id || item.product_id || item.product_name || item.name),
+        product_name: clean(item.product_name || item.name || item.label || item.product_code || "商品"),
+        quantity: Math.max(1, Number(item.quantity ?? item.qty ?? 1) || 1)
+      };
+    }
+
+    function findProductForRepeat(item) {
+      const normalized = normalizeItemForPreorder(item);
+      const code = normalized.product_code;
+      const name = normalized.product_name;
+      return currentProducts.find((p) => productCodeOf(p) === code)
+        || currentProducts.find((p) => clean(p.product_name) === name)
+        || currentProducts.find((p) => clean(p.product_name).includes(name) || name.includes(clean(p.product_name)));
+    }
+
+    function statusLabel(status) {
+      const map = {
+        pending: "受付済み",
+        preparing: "準備中",
+        ready: "準備完了",
+        picked_up: "受け渡し済み",
+        completed: "完了",
+        done: "完了",
+        cancelled: "取消",
+        canceled: "取消",
+        no_show: "未受取"
+      };
+      return map[clean(status)] || clean(status) || "受付済み";
+    }
+
+    function preorderItemsText(items = []) {
+      if (!items.length) return "商品未記録";
+      return items.map((item) => `${escapeHtml(item.product_name || item.name || "商品")} × ${Number(item.quantity ?? item.qty ?? 1)}`).join("、");
+    }
+
+    async function loadCustomerPreorderSummary() {
+      if (!currentCustomer) return;
+      const key = currentCustomer.member_code || currentCustomer.line_user_id || currentCustomer.id;
+      if (!key) return;
+
+      try {
+        const data = await apiGet("/api/customer/preorders?customer_key=" + encodeURIComponent(key));
+        customerPreorderSummary = data;
+        renderRepeatPanel();
+      } catch (e) {
+        customerPreorderSummary = null;
+        renderRepeatPanel();
+        setStatus("repeatStatus", "取り置き履歴の読み込みに失敗しました。通常の取り置き予約は利用できます。\n" + (e.message || ""), "warn");
+      }
+    }
+
+    function renderRepeatPanel() {
+      const last = customerPreorderSummary?.last_preorder || null;
+      const favorites = Array.isArray(customerPreorderSummary?.favorite_items) ? customerPreorderSummary.favorite_items : [];
+      const fallbackFavorites = favorites.length ? favorites : currentProducts.slice(0, 3).map((p) => ({
+        product_code: productCodeOf(p),
+        product_name: p.product_name || "おすすめパン",
+        quantity: 1,
+        count: 0,
+        price: Number(p.preorder_price || p.price || 0),
+        is_fallback: true
+      }));
+      const active = Array.isArray(customerPreorderSummary?.active_preorders) ? customerPreorderSummary.active_preorders : [];
+      const recent = Array.isArray(customerPreorderSummary?.recent_preorders) ? customerPreorderSummary.recent_preorders : [];
+
+      if (last) {
+        $("lastPreorderCard").innerHTML = `
+          <strong>前回と同じ内容</strong>
+          <p>${escapeHtml(last.pickup_date || "前回")} ${escapeHtml(last.pickup_time || "")} / ${preorderItemsText(last.items)}</p>
+          <button class="green" id="repeatLastButton" type="button">前回と同じ内容を入れる</button>
+        `;
+      } else {
+        $("lastPreorderCard").innerHTML = `
+          <strong>前回と同じ内容</strong>
+          <p>まだ取り置き履歴がありません。最初の予約後、次回からここに表示されます。</p>
+          <button class="green" id="repeatLastButton" type="button" disabled>前回と同じ内容を入れる</button>
+        `;
+      }
+
+      if (fallbackFavorites.length) {
+        const top = fallbackFavorites.slice(0, 3).map((item) => `${escapeHtml(item.product_name)} × ${Number(item.quantity || 1)}`).join("、");
+        $("favoriteBreadCard").innerHTML = `
+          <strong>${favorites.length ? "よく買うパン" : "おすすめのパン"}</strong>
+          <p>${top}</p>
+          <button class="blue" id="applyFavoriteButton" type="button">${favorites.length ? "いつものパンを入れる" : "おすすめを入れる"}</button>
+        `;
+      } else {
+        $("favoriteBreadCard").innerHTML = `
+          <strong>よく買うパン</strong>
+          <p>商品を読み込むと、ここからすぐ数量を入れられます。</p>
+          <button class="blue" id="applyFavoriteButton" type="button" disabled>いつものパンを入れる</button>
+        `;
+      }
+
+      const list = active.length ? active : recent.slice(0, 5);
+      if (!list.length) {
+        $("customerPreorderList").innerHTML = '<div class="status-box info">現在表示できる取り置き履歴はありません。</div>';
+      } else {
+        $("customerPreorderList").innerHTML = list.slice(0, 6).map((row) => `
+          <div class="mini-row">
+            <div>${escapeHtml(row.pickup_date || "-")}<br>${escapeHtml(row.pickup_time || "")}</div>
+            <div>${preorderItemsText(row.items)}<br><span class="small">${yen(row.total_amount || 0)}</span></div>
+            <div class="status-pill">${escapeHtml(statusLabel(row.status))}</div>
+          </div>
+        `).join("");
+      }
+
+      const repeatLastButton = $("repeatLastButton");
+      if (repeatLastButton && last) {
+        repeatLastButton.addEventListener("click", () => applyItemsToPreorder(last.items || [], "前回の取り置き内容を商品選択に入れました。"));
+      }
+
+      const applyFavoriteButton = $("applyFavoriteButton");
+      if (applyFavoriteButton && fallbackFavorites.length) {
+        applyFavoriteButton.addEventListener("click", () => applyItemsToPreorder(fallbackFavorites.slice(0, 3), favorites.length ? "いつものパンを商品選択に入れました。" : "おすすめパンを商品選択に入れました。"));
+      }
+
+      setStatus("repeatStatus", active.length
+        ? `予約中の取り置きが${active.length}件あります。内容を確認して、必要なら追加予約できます。`
+        : "前回の内容やよく買うパンから、すぐに取り置きできます。", active.length ? "ok" : "info");
+    }
+
+    function applyItemsToPreorder(items = [], message = "商品選択に入れました。") {
+      if (!items.length) {
+        setStatus("repeatStatus", "入れられる商品がありません。", "warn");
+        return;
+      }
+
+      let applied = 0;
+      preorderItems = {};
+      items.forEach((raw) => {
+        const item = normalizeItemForPreorder(raw);
+        const product = findProductForRepeat(item);
+        if (!product) return;
+        const code = productCodeOf(product);
+        const remainingRaw = product.remaining_preorder_quantity;
+        const maxQty = remainingRaw === null || remainingRaw === undefined ? 20 : Math.max(0, Number(remainingRaw));
+        const qty = Math.max(1, Math.min(maxQty || 20, Number(item.quantity || 1)));
+        if (qty <= 0) return;
+        preorderItems[code] = (preorderItems[code] || 0) + qty;
+        applied += 1;
+      });
+
+      renderProducts();
+      if (applied) {
+        setStatus("preorderStatus", message + " 受け取り日と時間を確認して予約してください。", "ok");
+        setStatus("repeatStatus", message, "ok");
+        const target = document.querySelector("#preorderPanel");
+        if (target) target.scrollIntoView({ behavior: "smooth", block: "start" });
+      } else {
+        setStatus("repeatStatus", "現在の商品一覧に一致する商品がありません。商品を選び直してください。", "warn");
+      }
+    }
+
     function renderProducts() {
       if (!currentProducts.length) {
         $("productGrid").innerHTML = '<div class="status-box warn">取り置き可能な商品がありません。</div>';
@@ -1403,7 +1661,7 @@
       }
 
       $("productGrid").innerHTML = currentProducts.map((p) => {
-        const code = p.product_code || p.id;
+        const code = productCodeOf(p);
         const qty = preorderItems[code] || 0;
         const remainingRaw = p.remaining_preorder_quantity;
         const limitRaw = p.daily_preorder_limit;
@@ -1460,7 +1718,7 @@
 
     function buildPreorderItems() {
       return currentProducts.map((p) => {
-        const code = p.product_code || p.id;
+        const code = productCodeOf(p);
         const quantity = preorderItems[code] || 0;
         if (!quantity) return null;
         const price = Number(p.preorder_price || p.price || 0);
@@ -1498,6 +1756,7 @@
       renderRealQr(member);
       showPanel("walletPanel", true);
       showPanel("chargePanel", true);
+      showPanel("repeatPanel", true);
       showPanel("preorderPanel", true);
       showPanel("ecoPanel", true);
     }
@@ -1791,6 +2050,7 @@
         if (!currentCustomer) throw new Error("会員証登録に失敗しました。");
         saveCustomerKey(currentCustomer.member_code || currentCustomer.line_user_id || currentCustomer.id);
         renderWallet();
+        await loadCustomerPreorderSummary();
         setStatus("registerStatus", "会員証を発行しました。", "ok");
       } catch (e) {
         setStatus("registerStatus", e.message || "会員証登録に失敗しました。", "ng");
@@ -1811,6 +2071,7 @@
         currentCustomer = data.customer;
         saveCustomerKey(currentCustomer.member_code || currentCustomer.line_user_id || currentCustomer.id);
         renderWallet();
+        await loadCustomerPreorderSummary();
         setStatus("registerStatus", "DEMO会員を表示しました。", "ok");
       } catch (e) {
         setStatus("registerStatus", e.message || "DEMO会員が見つかりません。営業前DEMO設定を確認してください。", "ng");
@@ -1824,6 +2085,7 @@
         const data = await loadCustomerByKey(key);
         currentCustomer = data.customer;
         renderWallet();
+        await loadCustomerPreorderSummary();
         setStatus("walletStatus", "保存済み会員証を読み込みました。", "ok");
       } catch (e) {
         localStorage.removeItem(customerStorageKey());
@@ -1837,7 +2099,8 @@
         const data = await loadCustomerByKey(key);
         currentCustomer = data.customer;
         renderWallet();
-        setStatus("walletStatus", "残高を再読み込みしました。", "ok");
+        await loadCustomerPreorderSummary();
+        setStatus("walletStatus", "残高と取り置き履歴を再読み込みしました。", "ok");
       } catch (e) {
         setStatus("walletStatus", e.message, "ng");
       }
@@ -1914,11 +2177,12 @@
           payment_method: "store",
           total_amount: total,
           items,
-          memo: "wallet.html STEP BAKERY-30-CHARGEから取り置き予約"
+          memo: "wallet.html STEP BAKERY-31D いつものパン導線から取り置き予約"
         });
 
         preorderItems = {};
         renderProducts();
+        await loadCustomerPreorderSummary();
         setStatus("preorderStatus", "取り置き予約を受け付けました。\n合計 " + yen(total) + " / 受け取り " + date + " " + ($("pickupTimeInput").value || "-"), "ok");
       } catch (e) {
         setStatus("preorderStatus", e.message || "取り置き予約に失敗しました。", "ng");
@@ -1982,6 +2246,7 @@
       localStorage.removeItem(customerStorageKey());
       currentCustomer = null;
       showPanel("walletPanel", false);
+      showPanel("repeatPanel", false);
       showPanel("chargePanel", false);
       showPanel("preorderPanel", false);
       showPanel("ecoPanel", false);
