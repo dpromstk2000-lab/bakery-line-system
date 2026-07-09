@@ -468,7 +468,7 @@
   <div class="wrap">
     <header class="hero">
       <div>
-        <div class="badge">DPRO SHOP / Bakery Cashier / STEP BAKERY-8</div>
+        <div class="badge">DPRO SHOP / Bakery Cashier / STEP BAKERY-PHONE-2</div>
         <h1>店員用<br>1秒レジ決済</h1>
         <p class="lead">
           お客様の会員証QRを読み取り、金額を入れて決済するだけ。
@@ -821,30 +821,57 @@
       if (shop) $("shopCodeInput").value = shop;
     }
 
+    function clean(value) {
+      return String(value ?? "").trim();
+    }
+
+
+    // STEP BAKERY-PHONE-2: 電話番号の表記ゆれを統一する
+    function normalizePhone(value) {
+      let text = clean(value)
+        .replace(/[０-９]/g, (ch) => String.fromCharCode(ch.charCodeAt(0) - 0xFEE0))
+        .replace(/[－ー―‐‑‒–—−]/g, "-")
+        .replace(/[（]/g, "(")
+        .replace(/[）]/g, ")");
+      text = text.replace(/[^0-9+]/g, "");
+      if (text.startsWith("+81")) text = "0" + text.slice(3);
+      return text.replace(/[^0-9]/g, "");
+    }
+
+    function looksLikePhone(value) {
+      const raw = clean(value);
+      const digits = normalizePhone(raw);
+      return !!digits && (digits.length >= 10 || raw.includes("+81") || /[０-９]/.test(raw));
+    }
+
+    function normalizeCustomerKey(value) {
+      return looksLikePhone(value) ? normalizePhone(value) : clean(value);
+    }
+
     function parseQrValue(value) {
       const raw = String(value || "").trim();
       if (!raw) return "";
 
       try {
         const obj = JSON.parse(raw);
-        return obj.member_code || obj.customer_key || obj.line_user_id || obj.customer_id || raw;
+        return normalizeCustomerKey(obj.member_code || obj.customer_key || obj.line_user_id || obj.customer_id || raw);
       } catch {}
 
       try {
         const url = new URL(raw);
-        return url.searchParams.get("member_code") ||
+        return normalizeCustomerKey(url.searchParams.get("member_code") ||
           url.searchParams.get("customer_key") ||
           url.searchParams.get("line_user_id") ||
           url.searchParams.get("customer_id") ||
-          raw;
+          raw);
       } catch {}
 
       if (raw.includes("member_code=") || raw.includes("customer_key=")) {
         const params = new URLSearchParams(raw.split("?").pop());
-        return params.get("member_code") || params.get("customer_key") || raw;
+        return normalizeCustomerKey(params.get("member_code") || params.get("customer_key") || raw);
       }
 
-      return raw;
+      return normalizeCustomerKey(raw);
     }
 
     async function startCamera() {
@@ -929,7 +956,7 @@
       $("customerKeyInput").value = key;
 
       try {
-        const data = await apiGet("/api/customer/me", { member_code: key }, false);
+        const data = await apiGet("/api/customer/me", { customer_key: normalizeCustomerKey(key) }, false);
         selectedCustomer = data.customer || null;
         renderCustomer();
         setStatus("scanStatus", "会員を確認しました。金額を入力してください。", "ok");
