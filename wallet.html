@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  <title>DPROベーカリー | wallet.html STEP BAKERY-31D-R2</title>
+  <title>DPROベーカリー | wallet.html STEP BAKERY-PHONE-2</title>
   <style>
     :root {
       --bg: #fff7ed;
@@ -791,7 +791,7 @@
 <body>
   <div class="wrap">
     <header class="hero">
-      <div class="badge">STEP BAKERY-31D-R2 / いつものパン・定休日を自動回避</div>
+      <div class="badge">STEP BAKERY-PHONE-2 / いつものパン・定休日を自動回避</div>
       <h1>LINEデジタル<br>会員証</h1>
       <p class="lead">
         人気パンの取り置き、ECOレスキュー通知、常連様向け会員証をLINEの中でまとめます。常連さんは「いつものパン」「前回と同じ内容」からすぐ取り置きできます。
@@ -1048,7 +1048,7 @@
     </details>
 
     <div class="footer">
-      DPRO SHOP / パン屋専用LIFFライト版会員証 / wallet.html STEP BAKERY-31D-R2<br>
+      DPRO SHOP / パン屋専用LIFFライト版会員証 / wallet.html STEP BAKERY-PHONE-2<br>
       いつものパン・前回取り置き・定休日を避けた予約導線まで、お客様側の再注文導線を強化しています。
     </div>
   </div>
@@ -1081,6 +1081,29 @@
 
     function clean(value) {
       return String(value ?? "").trim();
+    }
+
+
+    // STEP BAKERY-PHONE-2: 電話番号の表記ゆれを統一する
+    function normalizePhone(value) {
+      let text = clean(value)
+        .replace(/[０-９]/g, (ch) => String.fromCharCode(ch.charCodeAt(0) - 0xFEE0))
+        .replace(/[－ー―‐‑‒–—−]/g, "-")
+        .replace(/[（]/g, "(")
+        .replace(/[）]/g, ")");
+      text = text.replace(/[^0-9+]/g, "");
+      if (text.startsWith("+81")) text = "0" + text.slice(3);
+      return text.replace(/[^0-9]/g, "");
+    }
+
+    function looksLikePhone(value) {
+      const raw = clean(value);
+      const digits = normalizePhone(raw);
+      return !!digits && (digits.length >= 10 || raw.includes("+81") || /[０-９]/.test(raw));
+    }
+
+    function normalizeCustomerKey(value) {
+      return looksLikePhone(value) ? normalizePhone(value) : clean(value);
     }
 
     function apiBase() {
@@ -2191,7 +2214,7 @@
 
         const data = await apiPost("/api/customer/register", {
           customer_name: clean($("nameInput").value),
-          phone: clean($("phoneInput").value),
+          phone: normalizePhone($("phoneInput").value),
           line_user_id: liffProfile?.userId || getGuestId(),
           line_display_name: liffProfile?.displayName || clean($("nameInput").value),
           buying_habit: selectedRadio("buyingHabit"),
@@ -2214,8 +2237,9 @@
     }
 
     async function loadCustomerByKey(key) {
-      if (!key) return null;
-      return apiGet("/api/customer/me?member_code=" + encodeURIComponent(key));
+      const normalizedKey = normalizeCustomerKey(key);
+      if (!normalizedKey) return null;
+      return apiGet("/api/customer/me?customer_key=" + encodeURIComponent(normalizedKey));
     }
 
     async function useDemoMember() {
@@ -2323,14 +2347,14 @@
           member_code: currentCustomer.member_code,
           line_user_id: currentCustomer.line_user_id,
           customer_name: currentCustomer.customer_name || currentCustomer.line_display_name || "お客様",
-          phone: currentCustomer.phone || "",
+          phone: normalizePhone(currentCustomer.phone || ""),
           pickup_date: date,
           pickup_time: $("pickupTimeInput").value || pickupTimes()[0],
           payment_status: "unpaid",
           payment_method: "store",
           total_amount: total,
           items,
-          memo: "wallet.html STEP BAKERY-31D-R2 いつものパン導線から取り置き予約"
+          memo: "wallet.html STEP BAKERY-PHONE-2 いつものパン導線から取り置き予約"
         });
 
         preorderItems = {};
@@ -2359,7 +2383,7 @@
       try {
         const data = await apiPost("/api/customer/register", {
           customer_name: currentCustomer.customer_name || currentCustomer.line_display_name || "お客様",
-          phone: currentCustomer.phone || "",
+          phone: normalizePhone(currentCustomer.phone || ""),
           line_user_id: currentCustomer.line_user_id || currentCustomer.member_code,
           line_display_name: currentCustomer.line_display_name || currentCustomer.customer_name || "お客様",
           buying_habit: currentCustomer.buying_habit || "family",
@@ -2412,6 +2436,7 @@
     }
 
     function bindEvents() {
+      $("phoneInput")?.addEventListener("blur", () => { $("phoneInput").value = normalizePhone($("phoneInput").value); });
       $("registerButton").addEventListener("click", registerCustomer);
       $("useDemoMemberButton").addEventListener("click", useDemoMember);
       $("copyMemberButton").addEventListener("click", async () => {
