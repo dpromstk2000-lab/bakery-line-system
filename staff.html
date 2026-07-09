@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  <title>DPROベーカリー | staff.html STEP BAKERY-31B</title>
+  <title>DPROベーカリー | staff.html STEP BAKERY-PHONE-2</title>
   <style>
     :root {
       --bg: #fff7ed;
@@ -625,7 +625,7 @@
   <div class="wrap">
     <header class="hero">
       <div>
-        <div class="badge">STEP BAKERY-31B / スタッフ・iPad現場画面</div>
+        <div class="badge">STEP BAKERY-PHONE-2 / スタッフ・iPad現場画面</div>
         <h1>パン屋スタッフ<br>今日の取り置き画面</h1>
         <p class="lead">
           スタッフはこの画面だけを見ればOK。誰が、何時に、何を取りに来るかを大きく表示し、
@@ -798,7 +798,7 @@
     </div>
 
     <div class="footer">
-      DPROベーカリーLINE / staff.html / STEP BAKERY-31B<br>
+      DPROベーカリーLINE / staff.html / STEP BAKERY-PHONE-2<br>
       スタッフ・iPad用に、取り置き対応だけを大きく表示する現場専用画面です。
     </div>
   </div>
@@ -817,6 +817,29 @@
 
     function clean(value) {
       return String(value ?? "").trim();
+    }
+
+
+    // STEP BAKERY-PHONE-2: 電話番号の表記ゆれを統一する
+    function normalizePhone(value) {
+      let text = clean(value)
+        .replace(/[０-９]/g, (ch) => String.fromCharCode(ch.charCodeAt(0) - 0xFEE0))
+        .replace(/[－ー―‐‑‒–—−]/g, "-")
+        .replace(/[（]/g, "(")
+        .replace(/[）]/g, ")");
+      text = text.replace(/[^0-9+]/g, "");
+      if (text.startsWith("+81")) text = "0" + text.slice(3);
+      return text.replace(/[^0-9]/g, "");
+    }
+
+    function looksLikePhone(value) {
+      const raw = clean(value);
+      const digits = normalizePhone(raw);
+      return !!digits && (digits.length >= 10 || raw.includes("+81") || /[０-９]/.test(raw));
+    }
+
+    function normalizeCustomerKey(value) {
+      return looksLikePhone(value) ? normalizePhone(value) : clean(value);
     }
 
     function todayJst() {
@@ -1047,7 +1070,7 @@
       const cardClass = mode === "ready" ? "ready-card" : (mode === "history" ? "done" : "urgent");
       const customer = preorder.customer_name || preorder.member_code || "お客様";
       const member = preorder.member_code || "";
-      const phone = preorder.phone || "";
+      const phone = normalizePhone(preorder.phone || "");
       const memo = preorder.memo || preorder.status_memo || "";
       const pickupDate = preorder.pickup_date || targetDate();
 
@@ -1269,7 +1292,7 @@
           preorder_id: preorderId,
           status: nextStatus,
           staff_name: "スタッフ",
-          memo: "staff.html STEP BAKERY-31Bから更新"
+          memo: "staff.html STEP BAKERY-PHONE-2から更新"
         });
 
         setStatus("startStatus", data.message || `「${label}」に変更しました。`, "ok");
