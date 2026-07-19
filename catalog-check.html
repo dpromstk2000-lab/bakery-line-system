@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>STEP BAKERY-32 カタログチェック</title>
+  <title>STEP BAKERY-33 カタログチェック</title>
   <style>
     *{box-sizing:border-box}body{margin:0;background:#fff8ed;color:#29211b;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;line-height:1.65}
     .wrap{width:min(900px,calc(100% - 24px));margin:20px auto 50px}.panel{background:#fff;border:1px solid #ead8c3;border-radius:24px;padding:22px;margin-bottom:14px;box-shadow:0 14px 40px rgba(88,48,19,.08)}
@@ -16,7 +16,7 @@
 <body><div class="wrap">
   <section class="panel">
     <h1>カタログ一括チェック</h1>
-    <p>STEP BAKERY-32のカタログWorker、公開商品、公開ページURLを確認します。</p>
+    <p>STEP BAKERY-33のカタログWorker、公開商品、公開ページURLを確認します。</p>
     <div class="grid">
       <div><label>カタログWorker</label><input id="api" value="https://dpro-bakery-catalog-api.dpromstk2000.workers.dev"></div>
       <div><label>店舗コード</label><input id="shop" value="bakery_demo"></div>
@@ -39,7 +39,8 @@ $("check").addEventListener("click",async()=>{
   }catch(e){show("health",e.message,false)}
   try{
     const r=await fetch(base()+"/api/public/catalog?shop_code="+encodeURIComponent(shop)),d=await r.json();
-    show("catalog",JSON.stringify({ok:d.ok,shop:d.shop,product_count:d.count,categories:d.categories},null,2),r.ok&&d.ok);
+    const limited=(d.products||[]).filter(p=>Number(p.per_customer_daily_limit||0)>0).map(p=>({product_code:p.product_code,product_name:p.product_name,per_customer_daily_limit:p.per_customer_daily_limit}));
+    show("catalog",JSON.stringify({ok:d.ok,shop:d.shop,product_count:d.count,categories:d.categories,customer_limited_products:limited},null,2),r.ok&&d.ok&&limited.length>0);
   }catch(e){show("catalog",e.message,false)}
   const u=new URL("./catalog.html",location.href);u.searchParams.set("shop_code",shop);u.searchParams.set("catalog_api",base());u.searchParams.set("api","https://dpro-bakery-wallet-api.dpromstk2000.workers.dev");
   $("url").innerHTML='<a href="'+u.toString()+'" target="_blank" rel="noopener">'+u.toString()+'</a>';

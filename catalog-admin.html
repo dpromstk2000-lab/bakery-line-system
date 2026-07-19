@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>DPROベーカリー | 商品・カタログ管理 STEP BAKERY-32-R1</title>
+  <title>DPROベーカリー | 商品・カタログ管理 STEP BAKERY-33</title>
   <style>
     :root{--bg:#fff8ed;--panel:#fff;--ink:#29211b;--muted:#74675d;--line:#ead8c3;--main:#9a4e16;--soft:#fff0dc;--green:#15704a;--red:#b83232;--blue:#225ea8;--shadow:0 18px 50px rgba(88,48,19,.11)}
     *{box-sizing:border-box}body{margin:0;color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:linear-gradient(180deg,#fff8ed,#fffdf9);line-height:1.65}
@@ -30,7 +30,7 @@
 <body>
 <div class="wrap">
   <header class="hero">
-    <span class="badge">STEP BAKERY-32-R1 / OWNER CATALOG</span>
+    <span class="badge">STEP BAKERY-33 / OWNER CATALOG</span>
     <h1>商品・写真・カタログ管理</h1>
     <p class="lead">パンの写真、価格、説明、カテゴリー、取り置き可否、売り切れ表示を管理します。画像は登録前にブラウザでWebPへ縮小します。</p>
     <div class="auth">
@@ -69,7 +69,8 @@
         <div class="full"><label>一覧用の短い説明</label><input id="shortDescription" maxlength="300" placeholder="例: 発酵バターの香りと、軽い食感が人気です。"></div>
         <div class="full"><label>詳しい説明</label><textarea id="description" placeholder="素材、焼き上がり、食べ方などを入力"></textarea></div>
         <div class="full"><label>アレルギー表示</label><input id="allergens" placeholder="例: 小麦・乳・卵"></div>
-        <div><label>1日の取り置き上限</label><input id="dailyLimit" type="number" min="0" placeholder="空欄は上限なし"></div>
+        <div><label>店舗全体の1日上限</label><input id="dailyLimit" type="number" min="0" placeholder="空欄は上限なし"></div>
+        <div><label>お一人様の1日上限</label><input id="customerDailyLimit" type="number" min="0" max="999" placeholder="例: 3／空欄は制限なし"></div>
         <div><label>公開状態</label><select id="catalogStatus"><option value="published">販売中</option><option value="sold_out">売り切れ</option><option value="hidden">非表示</option></select></div>
         <div><label>商品URL用スラッグ</label><input id="seoSlug" placeholder="通常は商品コードでOK"></div>
         <div class="full"><label>外部の詳細ページURL（任意）</label><input id="detailUrl" type="url" placeholder="既存ホームページの商品ページがある場合"></div>
@@ -173,6 +174,7 @@
         <strong>${escapeHtml(p.product_name || "-")}</strong>
         <span>${escapeHtml(p.product_code || "")} / ${Number(p.preorder_price ?? p.price ?? 0).toLocaleString("ja-JP")}円</span>
         <span>${escapeHtml(p.category || "その他")} / ${p.catalog_status === "sold_out" ? "売り切れ" : (p.catalog_published === false ? "非公開" : "公開")}</span>
+        <span>${p.per_customer_daily_limit ? `お一人様1日${Number(p.per_customer_daily_limit)}個まで` : "お一人様制限なし"}</span>
       </div>
     `).join("");
     document.querySelectorAll("[data-index]").forEach(el => el.addEventListener("click", () => selectProduct(products[Number(el.dataset.index)])));
@@ -190,6 +192,7 @@
     $("description").value = p.description || "";
     $("allergens").value = p.allergens || "";
     $("dailyLimit").value = p.daily_preorder_limit ?? "";
+    $("customerDailyLimit").value = p.per_customer_daily_limit ?? "";
     $("catalogStatus").value = p.catalog_status || "published";
     $("seoSlug").value = p.seo_slug || p.product_code || "";
     $("detailUrl").value = p.detail_url || "";
@@ -211,6 +214,7 @@
   function resetForm() {
     document.querySelectorAll("main input:not([type=checkbox]):not([type=file]), main textarea").forEach(el => el.value = "");
     $("price").value = "0"; $("preorderPrice").value = "0"; $("displayOrder").value = "100";
+    $("dailyLimit").value = ""; $("customerDailyLimit").value = "";
     $("category").value = "その他"; $("catalogStatus").value = "published";
     ["catalogPublished","isActive","preorderAvailable"].forEach(id => $(id).checked = true);
     ["isFeatured","isNew"].forEach(id => $(id).checked = false);
@@ -312,6 +316,7 @@
       description: $("description").value,
       allergens: $("allergens").value,
       daily_preorder_limit: $("dailyLimit").value,
+      per_customer_daily_limit: $("customerDailyLimit").value,
       catalog_status: $("catalogStatus").value,
       seo_slug: $("seoSlug").value,
       detail_url: $("detailUrl").value,

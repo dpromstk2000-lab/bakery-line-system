@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="description" content="パンの商品カタログ。写真・価格・説明を見ながらLINE取り置きへ進めます。">
-  <title>DPROベーカリー | パンカタログ STEP BAKERY-32</title>
+  <title>DPROベーカリー | パンカタログ STEP BAKERY-33</title>
   <style>
     :root{
       --bg:#fff8ed;--panel:#fff;--ink:#29211b;--muted:#74675d;--line:#ead8c3;
@@ -60,7 +60,7 @@
 <body>
 <div class="wrap">
   <header class="hero">
-    <span class="badge">PHOTO CATALOG / STEP BAKERY-32</span>
+    <span class="badge">PHOTO CATALOG / STEP BAKERY-33</span>
     <h1 id="shopName">パンカタログ</h1>
     <p class="lead">写真・価格・説明を見ながら、お気に入りのパンを選べます。取り置き可能な商品は、そのままLINE会員証へ進めます。</p>
   </header>
@@ -86,6 +86,7 @@
     <div class="price" id="modalPrice"></div>
     <p id="modalDescription"></p>
     <div class="allergen" id="modalAllergen" hidden></div>
+    <div class="allergen" id="modalCustomerLimit" hidden></div>
     <div class="modal-actions">
       <button class="reserve" id="modalReserve" type="button">LINEで取り置き</button>
       <button class="detail" id="modalClose" type="button">閉じる</button>
@@ -180,6 +181,7 @@
             <p class="desc">${escapeHtml(p.catalog_short_description || p.description || "")}</p>
             <div class="price">${yen(price)}</div>
             ${p.allergens ? `<div class="allergen">アレルギー: ${escapeHtml(p.allergens)}</div>` : ""}
+            ${Number(p.per_customer_daily_limit || 0) > 0 ? `<div class="allergen">お一人様1日 ${Number(p.per_customer_daily_limit)}個まで</div>` : ""}
             <div class="actions">
               <button class="detail" type="button" data-detail="${index}">詳しく見る</button>
               <button class="reserve" type="button" data-reserve="${index}" ${sold || p.is_preorder_available === false ? "disabled" : ""}>
@@ -202,6 +204,9 @@
     $("modalDescription").textContent = p.description || p.catalog_short_description || "";
     $("modalAllergen").hidden = !p.allergens;
     $("modalAllergen").textContent = p.allergens ? "アレルギー: " + p.allergens : "";
+    const customerLimit = Number(p.per_customer_daily_limit || 0);
+    $("modalCustomerLimit").hidden = customerLimit <= 0;
+    $("modalCustomerLimit").textContent = customerLimit > 0 ? `お一人様1日 ${customerLimit}個まで` : "";
     $("modalImage").hidden = !p.image_url;
     if (p.image_url) {
       $("modalImage").src = p.image_url;
