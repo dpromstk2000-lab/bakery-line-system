@@ -1,0 +1,127 @@
+name: One-time Bakery STEP 35 R2 toggle fix
+
+on:
+  push:
+    paths:
+      - '.github/workflows/bakery-step35-r2.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  fix-toggle:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Preserve unsaved toggle state
+        shell: python
+        run: |
+          from pathlib import Path
+
+          js_path = Path("owner-wallet-mode.js")
+          owner_path = Path("owner.html")
+          workflow_path = Path(".github/workflows/bakery-step35-r2.yml")
+
+          text = js_path.read_text(encoding="utf-8")
+          owner = owner_path.read_text(encoding="utf-8")
+
+          text = text.replace(
+              "// DPRO Bakery STEP BAKERY-35",
+              "// DPRO Bakery STEP BAKERY-35-R2",
+              1
+          )
+
+          text = text.replace(
+              """  const state = {
+              chargeEnabled: null,
+              loaded: false,
+              applying: false
+            };""",
+              """  const state = {
+              chargeEnabled: null,
+              loaded: false,
+              applying: false,
+              toggleDirty: false
+            };""",
+              1
+          )
+
+          text = text.replace(
+              """      const toggle = document.getElementById("dpro35ChargeToggle");
+              if (toggle) toggle.checked = state.chargeEnabled === true;""",
+              """      const toggle = document.getElementById("dpro35ChargeToggle");
+              if (toggle && !state.toggleDirty) {
+                toggle.checked = state.chargeEnabled === true;
+              }""",
+              1
+          )
+
+          load_block = """      state.chargeEnabled = data.settings?.wallet_charge_enabled === true;
+              state.loaded = true;
+              applyOwnerMode();"""
+          load_fixed = """      state.chargeEnabled = data.settings?.wallet_charge_enabled === true;
+              state.loaded = true;
+              state.toggleDirty = false;
+              applyOwnerMode();"""
+          text = text.replace(load_block, load_fixed, 1)
+
+          save_block = """      state.chargeEnabled = data.settings?.wallet_charge_enabled === true;
+              state.loaded = true;
+              applyOwnerMode();
+              setStatus("""
+          save_fixed = """      state.chargeEnabled = data.settings?.wallet_charge_enabled === true;
+              state.loaded = true;
+              state.toggleDirty = false;
+              applyOwnerMode();
+              setStatus("""
+          text = text.replace(save_block, save_fixed, 1)
+
+          listener_block = """    section.querySelector("#dpro35SaveMode")?.addEventListener("click", saveMode);
+              section.querySelector("#dpro35LoadMode")?.addEventListener("click", () => loadMode(true));"""
+          listener_fixed = """    section.querySelector("#dpro35SaveMode")?.addEventListener("click", saveMode);
+              section.querySelector("#dpro35LoadMode")?.addEventListener("click", () => loadMode(true));
+              section.querySelector("#dpro35ChargeToggle")?.addEventListener("change", (event) => {
+                state.toggleDirty = true;
+                setStatus(
+                  event.target.checked
+                    ? "チャージ機能をONに変更しました。まだ保存されていません。"
+                    : "チャージ機能をOFFに変更しました。まだ保存されていません。",
+                  "warn"
+                );
+              });"""
+          text = text.replace(listener_block, listener_fixed, 1)
+
+          owner = owner.replace(
+              '<script src="./owner-wallet-mode.js?v=35"></script>',
+              '<script src="./owner-wallet-mode.js?v=35-r2"></script>',
+              1
+          )
+
+          checks = {
+              "R2 version": "STEP BAKERY-35-R2" in text,
+              "dirty state": "toggleDirty: false" in text,
+              "manual change preserved": "if (toggle && !state.toggleDirty)" in text,
+              "unsaved notice": "まだ保存されていません" in text,
+              "cache version": 'owner-wallet-mode.js?v=35-r2' in owner,
+          }
+          failed = [name for name, ok in checks.items() if not ok]
+          if failed:
+              raise SystemExit("validation failed: " + ", ".join(failed))
+
+          js_path.write_text(text, encoding="utf-8")
+          owner_path.write_text(owner, encoding="utf-8")
+          workflow_path.unlink(missing_ok=True)
+
+      - name: JavaScript syntax check
+        run: node --check owner-wallet-mode.js
+
+      - name: Commit STEP BAKERY-35-R2
+        run: |
+          git config user.name "DPRO Bakery Automation"
+          git config user.email "actions@users.noreply.github.com"
+          git add owner-wallet-mode.js owner.html .github/workflows/bakery-step35-r2.yml
+          git commit -m "STEP BAKERY-35-R2 preserve charge toggle before save"
+          git push
