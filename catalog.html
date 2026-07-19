@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="description" content="パンの商品カタログ。写真・価格・説明を見ながらLINE取り置きへ進めます。">
+  <title>DPROベーカリー | パンカタログ STEP BAKERY-32</title>
+  <style>
+    :root{
+      --bg:#fff8ed;--panel:#fff;--ink:#29211b;--muted:#74675d;--line:#ead8c3;
+      --main:#9a4e16;--main2:#c36a22;--soft:#fff0dc;--green:#16704b;--red:#b83232;
+      --shadow:0 18px 48px rgba(88,48,19,.12);--radius:24px
+    }
+    *{box-sizing:border-box}
+    body{margin:0;color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      background:radial-gradient(circle at 10% 0,rgba(240,165,75,.18),transparent 32%),linear-gradient(180deg,#fff8ed,#fffdf8);
+      line-height:1.65}
+    .wrap{width:min(1180px,calc(100% - 28px));margin:18px auto 64px}
+    .hero{background:linear-gradient(135deg,#3b2518,#74401f 66%,#a55a23);color:#fff7ec;border-radius:32px;
+      padding:clamp(24px,5vw,52px);box-shadow:var(--shadow);position:relative;overflow:hidden}
+    .hero:after{content:"🥐";position:absolute;right:22px;top:4px;font-size:clamp(90px,18vw,180px);opacity:.12}
+    .badge{display:inline-flex;background:#fff0dc;color:#7b3c10;border-radius:999px;padding:7px 12px;font-weight:950;font-size:13px}
+    h1{font-size:clamp(36px,7vw,72px);line-height:1;margin:16px 0 12px;letter-spacing:-.06em}
+    .lead{font-size:clamp(16px,2vw,20px);font-weight:800;max-width:720px;margin:0;color:#ffe8cd}
+    .toolbar{display:grid;grid-template-columns:1fr auto;gap:12px;margin:18px 0}
+    .search{width:100%;border:1px solid var(--line);border-radius:18px;padding:15px 16px;font-size:17px;background:#fff}
+    .chips{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 18px}
+    .chip{border:1px solid var(--line);background:#fff;color:#5e4838;border-radius:999px;padding:10px 14px;font-size:14px;font-weight:900;cursor:pointer}
+    .chip.active{background:var(--main);color:#fff;border-color:var(--main)}
+    .status{background:#fff;border:1px solid var(--line);border-radius:18px;padding:14px 16px;font-weight:850;color:var(--muted);margin:14px 0}
+    .grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+    .card{background:#fff;border:1px solid var(--line);border-radius:26px;overflow:hidden;box-shadow:0 12px 34px rgba(88,48,19,.08);display:flex;flex-direction:column}
+    .photo{aspect-ratio:4/3;background:linear-gradient(135deg,#f9e2c5,#fff4e5);position:relative;overflow:hidden}
+    .photo img{width:100%;height:100%;object-fit:cover;display:block;transition:.25s transform}
+    .card:hover .photo img{transform:scale(1.025)}
+    .placeholder{height:100%;display:grid;place-items:center;font-size:64px}
+    .labels{position:absolute;left:12px;top:12px;display:flex;gap:6px;flex-wrap:wrap}
+    .label{background:rgba(255,255,255,.92);color:#71350f;border-radius:999px;padding:5px 9px;font-size:11px;font-weight:950}
+    .label.new{background:#dff7ea;color:#135d3d}.label.sold{background:#fde4e4;color:#8d2525}
+    .body{padding:18px;display:flex;flex-direction:column;gap:9px;flex:1}
+    .category{font-size:12px;color:var(--main);font-weight:950}
+    h2{font-size:23px;line-height:1.2;letter-spacing:-.04em;margin:0}
+    .desc{color:var(--muted);font-size:14px;margin:0;min-height:46px}
+    .price{font-size:25px;font-weight:950;color:#6c3513}
+    .allergen{font-size:12px;color:#765f50;background:#fff6eb;border-radius:12px;padding:7px 9px}
+    .actions{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:auto}
+    button,.button{border:0;border-radius:999px;padding:12px 14px;font-size:14px;font-weight:950;text-decoration:none;cursor:pointer;text-align:center}
+    .detail{background:#fff;color:#784119;border:1px solid #d7b48e}
+    .reserve{background:var(--green);color:#fff}.reserve[disabled]{background:#aaa;cursor:not-allowed}
+    .footer{margin-top:32px;text-align:center;color:var(--muted);font-size:13px;font-weight:800}
+    dialog{border:0;border-radius:28px;padding:0;width:min(720px,calc(100% - 24px));box-shadow:0 30px 100px rgba(0,0,0,.28)}
+    dialog::backdrop{background:rgba(32,23,17,.62)}
+    .modal{padding:24px}.modal img{width:100%;max-height:360px;object-fit:cover;border-radius:20px;background:#f7eadb}
+    .modal h2{font-size:30px;margin:16px 0 8px}.modal p{white-space:pre-wrap}
+    .modal-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+    @media(max-width:900px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+    @media(max-width:620px){.wrap{width:min(100% - 18px,1180px)}.grid{grid-template-columns:1fr}.toolbar{grid-template-columns:1fr}.hero{border-radius:24px}.actions{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <header class="hero">
+    <span class="badge">PHOTO CATALOG / STEP BAKERY-32</span>
+    <h1 id="shopName">パンカタログ</h1>
+    <p class="lead">写真・価格・説明を見ながら、お気に入りのパンを選べます。取り置き可能な商品は、そのままLINE会員証へ進めます。</p>
+  </header>
+
+  <div class="toolbar">
+    <input class="search" id="searchInput" type="search" placeholder="パンの名前・説明・アレルギー情報から検索">
+    <button class="chip" id="reloadButton" type="button">再読み込み</button>
+  </div>
+  <div class="chips" id="categoryChips"></div>
+  <div class="status" id="status">商品を読み込んでいます。</div>
+  <main class="grid" id="productGrid"></main>
+
+  <footer class="footer">
+    DPROベーカリー LINE / 公開カタログ<br>
+    商品写真は遅延読み込みされるため、ページを重くしにくい構成です。
+  </footer>
+</div>
+
+<dialog id="detailDialog">
+  <div class="modal">
+    <img id="modalImage" alt="" hidden>
+    <h2 id="modalName"></h2>
+    <div class="price" id="modalPrice"></div>
+    <p id="modalDescription"></p>
+    <div class="allergen" id="modalAllergen" hidden></div>
+    <div class="modal-actions">
+      <button class="reserve" id="modalReserve" type="button">LINEで取り置き</button>
+      <button class="detail" id="modalClose" type="button">閉じる</button>
+    </div>
+  </div>
+</dialog>
+
+<script>
+(() => {
+  const params = new URLSearchParams(location.search);
+  const CONFIG = {
+    catalogApi: params.get("catalog_api") || "https://dpro-bakery-catalog-api.dpromstk2000.workers.dev",
+    reservationApi: params.get("api") || "https://dpro-bakery-wallet-api.dpromstk2000.workers.dev",
+    shopCode: params.get("shop_code") || "bakery_demo",
+    walletUrl: params.get("wallet_url") || "./wallet.html"
+  };
+
+  let products = [];
+  let currentCategory = "すべて";
+  let selectedProduct = null;
+  const $ = id => document.getElementById(id);
+  const cleanBase = v => String(v || "").replace(/\/+$/, "");
+  const yen = v => Number(v || 0).toLocaleString("ja-JP") + "円";
+  const escapeHtml = v => String(v ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+
+  async function loadCatalog() {
+    $("status").textContent = "商品を読み込んでいます。";
+    $("productGrid").innerHTML = "";
+    try {
+      const url = cleanBase(CONFIG.catalogApi) + "/api/public/catalog?shop_code=" + encodeURIComponent(CONFIG.shopCode);
+      const res = await fetch(url);
+      const data = await res.json();
+      if (!res.ok || !data.ok) throw new Error(data?.error?.message || "商品を取得できませんでした。");
+      products = Array.isArray(data.products) ? data.products : [];
+      $("shopName").textContent = (data.shop?.shop_name || "ベーカリー") + " 商品カタログ";
+      renderCategories(data.categories || []);
+      renderProducts();
+    } catch (e) {
+      $("status").textContent = e.message || "商品を取得できませんでした。";
+    }
+  }
+
+  function renderCategories(categories) {
+    const all = ["すべて", ...categories.filter(Boolean)];
+    $("categoryChips").innerHTML = all.map(c =>
+      `<button type="button" class="chip ${c === currentCategory ? "active" : ""}" data-category="${escapeHtml(c)}">${escapeHtml(c)}</button>`
+    ).join("");
+    document.querySelectorAll("[data-category]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        currentCategory = btn.dataset.category;
+        renderCategories(categories);
+        renderProducts();
+      });
+    });
+  }
+
+  function filteredProducts() {
+    const q = $("searchInput").value.trim().toLowerCase();
+    return products.filter(p => {
+      if (currentCategory !== "すべて" && String(p.category || "その他") !== currentCategory) return false;
+      if (!q) return true;
+      return [p.product_name, p.description, p.catalog_short_description, p.category, p.allergens]
+        .join(" ").toLowerCase().includes(q);
+    });
+  }
+
+  function renderProducts() {
+    const list = filteredProducts();
+    $("status").textContent = list.length
+      ? `${list.length}商品を表示しています。`
+      : "条件に合う商品がありません。";
+
+    $("productGrid").innerHTML = list.map((p, index) => {
+      const price = p.preorder_price ?? p.price ?? 0;
+      const sold = p.catalog_status === "sold_out";
+      const photo = p.image_url
+        ? `<img src="${escapeHtml(p.image_url)}" alt="${escapeHtml(p.product_name)}" loading="lazy" decoding="async">`
+        : `<div class="placeholder" aria-hidden="true">🥖</div>`;
+      return `
+        <article class="card">
+          <div class="photo">
+            ${photo}
+            <div class="labels">
+              ${p.is_new ? '<span class="label new">NEW</span>' : ""}
+              ${p.is_featured ? '<span class="label">おすすめ</span>' : ""}
+              ${sold ? '<span class="label sold">売り切れ</span>' : ""}
+            </div>
+          </div>
+          <div class="body">
+            <div class="category">${escapeHtml(p.category || "その他")}</div>
+            <h2>${escapeHtml(p.product_name || "-")}</h2>
+            <p class="desc">${escapeHtml(p.catalog_short_description || p.description || "")}</p>
+            <div class="price">${yen(price)}</div>
+            ${p.allergens ? `<div class="allergen">アレルギー: ${escapeHtml(p.allergens)}</div>` : ""}
+            <div class="actions">
+              <button class="detail" type="button" data-detail="${index}">詳しく見る</button>
+              <button class="reserve" type="button" data-reserve="${index}" ${sold || p.is_preorder_available === false ? "disabled" : ""}>
+                ${sold ? "売り切れ" : (p.is_preorder_available === false ? "店頭販売のみ" : "取り置き")}
+              </button>
+            </div>
+          </div>
+        </article>`;
+    }).join("");
+
+    document.querySelectorAll("[data-detail]").forEach(btn => btn.addEventListener("click", () => showDetail(list[Number(btn.dataset.detail)])));
+    document.querySelectorAll("[data-reserve]").forEach(btn => btn.addEventListener("click", () => reserve(list[Number(btn.dataset.reserve)])));
+  }
+
+  function showDetail(p) {
+    if (!p) return;
+    selectedProduct = p;
+    $("modalName").textContent = p.product_name || "";
+    $("modalPrice").textContent = yen(p.preorder_price ?? p.price ?? 0);
+    $("modalDescription").textContent = p.description || p.catalog_short_description || "";
+    $("modalAllergen").hidden = !p.allergens;
+    $("modalAllergen").textContent = p.allergens ? "アレルギー: " + p.allergens : "";
+    $("modalImage").hidden = !p.image_url;
+    if (p.image_url) {
+      $("modalImage").src = p.image_url;
+      $("modalImage").alt = p.product_name || "商品写真";
+    }
+    const unavailable = p.catalog_status === "sold_out" || p.is_preorder_available === false;
+    $("modalReserve").disabled = unavailable;
+    $("modalReserve").textContent = unavailable ? "現在取り置きできません" : "LINEで取り置き";
+    $("detailDialog").showModal();
+  }
+
+  function reserve(p) {
+    if (!p) return;
+    const code = p.product_code || p.id;
+    localStorage.setItem("dpro_bakery_catalog_selected_" + CONFIG.shopCode, JSON.stringify({
+      product_code: code,
+      product_name: p.product_name || "",
+      quantity: 1,
+      saved_at: Date.now()
+    }));
+
+    const url = new URL(CONFIG.walletUrl, location.href);
+    url.searchParams.set("shop_code", CONFIG.shopCode);
+    url.searchParams.set("api", CONFIG.reservationApi);
+    url.searchParams.set("product_code", code);
+    url.searchParams.set("product_name", p.product_name || "");
+    url.searchParams.set("from", "catalog");
+    location.href = url.toString();
+  }
+
+  $("searchInput").addEventListener("input", renderProducts);
+  $("reloadButton").addEventListener("click", loadCatalog);
+  $("modalClose").addEventListener("click", () => $("detailDialog").close());
+  $("modalReserve").addEventListener("click", () => reserve(selectedProduct));
+  loadCatalog();
+})();
+</script>
+</body>
+</html>

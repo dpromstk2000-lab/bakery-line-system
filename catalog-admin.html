@@ -1,0 +1,357 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>DPROベーカリー | 商品・カタログ管理 STEP BAKERY-32</title>
+  <style>
+    :root{--bg:#fff8ed;--panel:#fff;--ink:#29211b;--muted:#74675d;--line:#ead8c3;--main:#9a4e16;--soft:#fff0dc;--green:#15704a;--red:#b83232;--blue:#225ea8;--shadow:0 18px 50px rgba(88,48,19,.11)}
+    *{box-sizing:border-box}body{margin:0;color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:linear-gradient(180deg,#fff8ed,#fffdf9);line-height:1.65}
+    .wrap{width:min(1240px,calc(100% - 28px));margin:18px auto 60px}.hero{background:#fff;border:1px solid var(--line);border-radius:30px;padding:24px;box-shadow:var(--shadow)}
+    .badge{display:inline-flex;background:var(--soft);color:#71350f;border-radius:999px;padding:6px 11px;font-size:12px;font-weight:950}
+    h1{font-size:clamp(32px,5vw,52px);line-height:1;margin:12px 0 10px;letter-spacing:-.055em}.lead{margin:0;color:var(--muted);font-weight:800}
+    .auth{display:grid;grid-template-columns:1.2fr .8fr .7fr auto;gap:10px;margin-top:18px}
+    input,textarea,select{width:100%;border:1px solid #dcbf9e;border-radius:14px;padding:12px 13px;font-size:15px;background:#fff;color:var(--ink)}
+    textarea{min-height:110px;resize:vertical}label{display:block;font-size:12px;font-weight:950;color:#625246;margin:0 0 5px}
+    button,.button{border:0;border-radius:999px;padding:12px 16px;font-weight:950;font-size:14px;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:6px}
+    .main{background:var(--main);color:#fff}.green{background:var(--green);color:#fff}.red{background:var(--red);color:#fff}.blue{background:var(--blue);color:#fff}.ghost{background:#fff;color:#71350f;border:1px solid #dcbf9e}
+    .status{margin-top:12px;border:1px solid var(--line);background:#fff8ed;border-radius:16px;padding:12px 14px;font-size:13px;font-weight:850;white-space:pre-wrap}.status.ok{background:#edf9f2;color:#155b3e;border-color:#b7dfca}.status.ng{background:#fff0f0;color:#8e2929;border-color:#efc1c1}.status.info{background:#eef6ff;color:#1e4d83;border-color:#bfd5ed}
+    .layout{display:grid;grid-template-columns:360px 1fr;gap:16px;margin-top:16px;align-items:start}.panel{background:#fff;border:1px solid var(--line);border-radius:24px;padding:20px;box-shadow:0 12px 38px rgba(88,48,19,.07)}
+    .sticky{position:sticky;top:12px}.panel h2{font-size:23px;margin:0 0 12px;letter-spacing:-.04em}.list{display:grid;gap:9px;max-height:68vh;overflow:auto;padding-right:4px}
+    .item{border:1px solid var(--line);background:#fffaf4;border-radius:16px;padding:12px;cursor:pointer}.item.active{border-color:#bd733a;background:#fff0dc}.item strong{display:block;font-size:16px}.item span{display:block;color:var(--muted);font-size:12px}
+    .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.grid.three{grid-template-columns:repeat(3,minmax(0,1fr))}.full{grid-column:1/-1}.checks{display:flex;gap:10px;flex-wrap:wrap;margin:12px 0}.check{display:flex;align-items:center;gap:7px;background:#fff8ed;border:1px solid var(--line);border-radius:999px;padding:8px 11px;font-size:13px;font-weight:900}.check input{width:auto}
+    .preview{border:1px dashed #c99c72;background:#fff9f2;border-radius:20px;padding:14px;margin-top:12px}.preview img{display:block;width:min(100%,460px);aspect-ratio:4/3;object-fit:cover;border-radius:16px;background:#f5e5d4}
+    .buttons{display:flex;gap:9px;flex-wrap:wrap;margin-top:14px}.urlbox{word-break:break-all;background:#f8f5f1;border:1px solid #ddd0c3;border-radius:14px;padding:11px;font-size:12px;margin-top:8px}
+    .hint{color:var(--muted);font-size:12px;font-weight:800}.danger{border-top:1px solid var(--line);margin-top:18px;padding-top:14px}
+    @media(max-width:900px){.auth{grid-template-columns:1fr 1fr}.layout{grid-template-columns:1fr}.sticky{position:static}.list{max-height:none}.grid.three{grid-template-columns:1fr 1fr}}
+    @media(max-width:600px){.wrap{width:calc(100% - 18px)}.auth,.grid,.grid.three{grid-template-columns:1fr}.full{grid-column:auto}}
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <header class="hero">
+    <span class="badge">STEP BAKERY-32 / OWNER CATALOG</span>
+    <h1>商品・写真・カタログ管理</h1>
+    <p class="lead">パンの写真、価格、説明、カテゴリー、取り置き可否、売り切れ表示を管理します。画像は登録前にブラウザでWebPへ縮小します。</p>
+    <div class="auth">
+      <div><label>カタログWorker URL</label><input id="apiBase" value="https://dpro-bakery-catalog-api.dpromstk2000.workers.dev"></div>
+      <div><label>店舗コード</label><input id="shopCode" value="bakery_demo"></div>
+      <div><label>管理コード</label><input id="adminCode" type="password" value="1234"></div>
+      <button class="main" id="loadButton" type="button">商品を読み込む</button>
+    </div>
+    <div id="topStatus" class="status info">SQLとカタログWorker反映後に「商品を読み込む」を押してください。</div>
+  </header>
+
+  <div class="layout">
+    <aside class="panel sticky">
+      <h2>登録商品</h2>
+      <div class="buttons" style="margin-top:0;margin-bottom:12px">
+        <button class="green" id="newButton" type="button">＋ 新しい商品</button>
+        <button class="ghost" id="openCatalogButton" type="button">公開カタログ</button>
+      </div>
+      <div id="productList" class="list"><div class="status">まだ読み込んでいません。</div></div>
+      <h2 style="margin-top:18px">公開URL</h2>
+      <div class="urlbox" id="catalogUrl"></div>
+      <div class="buttons"><button class="ghost" id="copyCatalogButton" type="button">URLをコピー</button></div>
+    </aside>
+
+    <main class="panel">
+      <h2>商品編集</h2>
+      <input id="id" type="hidden">
+      <input id="imagePath" type="hidden">
+      <div class="grid three">
+        <div><label>商品コード *</label><input id="productCode" placeholder="例: croissant"></div>
+        <div><label>商品名 *</label><input id="productName" placeholder="例: 発酵バタークロワッサン"></div>
+        <div><label>カテゴリー</label><input id="category" list="categoryList" value="その他"><datalist id="categoryList"><option>食パン</option><option>菓子パン</option><option>惣菜パン</option><option>ハード系</option><option>サンドイッチ</option><option>焼き菓子</option><option>季節商品</option><option>その他</option></datalist></div>
+        <div><label>通常価格（税込）</label><input id="price" type="number" min="0" step="1" value="0"></div>
+        <div><label>取り置き価格（税込）</label><input id="preorderPrice" type="number" min="0" step="1" value="0"></div>
+        <div><label>表示順</label><input id="displayOrder" type="number" step="1" value="100"></div>
+        <div class="full"><label>一覧用の短い説明</label><input id="shortDescription" maxlength="300" placeholder="例: 発酵バターの香りと、軽い食感が人気です。"></div>
+        <div class="full"><label>詳しい説明</label><textarea id="description" placeholder="素材、焼き上がり、食べ方などを入力"></textarea></div>
+        <div class="full"><label>アレルギー表示</label><input id="allergens" placeholder="例: 小麦・乳・卵"></div>
+        <div><label>1日の取り置き上限</label><input id="dailyLimit" type="number" min="0" placeholder="空欄は上限なし"></div>
+        <div><label>公開状態</label><select id="catalogStatus"><option value="published">販売中</option><option value="sold_out">売り切れ</option><option value="hidden">非表示</option></select></div>
+        <div><label>商品URL用スラッグ</label><input id="seoSlug" placeholder="通常は商品コードでOK"></div>
+        <div class="full"><label>外部の詳細ページURL（任意）</label><input id="detailUrl" type="url" placeholder="既存ホームページの商品ページがある場合"></div>
+      </div>
+
+      <div class="checks">
+        <label class="check"><input id="catalogPublished" type="checkbox" checked>カタログ公開</label>
+        <label class="check"><input id="isActive" type="checkbox" checked>商品を有効化</label>
+        <label class="check"><input id="preorderAvailable" type="checkbox" checked>取り置き可能</label>
+        <label class="check"><input id="isFeatured" type="checkbox">おすすめ</label>
+        <label class="check"><input id="isNew" type="checkbox">新商品</label>
+      </div>
+
+      <div class="preview">
+        <label>商品写真</label>
+        <input id="imageFile" type="file" accept="image/jpeg,image/png,image/webp">
+        <p class="hint">選択した写真は最大1400px・WebP品質82%へ自動圧縮します。元画像は12MB以内を推奨します。</p>
+        <img id="imagePreview" alt="商品写真プレビュー" hidden>
+        <input id="imageUrl" type="hidden">
+        <div class="buttons">
+          <button class="blue" id="uploadButton" type="button">写真をアップロード</button>
+          <button class="red" id="removeImageButton" type="button">写真を削除</button>
+        </div>
+        <div id="imageStatus" class="status info">写真を選択するとプレビューできます。</div>
+      </div>
+
+      <div class="buttons">
+        <button class="green" id="saveButton" type="button">商品情報を保存</button>
+        <button class="ghost" id="resetButton" type="button">入力をクリア</button>
+      </div>
+      <div id="saveStatus" class="status info">商品を選択するか「新しい商品」を押してください。</div>
+    </main>
+  </div>
+</div>
+
+<script>
+(() => {
+  let products = [];
+  let pendingImage = null;
+  const $ = id => document.getElementById(id);
+  const cleanBase = v => String(v || "").trim().replace(/\/+$/, "");
+  const escapeHtml = v => String(v ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+
+  function setStatus(id, text, cls="info") {
+    const el = $(id); el.textContent = text; el.className = "status " + cls;
+  }
+
+  function config() {
+    return {
+      api: cleanBase($("apiBase").value),
+      shopCode: $("shopCode").value.trim() || "bakery_demo",
+      adminCode: $("adminCode").value.trim()
+    };
+  }
+
+  async function post(path, payload) {
+    const c = config();
+    const res = await fetch(c.api + path, {
+      method: "POST",
+      headers: { "Content-Type": "text/plain;charset=UTF-8" },
+      body: JSON.stringify({ shop_code: c.shopCode, admin_code: c.adminCode, ...payload })
+    });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok || !data.ok) throw new Error(data?.error?.message || "通信に失敗しました。");
+    return data;
+  }
+
+  function catalogUrl() {
+    const c = config();
+    const url = new URL("./catalog.html", location.href);
+    url.searchParams.set("shop_code", c.shopCode);
+    url.searchParams.set("catalog_api", c.api);
+    url.searchParams.set("api", "https://dpro-bakery-wallet-api.dpromstk2000.workers.dev");
+    return url.toString();
+  }
+
+  function refreshCatalogUrl() {
+    $("catalogUrl").textContent = catalogUrl();
+  }
+
+  async function loadProducts() {
+    setStatus("topStatus", "商品を読み込んでいます。", "info");
+    try {
+      const data = await post("/api/admin/catalog/list", {});
+      products = data.products || [];
+      renderList();
+      refreshCatalogUrl();
+      setStatus("topStatus", `${products.length}商品を読み込みました。`, "ok");
+    } catch (e) {
+      setStatus("topStatus", e.message, "ng");
+    }
+  }
+
+  function renderList() {
+    if (!products.length) {
+      $("productList").innerHTML = '<div class="status">商品がありません。「新しい商品」から登録できます。</div>';
+      return;
+    }
+    $("productList").innerHTML = products.map((p, i) => `
+      <div class="item ${$("id").value === String(p.id || "") ? "active" : ""}" data-index="${i}">
+        <strong>${escapeHtml(p.product_name || "-")}</strong>
+        <span>${escapeHtml(p.product_code || "")} / ${Number(p.preorder_price ?? p.price ?? 0).toLocaleString("ja-JP")}円</span>
+        <span>${escapeHtml(p.category || "その他")} / ${p.catalog_status === "sold_out" ? "売り切れ" : (p.catalog_published === false ? "非公開" : "公開")}</span>
+      </div>
+    `).join("");
+    document.querySelectorAll("[data-index]").forEach(el => el.addEventListener("click", () => selectProduct(products[Number(el.dataset.index)])));
+  }
+
+  function selectProduct(p) {
+    $("id").value = p.id || "";
+    $("productCode").value = p.product_code || "";
+    $("productName").value = p.product_name || "";
+    $("category").value = p.category || "その他";
+    $("price").value = p.price ?? 0;
+    $("preorderPrice").value = p.preorder_price ?? p.price ?? 0;
+    $("displayOrder").value = p.display_order ?? 100;
+    $("shortDescription").value = p.catalog_short_description || "";
+    $("description").value = p.description || "";
+    $("allergens").value = p.allergens || "";
+    $("dailyLimit").value = p.daily_preorder_limit ?? "";
+    $("catalogStatus").value = p.catalog_status || "published";
+    $("seoSlug").value = p.seo_slug || p.product_code || "";
+    $("detailUrl").value = p.detail_url || "";
+    $("catalogPublished").checked = p.catalog_published !== false;
+    $("isActive").checked = p.is_active !== false;
+    $("preorderAvailable").checked = p.is_preorder_available !== false;
+    $("isFeatured").checked = p.is_featured === true;
+    $("isNew").checked = p.is_new === true;
+    $("imageUrl").value = p.image_url || "";
+    $("imagePath").value = p.image_path || "";
+    showPreview(p.image_url || "");
+    pendingImage = null;
+    $("imageFile").value = "";
+    setStatus("saveStatus", `「${p.product_name || "商品"}」を編集中です。`, "info");
+    renderList();
+    window.scrollTo({top: document.querySelector(".layout").offsetTop - 10, behavior:"smooth"});
+  }
+
+  function resetForm() {
+    document.querySelectorAll("main input:not([type=checkbox]):not([type=file]), main textarea").forEach(el => el.value = "");
+    $("price").value = "0"; $("preorderPrice").value = "0"; $("displayOrder").value = "100";
+    $("category").value = "その他"; $("catalogStatus").value = "published";
+    ["catalogPublished","isActive","preorderAvailable"].forEach(id => $(id).checked = true);
+    ["isFeatured","isNew"].forEach(id => $(id).checked = false);
+    $("imageFile").value = ""; pendingImage = null; showPreview("");
+    setStatus("saveStatus", "新しい商品を入力できます。", "info");
+    setStatus("imageStatus", "写真を選択するとプレビューできます。", "info");
+    renderList();
+  }
+
+  function showPreview(url) {
+    $("imagePreview").hidden = !url;
+    if (url) $("imagePreview").src = url;
+  }
+
+  async function compressImage(file) {
+    if (!file) throw new Error("写真を選択してください。");
+    if (file.size > 12 * 1024 * 1024) throw new Error("元画像が12MBを超えています。小さい画像を選んでください。");
+    const bitmap = await createImageBitmap(file);
+    const max = 1400;
+    const scale = Math.min(1, max / Math.max(bitmap.width, bitmap.height));
+    const w = Math.max(1, Math.round(bitmap.width * scale));
+    const h = Math.max(1, Math.round(bitmap.height * scale));
+    const canvas = document.createElement("canvas");
+    canvas.width = w; canvas.height = h;
+    const ctx = canvas.getContext("2d", {alpha:false});
+    ctx.fillStyle = "#fff"; ctx.fillRect(0,0,w,h); ctx.drawImage(bitmap,0,0,w,h);
+    bitmap.close?.();
+    const blob = await new Promise((resolve, reject) => canvas.toBlob(b => b ? resolve(b) : reject(new Error("画像圧縮に失敗しました。")), "image/webp", .82));
+    const dataUrl = await new Promise((resolve, reject) => {
+      const reader = new FileReader(); reader.onload = () => resolve(reader.result); reader.onerror = reject; reader.readAsDataURL(blob);
+    });
+    return { blob, dataUrl, base64: String(dataUrl).split(",")[1], mime_type:"image/webp", file_name:(file.name.replace(/\.[^.]+$/, "") || "product") + ".webp" };
+  }
+
+  async function chooseImage(file) {
+    try {
+      setStatus("imageStatus", "画像を圧縮しています。", "info");
+      pendingImage = await compressImage(file);
+      showPreview(pendingImage.dataUrl);
+      setStatus("imageStatus", `圧縮完了: ${(pendingImage.blob.size/1024).toFixed(0)}KB。続けて「写真をアップロード」を押してください。`, "ok");
+    } catch (e) {
+      pendingImage = null; setStatus("imageStatus", e.message, "ng");
+    }
+  }
+
+  async function uploadImage() {
+    const code = $("productCode").value.trim();
+    if (!code) return setStatus("imageStatus", "先に商品コードを入力してください。", "ng");
+    if (!pendingImage) return setStatus("imageStatus", "先に写真を選択してください。", "ng");
+    try {
+      $("uploadButton").disabled = true;
+      setStatus("imageStatus", "写真をアップロードしています。", "info");
+      const data = await post("/api/admin/catalog/upload-image", {
+        product_code: code,
+        file_name: pendingImage.file_name,
+        mime_type: pendingImage.mime_type,
+        base64: pendingImage.base64
+      });
+      $("imageUrl").value = data.image_url || "";
+      $("imagePath").value = data.image_path || "";
+      showPreview(data.image_url || "");
+      pendingImage = null;
+      setStatus("imageStatus", `写真を登録しました（${Math.round((data.bytes || 0)/1024)}KB）。最後に商品情報を保存してください。`, "ok");
+    } catch (e) {
+      setStatus("imageStatus", e.message, "ng");
+    } finally {
+      $("uploadButton").disabled = false;
+    }
+  }
+
+  async function removeImage() {
+    const path = $("imagePath").value.trim();
+    if (!path) {
+      $("imageUrl").value = ""; showPreview("");
+      return setStatus("imageStatus", "写真URLをクリアしました。商品情報を保存してください。", "info");
+    }
+    try {
+      await post("/api/admin/catalog/delete-image", { image_path:path });
+      $("imageUrl").value = ""; $("imagePath").value = ""; showPreview("");
+      setStatus("imageStatus", "写真を削除しました。商品情報も保存してください。", "ok");
+    } catch (e) {
+      setStatus("imageStatus", e.message, "ng");
+    }
+  }
+
+  async function saveProduct() {
+    if (!$("productCode").value.trim() || !$("productName").value.trim()) {
+      return setStatus("saveStatus", "商品コードと商品名は必須です。", "ng");
+    }
+    const payload = {
+      id: $("id").value,
+      product_code: $("productCode").value,
+      product_name: $("productName").value,
+      category: $("category").value,
+      price: $("price").value,
+      preorder_price: $("preorderPrice").value,
+      display_order: $("displayOrder").value,
+      catalog_short_description: $("shortDescription").value,
+      description: $("description").value,
+      allergens: $("allergens").value,
+      daily_preorder_limit: $("dailyLimit").value,
+      catalog_status: $("catalogStatus").value,
+      seo_slug: $("seoSlug").value,
+      detail_url: $("detailUrl").value,
+      catalog_published: $("catalogPublished").checked,
+      is_active: $("isActive").checked,
+      is_preorder_available: $("preorderAvailable").checked,
+      is_featured: $("isFeatured").checked,
+      is_new: $("isNew").checked,
+      image_url: $("imageUrl").value,
+      image_path: $("imagePath").value
+    };
+    try {
+      $("saveButton").disabled = true;
+      setStatus("saveStatus", "保存しています。", "info");
+      const data = await post("/api/admin/catalog/save", payload);
+      setStatus("saveStatus", data.message || "保存しました。", "ok");
+      await loadProducts();
+      if (data.product) selectProduct(data.product);
+    } catch (e) {
+      setStatus("saveStatus", e.message, "ng");
+    } finally {
+      $("saveButton").disabled = false;
+    }
+  }
+
+  $("loadButton").addEventListener("click", loadProducts);
+  $("newButton").addEventListener("click", resetForm);
+  $("resetButton").addEventListener("click", resetForm);
+  $("saveButton").addEventListener("click", saveProduct);
+  $("imageFile").addEventListener("change", e => chooseImage(e.target.files?.[0]));
+  $("uploadButton").addEventListener("click", uploadImage);
+  $("removeImageButton").addEventListener("click", removeImage);
+  $("copyCatalogButton").addEventListener("click", async () => {
+    await navigator.clipboard.writeText(catalogUrl()); setStatus("topStatus", "公開カタログURLをコピーしました。", "ok");
+  });
+  $("openCatalogButton").addEventListener("click", () => window.open(catalogUrl(), "_blank", "noopener"));
+  ["apiBase","shopCode"].forEach(id => $(id).addEventListener("input", refreshCatalogUrl));
+  refreshCatalogUrl();
+  resetForm();
+})();
+</script>
+</body>
+</html>
