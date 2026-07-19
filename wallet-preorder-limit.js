@@ -1,5 +1,5 @@
 // =========================================================
-// DPRO Bakery STEP BAKERY-33
+// DPRO Bakery STEP BAKERY-33-R1
 // お一人様取り置き上限・累計予約ガード（会員証画面補助）
 //
 // 役割:
@@ -175,8 +175,13 @@
         : `お一人様1日${limit}個まで`;
 
       const selected = currentQty(plus);
-      plus.disabled = remaining <= selected;
-      plus.title = plus.disabled ? statusMessage(code) : "";
+      const product = state.products.get(String(code)) || {};
+      const stockRemaining = product.remaining_preorder_quantity;
+      const soldOut = product.preorder_sold_out === true
+        || (stockRemaining !== null && stockRemaining !== undefined && Number(stockRemaining) <= 0);
+      const customerLimitReached = remaining <= selected;
+      plus.disabled = soldOut || customerLimitReached;
+      plus.title = customerLimitReached ? statusMessage(code) : "";
     });
   }
 
@@ -228,6 +233,7 @@
         showStatus(statusMessage(code), "warn");
         return;
       }
+      setTimeout(annotateCards, 30);
     }
 
     if (event.target.closest?.("#repeatLastButton, #applyFavoriteButton")) {
@@ -261,20 +267,7 @@
   `;
   document.head.appendChild(style);
 
-  const observer = new MutationObserver(() => {
-    const key = customerKey();
-    const date = pickupDate();
-    if (key !== state.lastCustomerKey || date !== state.lastPickupDate) {
-      state.lastCustomerKey = key;
-      state.lastPickupDate = date;
-      refresh("identity-or-date");
-    } else {
-      enforceRenderedQuantities();
-    }
-  });
-
   function start() {
-    observer.observe(document.body, { childList: true, subtree: true, characterData: true });
     refresh("start");
 
     setInterval(() => {
@@ -285,7 +278,7 @@
         state.lastPickupDate = date;
         refresh("poll");
       } else {
-        annotateCards();
+        enforceRenderedQuantities();
       }
     }, 1500);
   }
