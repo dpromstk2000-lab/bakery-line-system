@@ -1,5 +1,5 @@
 // =========================================================
-// DPRO Bakery STEP BAKERY-35
+// DPRO Bakery STEP BAKERY-35-R2
 // オーナー用：QR会員証・チャージオプション設定
 //
 // QR会員証は常にON。
@@ -12,7 +12,8 @@
   const state = {
     chargeEnabled: null,
     loaded: false,
-    applying: false
+    applying: false,
+    toggleDirty: false
   };
 
   const clean = (value) => String(value || "").trim();
@@ -116,7 +117,9 @@
       });
 
       const toggle = document.getElementById("dpro35ChargeToggle");
-      if (toggle) toggle.checked = state.chargeEnabled === true;
+      if (toggle && !state.toggleDirty) {
+        toggle.checked = state.chargeEnabled === true;
+      }
 
       const badge = document.getElementById("dpro35ModeBadge");
       if (badge) {
@@ -139,6 +142,7 @@
       const data = await post("/api/admin/wallet-mode/get");
       state.chargeEnabled = data.settings?.wallet_charge_enabled === true;
       state.loaded = true;
+      state.toggleDirty = false;
       applyOwnerMode();
       if (showMessage) {
         setStatus(
@@ -167,6 +171,7 @@
       });
       state.chargeEnabled = data.settings?.wallet_charge_enabled === true;
       state.loaded = true;
+      state.toggleDirty = false;
       applyOwnerMode();
       setStatus(
         data.message + " お客様画面を再読み込みすると反映されます。",
@@ -272,6 +277,15 @@
 
     section.querySelector("#dpro35SaveMode")?.addEventListener("click", saveMode);
     section.querySelector("#dpro35LoadMode")?.addEventListener("click", () => loadMode(true));
+    section.querySelector("#dpro35ChargeToggle")?.addEventListener("change", (event) => {
+      state.toggleDirty = true;
+      setStatus(
+        event.target.checked
+          ? "チャージ機能をONに変更しました。まだ保存されていません。"
+          : "チャージ機能をOFFに変更しました。まだ保存されていません。",
+        "warn"
+      );
+    });
   }
 
   function start() {
