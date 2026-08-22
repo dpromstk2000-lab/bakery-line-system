@@ -10,6 +10,14 @@
 // ・チャージパネル
 //
 // 既存のQR生成、会員登録、取り置き予約には触れません。
+//
+// PRODUCT READY PR1 / LINE IDENTITY:
+// Version: BAKERY-PR1-20260822
+// Production protected customer APIs send a LIFF ID Token to the Worker.
+// The Worker verifies it server-side; browser line_user_id is never proof.
+// 通常顧客画面では技術・DEMO保守UIを隠します。
+// demo=1 / dev=1 / maintenance=1 の明示モードだけ再表示します。
+// 既存API入力DOMは削除せず非表示にして、既存動作を維持します。
 // DOM変更の常時監視は使用しません。
 // =========================================================
 
@@ -20,7 +28,8 @@
     chargeEnabled: false,
     shopCode: "",
     catalogApi: "",
-    applying: false
+    applying: false,
+    liffReadyPromise: null
   };
 
   const cleanBase = (value) => String(value || "").trim().replace(/\/+$/, "");
@@ -35,6 +44,169 @@
   function catalogApi() {
     const params = new URLSearchParams(location.search);
     return cleanBase(params.get("catalog_api") || DEFAULT_CATALOG_API);
+  }
+
+  function maintenanceMode() {
+    const params = new URLSearchParams(location.search);
+    return ["demo", "dev", "maintenance"].some((key) =>
+      ["1", "true", "yes", "on"].includes(
+        String(params.get(key) || "").toLowerCase()
+      )
+    );
+  }
+
+  const LINE_IDENTITY_VERSION = "BAKERY-PR1-LINE-IDENTITY-20260822";
+  const PROTECTED_CUSTOMER_PATHS = new Set([
+    "/api/customer/register",
+    "/api/customer/me",
+    "/api/customer/preorders",
+    "/api/preorders/create"
+  ]);
+
+  function walletApiBase() {
+    const params = new URLSearchParams(location.search);
+    return cleanBase(
+      params.get("api")
+      || document.getElementById("apiBaseInput")?.value
+      || "https://dpro-bakery-wallet-api.dpromstk2000.workers.dev"
+    );
+  }
+
+  function liffId() {
+    const params = new URLSearchParams(location.search);
+    return String(
+      params.get("liff_id")
+      || document.getElementById("liffIdInput")?.value
+      || ""
+    ).trim();
+  }
+
+  function canonicalDemoSurface() {
+    return shopCode() === "bakery_demo"
+      && location.hostname === "dpromstk2000-lab.github.io"
+      && location.pathname.startsWith("/bakery-line-system/");
+  }
+
+  function explicitDemoTransport() {
+    return shopCode() === "bakery_demo"
+      && (canonicalDemoSurface() || maintenanceMode());
+  }
+
+  async function ensureLiffReady() {
+    if (state.liffReadyPromise) return state.liffReadyPromise;
+    state.liffReadyPromise = (async () => {
+      const configuredLiffId = liffId();
+      if (!window.liff) {
+        if (!configuredLiffId) return null;
+        await new Promise((resolve, reject) => {
+          const existing = document.querySelector('script[data-dpro-line-liff-sdk="1"]');
+          if (existing) {
+            existing.addEventListener("load", resolve, { once: true });
+            existing.addEventListener("error", reject, { once: true });
+            return;
+          }
+          const script = document.createElement("script");
+          script.src = "https://static.line-scdn.net/liff/edge/2/sdk.js";
+          script.async = true;
+          script.dataset.dproLineLiffSdk = "1";
+          script.addEventListener("load", resolve, { once: true });
+          script.addEventListener("error", reject, { once: true });
+          document.head.appendChild(script);
+        });
+      }
+      if (!window.liff) return null;
+      if (configuredLiffId) {
+        try { await window.liff.init({ liffId: configuredLiffId }); }
+        catch (error) {
+          console.warn("BAKERY PR1 LIFF init:", error);
+          return null;
+        }
+      }
+      return window.liff;
+    })();
+    return state.liffReadyPromise;
+  }
+
+  async function currentLiffIdToken() {
+    try {
+      const liff = await ensureLiffReady();
+      if (!liff || typeof liff.getIDToken !== "function") return "";
+      return String(liff.getIDToken() || "").trim();
+    } catch (error) {
+      console.warn("BAKERY PR1 LIFF token:", error);
+      return "";
+    }
+  }
+
+  function requestUrl(input) {
+    try {
+      if (input instanceof Request) return new URL(input.url, location.href);
+      return new URL(String(input), location.href);
+    } catch {
+      return null;
+    }
+  }
+
+  function isProtectedWalletRequest(url) {
+    if (!url || !PROTECTED_CUSTOMER_PATHS.has(url.pathname)) return false;
+    try {
+      return url.origin === new URL(walletApiBase()).origin;
+    } catch {
+      return false;
+    }
+  }
+
+  function installLineIdentityTransport() {
+    if (window.__DPRO_BAKERY_PR1_FETCH_INSTALLED__) return;
+    const nativeFetch = window.fetch.bind(window);
+    window.fetch = async (input, init = {}) => {
+      const url = requestUrl(input);
+      if (!isProtectedWalletRequest(url)) {
+        return nativeFetch(input, init);
+      }
+
+      const inputHeaders = input instanceof Request ? input.headers : undefined;
+      const headers = new Headers(inputHeaders || {});
+      new Headers(init.headers || {}).forEach((value, key) => headers.set(key, value));
+
+      if (explicitDemoTransport()) {
+        headers.set("X-DPRO-Demo", "1");
+        headers.delete("Authorization");
+        headers.delete("X-Line-ID-Token");
+      } else {
+        const idToken = await currentLiffIdToken();
+        if (idToken) {
+          headers.set("Authorization", `Bearer ${idToken}`);
+        } else {
+          headers.delete("Authorization");
+        }
+        headers.delete("X-DPRO-Demo");
+      }
+
+      return nativeFetch(input, { ...init, headers });
+    };
+    window.__DPRO_BAKERY_PR1_FETCH_INSTALLED__ = true;
+    window.DPRO_BAKERY_LINE_IDENTITY_TRANSPORT = {
+      version: LINE_IDENTITY_VERSION,
+      protectedPaths: [...PROTECTED_CUSTOMER_PATHS],
+      demoMode: explicitDemoTransport(),
+      tokenTransport: "Authorization Bearer LIFF ID Token"
+    };
+  }
+
+  function detailsBySummaryText(text) {
+    return [...document.querySelectorAll("details")].find((details) =>
+      String(details.querySelector("summary")?.textContent || "").trim() === text
+    ) || null;
+  }
+
+  function applyCustomerSurfaceGuard() {
+    const maintenance = maintenanceMode();
+    setHidden(detailsBySummaryText("DEMO・開発設定"), !maintenance);
+    setHidden(detailsBySummaryText("確認用URL"), !maintenance);
+    setHidden(document.getElementById("useDemoMemberButton"), !maintenance);
+    document.documentElement.classList.toggle("dpro-pr1-maintenance", maintenance);
+    document.documentElement.classList.toggle("dpro-pr1-customer", !maintenance);
   }
 
   function setHidden(element, hidden) {
@@ -150,6 +322,7 @@
     try {
       document.documentElement.classList.toggle("dpro35-charge-enabled", state.chargeEnabled);
       document.documentElement.classList.toggle("dpro35-qr-only", !state.chargeEnabled);
+      applyCustomerSurfaceGuard();
       applyRegistrationMode();
       applyWalletCardMode();
       applyChargePanelMode();
@@ -199,6 +372,7 @@
   document.head.appendChild(style);
 
   function start() {
+    installLineIdentityTransport();
     loadMode();
 
     document.addEventListener("click", (event) => {

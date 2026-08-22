@@ -9,6 +9,7 @@
 // ・iPadカメラ利用条件 / jsQRフォールバック
 // ・Bluetooth HID自動待受
 // ・STEP BAKERY-40 複数端末ライブ同期
+// ・本番LINE本人確認 negative test / DEMO例外境界
 // ・GitHub Pages必須ファイル
 // =========================================================
 
@@ -19,9 +20,22 @@
   const QR_TEST_VALUE = "DEMO-BK-001";
   const FETCH_TIMEOUT_MS = 12000;
 
+  // PRODUCT READY PR1 / CENTRAL DECISION V2.2
+  // expected は live 応答から生成せず、承認済み成果物・CENTRAL契約に固定する。
+  const PRODUCT_READY_ADAPTER = "DPRO-CONTROL-ADAPTER-1.0";
+  const FRONTEND_EXPECTED_VERSION = "BAKERY-PR1-20260822";
+  const FRONTEND_CURRENT_VERSION = "BAKERY-PR1-20260822";
+  const WALLET_EXPECTED_VERSION =
+    "BAKERY-PR1-LINE-IDENTITY-20260822";
+  const CATALOG_EXPECTED_VERSION =
+    "BAKERY-37-QR-ARRIVAL-PICKUP-20260720";
+  const DATABASE_EXPECTED_VERSION =
+    "BAKERY-DB-FINAL-RUNTIME-20260720";
+
   const state = {
     running: false,
     result: null,
+    walletHealth: null,
     catalogData: null,
     catalogHealth: null,
     assetTexts: new Map()
@@ -325,12 +339,80 @@
       const status = byId("finalCheckStatus");
       status.className = "dpro39-status info";
       status.textContent =
-        "ウォレット、カタログ、写真、QR、カメラ、HID、ライブ同期を確認しています。";
+        "ウォレット、LINE本人確認、カタログ、写真、QR、カメラ、HID、ライブ同期を確認しています。";
     }
+  }
+
+  function checkByKey(items, key) {
+    return items.find((entry) => entry.key === key) || null;
+  }
+
+  function buildProductReadyVersionContract(items) {
+    const databaseCheckKeys = [
+      "wallet_supabase",
+      "catalog_products",
+      "pickup_protection"
+    ];
+    const databaseChecks = databaseCheckKeys.map((key) => {
+      const entry = checkByKey(items, key);
+      return {
+        key,
+        ok: entry?.ok === true,
+        detail: clean(entry?.detail || "未実行")
+      };
+    });
+    const databaseAligned = databaseChecks.every((entry) => entry.ok);
+
+    const walletCurrent = clean(state.walletHealth?.version);
+    const catalogCurrent = clean(state.catalogHealth?.version);
+    const databaseCurrent = databaseAligned ? DATABASE_EXPECTED_VERSION : "";
+    const frontendCurrent = FRONTEND_CURRENT_VERSION;
+
+    const walletAligned = walletCurrent === WALLET_EXPECTED_VERSION;
+    const catalogAligned = catalogCurrent === CATALOG_EXPECTED_VERSION;
+    const frontendAligned = frontendCurrent === FRONTEND_EXPECTED_VERSION;
+
+    return {
+      adapter: PRODUCT_READY_ADAPTER,
+      wallet: {
+        expected: WALLET_EXPECTED_VERSION,
+        current: walletCurrent,
+        aligned: walletAligned
+      },
+      catalog: {
+        expected: CATALOG_EXPECTED_VERSION,
+        current: catalogCurrent,
+        aligned: catalogAligned
+      },
+      database: {
+        expected: DATABASE_EXPECTED_VERSION,
+        current: databaseCurrent,
+        checks: databaseChecks,
+        aligned: databaseAligned
+      },
+      frontend: {
+        expected: FRONTEND_EXPECTED_VERSION,
+        current: frontendCurrent,
+        aligned: frontendAligned
+      },
+      versionsAligned:
+        walletAligned &&
+        catalogAligned &&
+        databaseAligned &&
+        frontendAligned
+    };
+  }
+
+  function versionDetail(label, contract) {
+    const current = clean(contract.current) || "未取得";
+    return `${label}: expected=${contract.expected} / current=${current}`;
   }
 
   async function independentChecks() {
     const items = [];
+    state.walletHealth = null;
+    state.catalogHealth = null;
+    state.catalogData = null;
     let walletHealth = null;
     let walletSettings = null;
     let catalogHealth = null;
@@ -342,12 +424,15 @@
       "ウォレットWorker API",
       async () => {
         const data = await fetchJson(walletApi() + "/api/health");
+        state.walletHealth = data;
         if (data?.ok !== true) throw new Error("ok=trueではありません。");
         return {
           detail: data.version || "Worker起動OK",
           data: {
             version: data.version || "",
-            service: data.service || ""
+            service: data.service || "",
+            line_identity_server_verified: data.line_identity_server_verified === true,
+            line_identity_fail_closed: data.line_identity_fail_closed === true
           }
         };
       }
@@ -369,6 +454,73 @@
             shop_code: currentShopCode(),
             shop_name: shop.shop_name || ""
           }
+        };
+      }
+    );
+
+    await check(
+      items,
+      "line_identity_worker_contract",
+      "LINE本人確認・Worker契約",
+      async () => {
+        const health = state.walletHealth || {};
+        if (health.line_identity_server_verified !== true) {
+          throw new Error("server-verified LINE identity capability がありません。");
+        }
+        if (health.line_identity_fail_closed !== true) {
+          throw new Error("LINE identity fail-closed が確認できません。");
+        }
+        return {
+          detail: "LIFF ID TokenをWorkerで検証し、本番はfail-closedです。"
+        };
+      }
+    );
+
+    await check(
+      items,
+      "line_identity_forged_negative",
+      "LINE偽装ID・negative test",
+      async () => {
+        const url = new URL(walletApi() + "/api/customer/me");
+        url.searchParams.set("shop_code", "bakery_demo");
+        url.searchParams.set("line_user_id", "FORGED-LINE-USER-ID");
+        const response = await withTimeout(fetch(url.toString(), {
+          cache: "no-store",
+          headers: { Accept: "application/json" }
+        }));
+        const text = await response.text();
+        if (response.status !== 401) {
+          throw new Error(`偽装line_user_idが401で拒否されませんでした。HTTP ${response.status}: ${text.slice(0, 160)}`);
+        }
+        return {
+          detail: "有効なLINE証明なしの偽装line_user_idをHTTP 401で拒否しました。"
+        };
+      }
+    );
+
+    await check(
+      items,
+      "line_identity_demo_exception",
+      "LINE本人確認・DEMO例外境界",
+      async () => {
+        const url = new URL(walletApi() + "/api/customer/me");
+        url.searchParams.set("shop_code", "bakery_demo");
+        url.searchParams.set("member_code", "DEMO-BK-001");
+        const response = await withTimeout(fetch(url.toString(), {
+          cache: "no-store",
+          headers: {
+            Accept: "application/json",
+            "X-DPRO-Demo": "1"
+          }
+        }));
+        const text = await response.text();
+        let data = {};
+        try { data = text ? JSON.parse(text) : {}; } catch { data = {}; }
+        if (!response.ok || data?.ok === false) {
+          throw new Error(`明示BAKERY DEMO例外を確認できません。HTTP ${response.status}: ${text.slice(0, 160)}`);
+        }
+        return {
+          detail: "bakery_demo + 明示DEMO header の場合だけ既存DEMO導線を利用できます。"
         };
       }
     );
@@ -479,6 +631,11 @@
         path: "staff.html",
         label: "店舗iPad画面",
         marker: "staff-live-sync.js?v=40"
+      },
+      {
+        path: "wallet-membership-mode.js",
+        label: "Product READY LINE identity transport",
+        marker: "BAKERY-PR1-LINE-IDENTITY-20260822"
       },
       {
         path: "wallet-qr-standard.js",
@@ -674,18 +831,75 @@
           : "従来チェックにNGがあります。上部の結果を確認してください。"
       ));
 
+      // CENTRAL V2.1: expected/current を独立根拠で比較し、
+      // DB は既存runtime/business probes が全PASSした時だけ canonical current を採用する。
+      const productReadyVersions = buildProductReadyVersionContract(items);
+
+      items.push(item(
+        "wallet_version_aligned",
+        "Wallet Worker version",
+        productReadyVersions.wallet.aligned,
+        versionDetail("wallet", productReadyVersions.wallet)
+      ));
+      items.push(item(
+        "catalog_version_aligned",
+        "Catalog Worker version",
+        productReadyVersions.catalog.aligned,
+        versionDetail("catalog", productReadyVersions.catalog)
+      ));
+      items.push(item(
+        "database_version_aligned",
+        "Database runtime baseline",
+        productReadyVersions.database.aligned,
+        productReadyVersions.database.aligned
+          ? versionDetail("database", productReadyVersions.database)
+          : "DB canonicalはruntime/business probes全PASS後のみ採用します。"
+      ));
+      items.push(item(
+        "frontend_version_aligned",
+        "Frontend Product READY version",
+        productReadyVersions.frontend.aligned,
+        versionDetail("frontend", productReadyVersions.frontend)
+      ));
+
+      const blockingSystemCheckErrors = items
+        .filter((entry) => !entry.ok)
+        .map((entry) => ({
+          key: entry.key,
+          label: entry.label,
+          detail: entry.detail
+        }));
+      const versionsAligned = productReadyVersions.versionsAligned;
       const passed = items.filter((entry) => entry.ok).length;
       const failed = items.length - passed;
+      const allOk = failed === 0 && versionsAligned;
       const result = {
-        ok: failed === 0,
+        ok: allOk,
         service: "DPRO Bakery Final System Check",
         version: VERSION,
+        adapter: PRODUCT_READY_ADAPTER,
         time: new Date().toISOString(),
         jst_checked_at: jstNow(),
         shop_code: currentShopCode(),
         wallet_api: walletApi(),
         catalog_api: catalogApi(),
-        all_ok: failed === 0,
+        walletExpectedVersion: productReadyVersions.wallet.expected,
+        walletCurrentVersion: productReadyVersions.wallet.current,
+        walletAligned: productReadyVersions.wallet.aligned,
+        catalogExpectedVersion: productReadyVersions.catalog.expected,
+        catalogCurrentVersion: productReadyVersions.catalog.current,
+        catalogAligned: productReadyVersions.catalog.aligned,
+        databaseExpectedVersion: productReadyVersions.database.expected,
+        databaseCurrentVersion: productReadyVersions.database.current,
+        databaseChecks: productReadyVersions.database.checks,
+        databaseAligned: productReadyVersions.database.aligned,
+        frontendExpectedVersion: productReadyVersions.frontend.expected,
+        frontendCurrentVersion: productReadyVersions.frontend.current,
+        frontendAligned: productReadyVersions.frontend.aligned,
+        blockingSystemCheckErrors,
+        versionsAligned,
+        product_ready_versions: productReadyVersions,
+        all_ok: allOk,
         passed,
         failed,
         total: items.length,
