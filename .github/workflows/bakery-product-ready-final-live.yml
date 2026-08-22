@@ -1,4 +1,4 @@
-name: BAKERY Product READY Final Live Gate
+name: BAKERY Product READY Final Live Gate R2
 
 on:
   push:
@@ -22,6 +22,8 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Live API verification
+        # R2: Cloudflare Error 1010 avoidance.
+        # Use a normal Chromium-like browser signature instead of Python-urllib default UA.
         shell: bash
         run: |
           set -euo pipefail
@@ -35,14 +37,36 @@ jobs:
           UNKNOWN="https://evil.example"
           OUT=pathlib.Path("qa/bakery-product-ready-final/live.json")
 
+          DEFAULT_HEADERS={
+              "User-Agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36",
+              "Accept":"application/json,text/plain,*/*",
+              "Accept-Language":"ja,en-US;q=0.9,en;q=0.8",
+              "Cache-Control":"no-cache",
+              "Pragma":"no-cache",
+          }
+
           def request(url, method="GET", headers=None):
-              req=urllib.request.Request(url, method=method, headers=headers or {})
+              merged=dict(DEFAULT_HEADERS)
+              merged.update(headers or {})
+              req=urllib.request.Request(url, method=method, headers=merged)
               try:
                   with urllib.request.urlopen(req, timeout=30) as r:
                       body=r.read().decode("utf-8","replace")
-                      return r.status, {k.lower():v for k,v in r.headers.items()}, body
+                      h={k.lower():v for k,v in r.headers.items()}
+                      return r.status, h, body
               except urllib.error.HTTPError as e:
-                  return e.code, {k.lower():v for k,v in e.headers.items()}, e.read().decode("utf-8","replace")
+                  h={k.lower():v for k,v in e.headers.items()}
+                  body=e.read().decode("utf-8","replace")
+                  print("HTTP_ERROR", {
+                      "url": url,
+                      "status": e.code,
+                      "server": h.get("server"),
+                      "cf_ray": h.get("cf-ray"),
+                      "cf_error_type": h.get("cf-error-type"),
+                      "content_type": h.get("content-type"),
+                      "body_prefix": body[:240]
+                  })
+                  return e.code, h, body
 
           def j(body):
               try: return json.loads(body or "{}")
