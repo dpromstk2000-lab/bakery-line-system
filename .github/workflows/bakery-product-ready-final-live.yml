@@ -1,0 +1,250 @@
+name: BAKERY Product READY Final Live Gate
+
+on:
+  push:
+    paths:
+      - ".github/workflows/bakery-product-ready-final-live.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: bakery-product-ready-final-live
+  cancel-in-progress: false
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Live API verification
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p qa/bakery-product-ready-final screenshots
+          python - <<'PY'
+          import json, urllib.request, urllib.error, pathlib
+
+          WALLET="https://dpro-bakery-wallet-api.dpromstk2000.workers.dev"
+          CATALOG="https://dpro-bakery-catalog-api.dpromstk2000.workers.dev"
+          ALLOWED="https://dpromstk2000-lab.github.io"
+          UNKNOWN="https://evil.example"
+          OUT=pathlib.Path("qa/bakery-product-ready-final/live.json")
+
+          def request(url, method="GET", headers=None):
+              req=urllib.request.Request(url, method=method, headers=headers or {})
+              try:
+                  with urllib.request.urlopen(req, timeout=30) as r:
+                      body=r.read().decode("utf-8","replace")
+                      return r.status, {k.lower():v for k,v in r.headers.items()}, body
+              except urllib.error.HTTPError as e:
+                  return e.code, {k.lower():v for k,v in e.headers.items()}, e.read().decode("utf-8","replace")
+
+          def j(body):
+              try: return json.loads(body or "{}")
+              except: return {}
+
+          results={}
+
+          st,h,b=request(WALLET+"/api/health")
+          wh=j(b)
+          assert st==200, (st,b[:500])
+          assert wh.get("ok") is True
+          assert wh.get("version")=="BAKERY-PR1-LINE-IDENTITY-20260822", wh
+          assert wh.get("production_guard") is True
+          assert wh.get("demo_charge_guard") is True
+          assert wh.get("line_identity_server_verified") is True
+          assert wh.get("line_identity_fail_closed") is True
+          assert wh.get("cors_allowlist_ready") is True
+          assert wh.get("cors_unknown_origin_rejected") is True
+          results["wallet_health"]={"status":st,"body":wh}
+
+          st,h,b=request(CATALOG+"/api/health")
+          ch=j(b)
+          assert st==200, (st,b[:500])
+          assert ch.get("ok") is True
+          assert ch.get("version")=="BAKERY-37-QR-ARRIVAL-PICKUP-20260720", ch
+          f=ch.get("features") or {}
+          for k in ["ipad_qr_arrival","two_step_pickup_confirmation","double_pickup_guard"]:
+              assert f.get(k) is True, (k,f)
+          results["catalog_health"]={"status":st,"body":ch}
+
+          st,h,b=request(WALLET+"/api/health","OPTIONS",{
+              "Origin":ALLOWED,
+              "Access-Control-Request-Method":"GET",
+              "Access-Control-Request-Headers":"Authorization,X-DPRO-Demo,Content-Type"
+          })
+          assert st==204, (st,b[:300])
+          assert h.get("access-control-allow-origin")==ALLOWED, h
+          ah=(h.get("access-control-allow-headers") or "").lower()
+          for x in ["authorization","x-dpro-demo","content-type"]:
+              assert x in ah, (x,ah)
+          results["cors_allowed"]={"status":st,"acao":h.get("access-control-allow-origin"),"allowHeaders":h.get("access-control-allow-headers")}
+
+          st,h,b=request(WALLET+"/api/health","OPTIONS",{
+              "Origin":UNKNOWN,
+              "Access-Control-Request-Method":"GET"
+          })
+          assert st==403, (st,b[:300],h)
+          assert not h.get("access-control-allow-origin"), h
+          results["cors_unknown"]={"status":st,"acao":h.get("access-control-allow-origin")}
+
+          st,h,b=request(WALLET+"/api/customer/me?shop_code=bakery_demo&line_user_id=FORGED-LINE-USER-ID")
+          neg=j(b)
+          assert st==401, (st,b[:500])
+          assert neg.get("code")=="LINE_IDENTITY_REQUIRED", neg
+          results["line_forged_negative"]={"status":st,"body":neg}
+
+          st,h,b=request(WALLET+"/api/customer/me?shop_code=bakery_demo&member_code=DEMO-BK-001",headers={"X-DPRO-Demo":"1"})
+          demo=j(b)
+          assert st not in (401,403), (st,b[:500])
+          assert demo.get("code") not in ("LINE_IDENTITY_REQUIRED","LINE_IDENTITY_INVALID","LINE_IDENTITY_AUDIENCE_MISMATCH"), demo
+          results["line_demo_boundary"]={"status":st,"body":demo}
+
+          st,h,b=request(WALLET+"/api/public/settings?shop_code=bakery_demo")
+          ws=j(b)
+          assert st==200 and ws.get("ok") is True, (st,ws)
+          results["wallet_settings"]={"status":st,"shop_code":ws.get("shop_code"),"shop_name":ws.get("shop_name")}
+
+          st,h,b=request(CATALOG+"/api/public/catalog?shop_code=bakery_demo")
+          cat=j(b)
+          assert st==200 and cat.get("ok") is True, (st,cat)
+          assert len(cat.get("products") or [])>0, cat
+          results["catalog_products"]={"status":st,"product_count":len(cat.get("products") or [])}
+
+          OUT.write_text(json.dumps({"ok":True,"results":results},ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
+          print(json.dumps({"ok":True,"checks":list(results.keys())},ensure_ascii=False))
+          PY
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install pinned Playwright
+        shell: bash
+        run: |
+          set -euo pipefail
+          npm install --no-save --package-lock=false playwright@1.55.0
+          npx playwright install --with-deps chromium
+
+      - name: Browser and system-check verification
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat > /tmp/bakery-qa.cjs <<'NODE'
+          const fs=require('fs');
+          const {chromium}=require('playwright');
+
+          const wallet="https://dpromstk2000-lab.github.io/bakery-line-system/wallet.html?shop_code=bakery_demo&api=https%3A%2F%2Fdpro-bakery-wallet-api.dpromstk2000.workers.dev&catalog_api=https%3A%2F%2Fdpro-bakery-catalog-api.dpromstk2000.workers.dev";
+          const system="https://dpromstk2000-lab.github.io/bakery-line-system/system-check.html?shop_code=bakery_demo&api=https%3A%2F%2Fdpro-bakery-wallet-api.dpromstk2000.workers.dev&catalog_api=https%3A%2F%2Fdpro-bakery-catalog-api.dpromstk2000.workers.dev";
+          const cases=[
+            ["pc",wallet,1440,1000],
+            ["mobile-390",wallet,390,844],
+            ["mobile-320",wallet,320,720],
+            ["ipad",wallet,1024,768],
+          ];
+
+          (async()=>{
+            const browser=await chromium.launch({headless:true});
+            const results=[];
+            for(const [key,url,width,height] of cases){
+              const page=await browser.newPage({viewport:{width,height}});
+              const pageErrors=[]; const consoleErrors=[];
+              page.on("pageerror",e=>pageErrors.push(String(e)));
+              page.on("console",m=>{ if(m.type()==="error") consoleErrors.push(m.text()) });
+              const resp=await page.goto(url,{waitUntil:"domcontentloaded",timeout:60000});
+              if(!resp || !resp.ok()) throw new Error(`${key} navigation failed ${resp&&resp.status()}`);
+              await page.waitForTimeout(4000);
+              const metrics=await page.evaluate(()=>{
+                const labels=["DEMO・開発設定","Worker API URL","店舗コード","LIFF ID","DEMO会員コード","確認用URL","DEMO会員で表示"];
+                const all=[...document.querySelectorAll("body *")];
+                const techVisible=labels.filter(label=>all.some(e=>{
+                  if((e.textContent||"").trim()!==label)return false;
+                  const r=e.getBoundingClientRect(),s=getComputedStyle(e);
+                  return r.width>0&&r.height>0&&s.visibility!=="hidden"&&s.display!=="none";
+                }));
+                const iw=innerWidth;
+                const controls=[...document.querySelectorAll("button,a,input,select,textarea")].filter(e=>{
+                  const r=e.getBoundingClientRect(),s=getComputedStyle(e);
+                  return r.width>0&&r.height>0&&s.visibility!=="hidden"&&s.display!=="none";
+                }).map(e=>{const r=e.getBoundingClientRect();return {tag:e.tagName,text:(e.textContent||e.value||"").trim().slice(0,50),left:r.left,right:r.right,width:r.width}})
+                  .filter(x=>x.left<-2||x.right>iw+2||x.width>iw+2);
+                return {
+                  innerWidth:iw,
+                  htmlScrollWidth:document.documentElement.scrollWidth,
+                  bodyScrollWidth:document.body.scrollWidth,
+                  techVisible,
+                  clippedControls:controls
+                };
+              });
+              const blockingConsole=consoleErrors.filter(x=>/Uncaught|TypeError|ReferenceError|SyntaxError/i.test(x));
+              const ok=metrics.htmlScrollWidth<=width+2 && metrics.bodyScrollWidth<=width+2 && metrics.clippedControls.length===0 && metrics.techVisible.length===0 && pageErrors.length===0 && blockingConsole.length===0;
+              await page.screenshot({path:`screenshots/bakery-${key}.png`,fullPage:true});
+              results.push({key,width,height,ok,metrics,pageErrors,blockingConsole,consoleErrors});
+              console.log(`QA_CASE=${key} OK=${ok} HTML=${metrics.htmlScrollWidth} BODY=${metrics.bodyScrollWidth} CLIPPED=${metrics.clippedControls.length} TECH=${metrics.techVisible.length} PAGE_ERRORS=${pageErrors.length} BLOCKING_CONSOLE=${blockingConsole.length}`);
+              if(!ok) throw new Error(`browser QA failed ${key}: ${JSON.stringify(results.at(-1))}`);
+              await page.close();
+            }
+
+            const page=await browser.newPage({viewport:{width:1200,height:900}});
+            const pageErrors=[]; const consoleErrors=[];
+            page.on("pageerror",e=>pageErrors.push(String(e)));
+            page.on("console",m=>{if(m.type()==="error")consoleErrors.push(m.text())});
+            const resp=await page.goto(system,{waitUntil:"domcontentloaded",timeout:60000});
+            if(!resp || !resp.ok()) throw new Error(`system-check navigation failed ${resp&&resp.status()}`);
+            await page.waitForTimeout(1500);
+            const btn=page.locator("#finalRunButton, #runAllButton").first();
+            await btn.click({timeout:20000});
+            await page.waitForFunction(()=>{
+              const e=document.querySelector("#finalJsonOutput");
+              if(!e || !e.value)return false;
+              try { const j=JSON.parse(e.value); return typeof j.all_ok==="boolean"; } catch { return false; }
+            },null,{timeout:120000});
+            const value=await page.locator("#finalJsonOutput").inputValue();
+            const result=JSON.parse(value);
+            await page.screenshot({path:"screenshots/bakery-system-check.png",fullPage:true});
+            const blockingConsole=consoleErrors.filter(x=>/Uncaught|TypeError|ReferenceError|SyntaxError/i.test(x));
+            const required=
+              result.all_ok===true &&
+              result.versionsAligned===true &&
+              result.walletAligned===true &&
+              result.catalogAligned===true &&
+              result.databaseAligned===true &&
+              result.frontendAligned===true &&
+              Array.isArray(result.blockingSystemCheckErrors) &&
+              result.blockingSystemCheckErrors.length===0 &&
+              pageErrors.length===0 &&
+              blockingConsole.length===0;
+            if(!required) throw new Error("system-check final gate failed: "+JSON.stringify({result,pageErrors,blockingConsole}));
+            fs.writeFileSync("qa/bakery-product-ready-final/browser.json",JSON.stringify({ok:true,results,systemCheck:result,pageErrors,blockingConsole},null,2)+"\n");
+            console.log(`SYSTEM_CHECK OK=${required} TOTAL=${result.total} PASSED=${result.passed} FAILED=${result.failed} VERSIONS_ALIGNED=${result.versionsAligned}`);
+            await browser.close();
+          })().catch(e=>{console.error(e);process.exit(1)});
+          NODE
+          node /tmp/bakery-qa.cjs
+
+      - name: Upload final live evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: bakery-product-ready-final-live-evidence
+          path: |
+            qa/bakery-product-ready-final/
+            screenshots/
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Self-delete verified workflow
+        if: success()
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git rm .github/workflows/bakery-product-ready-final-live.yml
+          git commit -m "Remove verified BAKERY Product READY live gate [skip ci]"
+          git push
