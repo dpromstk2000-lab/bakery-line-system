@@ -66,6 +66,16 @@
     });
   }
 
-  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
-  else init();
+  function loadTutorialR3() {
+    if (document.querySelector('script[data-dpro-tutorial-r3]')) return;
+    const script = document.createElement('script');
+    script.src = './dpro-tutorial-first10.js?v=R3-20260822';
+    script.async = false;
+    script.dataset.dproTutorialR3 = '1';
+    document.head.appendChild(script);
+  }
+
+  function boot() { init(); loadTutorialR3(); }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot);
+  else boot();
 })();
