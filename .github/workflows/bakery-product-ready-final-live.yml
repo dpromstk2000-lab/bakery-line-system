@@ -1,4 +1,4 @@
-name: BAKERY Product READY Final Live Gate R2
+name: BAKERY Product READY Final Live Gate R3
 
 on:
   push:
@@ -157,10 +157,13 @@ jobs:
           npx playwright install --with-deps chromium
 
       - name: Browser and system-check verification
+        # R3: keep the CommonJS QA script inside GITHUB_WORKSPACE so Node can
+        # resolve the pinned repo-local playwright installation.
         shell: bash
         run: |
           set -euo pipefail
-          cat > /tmp/bakery-qa.cjs <<'NODE'
+          echo "PLAYWRIGHT_RESOLVED=$(node -e "process.stdout.write(require.resolve('playwright'))")"
+          cat > .dpro-bakery-qa.cjs <<'NODE'
           const fs=require('fs');
           const {chromium}=require('playwright');
 
@@ -250,7 +253,7 @@ jobs:
             await browser.close();
           })().catch(e=>{console.error(e);process.exit(1)});
           NODE
-          node /tmp/bakery-qa.cjs
+          node .dpro-bakery-qa.cjs
 
       - name: Upload final live evidence
         uses: actions/upload-artifact@v4
