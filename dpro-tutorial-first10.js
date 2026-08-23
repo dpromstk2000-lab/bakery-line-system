@@ -1,6 +1,7 @@
 // DPRO TUTORIAL BAKERY R3 First10 V1.0 / UI-only / no automatic business mutation
 (() => {
   const TUTORIAL_VERSION = "BAKERY-FIRST10-R3-V1.0-20260822";
+  const PATCH_VERSION = "BAKERY-FIRST10-V1.1-DRAG-CARD-20260823";
   const STORAGE_KEY = "DPRO_BAKERY_FIRST10_V1";
   const FIRST10 = [
     {id:"F10-001",chapter:"1/7 最初の入口",title:"オーナー画面が毎日の開始地点",target:"bakery.owner.start",route:"owner",mode:"READ",body:"毎日の開始地点はオーナー画面です。まず「今日の管理を開始」から、その日の状況を確認します。"},
@@ -43,6 +44,8 @@
   let lastFocus = null;
   let overlay = null;
   let frameWrap = null;
+  let dragState = null;
+  let dragResizeBound = false;
 
   function readState() {
     try {
@@ -82,8 +85,11 @@
       #dproTutorialLauncher .dpro-guide-sub{display:flex;gap:7px;flex-wrap:wrap;justify-content:flex-end}
       #dproTutorialLauncher .dpro-guide-sub a,#dproTutorialLauncher .dpro-guide-sub button{border:1px solid #fdba74;border-radius:999px;padding:9px 12px;background:#fff;color:#9a3412;font-weight:900;text-decoration:none;cursor:pointer;min-height:40px}
       #dproTutorialOverlay{position:fixed;inset:0;z-index:2147482500;pointer-events:none;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
-      #dproTutorialOverlay .dpro-tour-card{position:absolute;left:50%;bottom:18px;transform:translateX(-50%);width:min(720px,calc(100% - 24px));max-height:min(54vh,560px);overflow:auto;pointer-events:auto;background:#fff;border:1px solid #fdba74;border-radius:24px;padding:18px;box-shadow:0 24px 90px rgba(0,0,0,.32);color:#292524}
-      #dproTutorialOverlay .dpro-tour-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+      #dproTutorialOverlay .dpro-tour-card{box-sizing:border-box;position:absolute;left:50%;bottom:18px;transform:translateX(-50%);width:min(720px,calc(100% - 24px));max-height:min(54vh,560px);overflow:auto;pointer-events:auto;background:#fff;border:1px solid #fdba74;border-radius:24px;padding:18px;box-shadow:0 24px 90px rgba(0,0,0,.32);color:#292524}
+      #dproTutorialOverlay .dpro-tour-card.dpro-dragging{box-shadow:0 28px 100px rgba(0,0,0,.38)}
+      #dproTutorialOverlay .dpro-tour-top{display:grid;grid-template-columns:minmax(0,1fr) auto auto;align-items:start;gap:10px}
+      #dproTutorialOverlay .dpro-tour-drag-handle{align-self:start;display:inline-flex;align-items:center;justify-content:center;min-height:36px;padding:7px 10px;border:1px dashed #fb923c;border-radius:999px;background:#fff7ed;color:#9a3412;font-size:12px;font-weight:950;line-height:1;cursor:grab;user-select:none;-webkit-user-select:none;touch-action:none}
+      #dproTutorialOverlay .dpro-tour-card.dpro-dragging .dpro-tour-drag-handle{cursor:grabbing;background:#ffedd5}
       #dproTutorialOverlay .dpro-tour-kicker{font-size:11px;font-weight:950;color:#9a3412;letter-spacing:.05em}
       #dproTutorialOverlay .dpro-tour-title{font-size:23px;font-weight:950;line-height:1.25;margin:5px 0 0}
       #dproTutorialOverlay .dpro-tour-close{border:1px solid #e7e5e4;background:#fff;color:#44403c;border-radius:999px;width:42px;height:42px;cursor:pointer;font-size:20px;flex:0 0 auto}
@@ -96,7 +102,7 @@
       #dproTutorialFrameWrap{position:fixed;inset:10px 10px 235px;z-index:2147482100;background:#fff;border:2px solid #fdba74;border-radius:24px;overflow:hidden;box-shadow:0 24px 90px rgba(0,0,0,.28)}
       #dproTutorialFrameWrap iframe{width:100%;height:100%;border:0;background:#fff}
       #dproTutorialFrameWrap .dpro-frame-label{position:absolute;top:9px;left:9px;z-index:3;background:#292524;color:#fff;padding:7px 10px;border-radius:999px;font-size:11px;font-weight:950;pointer-events:none}
-      @media(max-width:560px){#dproTutorialLauncher{right:8px;bottom:8px}#dproTutorialLauncher .dpro-guide-sub{display:none}#dproTutorialOverlay .dpro-tour-card{bottom:8px;width:calc(100% - 16px);max-height:58vh;padding:15px;border-radius:20px}#dproTutorialOverlay .dpro-tour-title{font-size:19px}#dproTutorialFrameWrap{inset:6px 6px 310px;border-radius:18px}#dproTutorialOverlay .dpro-tour-actions button{flex:1 1 44%}}
+      @media(max-width:560px){#dproTutorialLauncher{right:8px;bottom:8px}#dproTutorialLauncher .dpro-guide-sub{display:none}#dproTutorialOverlay .dpro-tour-card{bottom:8px;width:calc(100% - 16px);max-height:58vh;padding:15px;border-radius:20px}#dproTutorialOverlay .dpro-tour-top{grid-template-columns:minmax(0,1fr) auto}#dproTutorialOverlay .dpro-tour-drag-handle{grid-column:1/-1;grid-row:1;justify-self:end;margin-bottom:2px}#dproTutorialOverlay .dpro-tour-top>div:first-child{grid-column:1;grid-row:2}#dproTutorialOverlay .dpro-tour-close{grid-column:2;grid-row:2}#dproTutorialOverlay .dpro-tour-title{font-size:19px}#dproTutorialFrameWrap{inset:6px 6px 310px;border-radius:18px}#dproTutorialOverlay .dpro-tour-actions button{flex:1 1 44%}}
     `;
     document.head.appendChild(style);
   }
@@ -187,6 +193,78 @@
     return {found:true,fallback:false,iframe:true};
   }
 
+  function clampDragPosition(card, left, top) {
+    const margin = window.innerWidth <= 560 ? 8 : 10;
+    const rect = card.getBoundingClientRect();
+    const maxLeft = Math.max(margin, window.innerWidth - rect.width - margin);
+    const maxTop = Math.max(margin, window.innerHeight - rect.height - margin);
+    return {
+      left:Math.min(Math.max(left, margin), maxLeft),
+      top:Math.min(Math.max(top, margin), maxTop)
+    };
+  }
+
+  function placeDraggedCard(card, left, top) {
+    const next = clampDragPosition(card, left, top);
+    card.style.left = `${Math.round(next.left)}px`;
+    card.style.top = `${Math.round(next.top)}px`;
+    card.style.right = "auto";
+    card.style.bottom = "auto";
+    card.style.transform = "none";
+    card.dataset.dproDragged = "1";
+    return next;
+  }
+
+  function clampCurrentCard() {
+    const card = overlay?.querySelector(".dpro-tour-card");
+    if (!card || card.dataset.dproDragged !== "1") return;
+    const rect = card.getBoundingClientRect();
+    placeDraggedCard(card, rect.left, rect.top);
+  }
+
+  function installCardDrag() {
+    const card = overlay?.querySelector(".dpro-tour-card");
+    const handle = overlay?.querySelector(".dpro-tour-drag-handle");
+    if (!card || !handle || handle.dataset.dproDragReady === "1") return;
+    handle.dataset.dproDragReady = "1";
+
+    handle.addEventListener("pointerdown", (event) => {
+      if (event.pointerType === "mouse" && event.button !== 0) return;
+      const rect = card.getBoundingClientRect();
+      const start = placeDraggedCard(card, rect.left, rect.top);
+      dragState = {
+        pointerId:event.pointerId,
+        offsetX:event.clientX - start.left,
+        offsetY:event.clientY - start.top
+      };
+      card.classList.add("dpro-dragging");
+      try { handle.setPointerCapture(event.pointerId); } catch {}
+      event.preventDefault();
+    });
+
+    handle.addEventListener("pointermove", (event) => {
+      if (!dragState || dragState.pointerId !== event.pointerId) return;
+      placeDraggedCard(card, event.clientX - dragState.offsetX, event.clientY - dragState.offsetY);
+      event.preventDefault();
+    });
+
+    const finishDrag = (event) => {
+      if (!dragState || dragState.pointerId !== event.pointerId) return;
+      try { if (handle.hasPointerCapture(event.pointerId)) handle.releasePointerCapture(event.pointerId); } catch {}
+      dragState = null;
+      card.classList.remove("dpro-dragging");
+      clampCurrentCard();
+      event.preventDefault();
+    };
+    handle.addEventListener("pointerup", finishDrag);
+    handle.addEventListener("pointercancel", finishDrag);
+
+    if (!dragResizeBound) {
+      dragResizeBound = true;
+      window.addEventListener("resize", () => requestAnimationFrame(clampCurrentCard), {passive:true});
+    }
+  }
+
   function renderCard(index) {
     if (!overlay) return;
     activeIndex = Math.max(0, Math.min(FIRST10.length - 1, index));
@@ -216,11 +294,13 @@
     prev.disabled = activeIndex === 0;
     next.textContent = activeIndex === FIRST10.length - 1 ? "完了" : "次へ";
     writeState({status:"IN_PROGRESS",index:activeIndex});
+    requestAnimationFrame(clampCurrentCard);
     queueMicrotask(() => next.focus({preventScroll:true}));
   }
 
   function close({skip=false,complete=false}={}) {
     clearHighlight();
+    dragState = null;
     overlay?.remove();
     overlay = null;
     if (complete) writeState({status:"COMPLETED",index:FIRST10.length - 1,completed_at:new Date().toISOString()});
@@ -253,13 +333,14 @@
     overlay.id = "dproTutorialOverlay";
     overlay.innerHTML = `
       <div class="dpro-tour-card" role="dialog" aria-modal="true" aria-label="DPROベーカリー 最初の10分ガイド">
-        <div class="dpro-tour-top"><div><div class="dpro-tour-kicker"></div><div class="dpro-tour-title"></div></div><button type="button" class="dpro-tour-close" aria-label="ガイドを閉じる">×</button></div>
+        <div class="dpro-tour-top"><div><div class="dpro-tour-kicker"></div><div class="dpro-tour-title"></div></div><div class="dpro-tour-drag-handle" title="ドラッグして移動">↕ 移動</div><button type="button" class="dpro-tour-close" aria-label="ガイドを閉じる">×</button></div>
         <div class="dpro-progress" aria-hidden="true"><span></span></div>
         <div class="dpro-tour-body"></div>
         <div class="dpro-tour-note"></div>
         <div class="dpro-tour-actions"><button type="button" class="dpro-prev">戻る</button><button type="button" class="dpro-next">次へ</button><button type="button" class="dpro-skip">スキップ</button></div>
       </div>`;
     document.body.appendChild(overlay);
+    installCardDrag();
     overlay.querySelector(".dpro-tour-close").addEventListener("click", () => close());
     overlay.querySelector(".dpro-prev").addEventListener("click", () => renderCard(activeIndex - 1));
     overlay.querySelector(".dpro-next").addEventListener("click", () => {
@@ -298,6 +379,7 @@
     document.addEventListener("keydown", keyHandler, true);
     window.DPROBakeryTutorial = Object.freeze({
       version:TUTORIAL_VERSION,
+      patchVersion:PATCH_VERSION,
       cards:FIRST10.map((item)=>({...item})),
       start:()=>start(false),
       replay:()=>start(true),
