@@ -98,7 +98,7 @@
         border-radius:16px!important;scroll-margin:120px!important
       }
       #dproTutorialLauncher{
-        position:fixed;right:16px;bottom:16px;z-index:2147483000;
+        position:fixed;right:16px;bottom:16px;z-index:2147482300;
         display:grid;gap:8px;justify-items:end;
         font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans JP",sans-serif
       }
@@ -178,7 +178,7 @@
       }
       @media(max-width:560px){
         #dproTutorialLauncher{right:8px;bottom:8px}
-        #dproTutorialLauncher .dpro-guide-sub{display:none}
+        #dproTutorialLauncher .dpro-guide-sub{display:flex;max-width:calc(100vw - 16px);flex-wrap:wrap}
         #dproTutorialOverlay .dpro-tour-card{
           bottom:8px;width:calc(100% - 16px);max-height:60vh;padding:15px;border-radius:20px
         }
