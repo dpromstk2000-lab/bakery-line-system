@@ -69,7 +69,7 @@
   function loadTutorialR3() {
     if (document.querySelector('script[data-dpro-tutorial-r3]')) return;
     const script = document.createElement('script');
-    script.src = './dpro-tutorial-first10.js?v=R3-20260822';
+    script.src = './dpro-tutorial-first10.js?v=R3-V1.1-20260828';
     script.async = false;
     script.dataset.dproTutorialR3 = '1';
     document.head.appendChild(script);
