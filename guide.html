@@ -23,18 +23,18 @@ dialog{border:0;border-radius:25px;padding:0;width:min(720px,calc(100% - 20px));
 <body data-dpro-guide-center="1">
 <main class="page">
 <header class="hero">
-<div class="kicker">DPRO TUTORIAL / BAKERY GUIDE CENTER R4 / STANDARD V1.1</div>
+<div class="kicker">DPRO ベーカリー LINE / 操作ガイド</div>
 <h1>パン屋LINE<br>操作ガイド</h1>
-<p>毎日のオーナー運用、取り置き、スタッフ画面、お客様向け機能、ECO、商品・営業日設定、任意のチャージ/レジまで。既存29記事と12FAQを維持し、R3と同じ「最初の10分」から確認できます。</p>
+<p>毎日のオーナー運用、取り置き、スタッフ画面、お客様向け機能、ECO、商品・営業日設定、任意のチャージ/レジまで。29記事と12FAQを維持し、「最初の10分」から確認できます。</p>
 <div class="hero-actions"><a class="btn light" href="./owner.html?tutorial=replay" id="replayFirst10">最初の10分を再実行</a><a class="btn ghost" href="./owner.html">オーナー画面へ戻る</a></div>
 </header>
 <div class="notice">このガイドは操作を自動実行しません。保存・更新・送信・決済・ステータス変更は、内容を確認した利用者自身が操作します。実在するお客様情報を教材として入力・保存しないでください。</div>
-<div class="section-head"><small>FIRST 10 / SINGLE SOURCE</small><h2>最初の10分</h2><p>R3 First10と同じ10件・同じ順番を、同じソースから表示します。</p></div>
+<div class="section-head"><small>はじめに</small><h2>最初の10分</h2><p>最初の10項目を、決められた順番で分かりやすく表示します。</p></div>
 <section class="first10" id="first10Grid" aria-live="polite"></section>
 <section class="search-panel" data-dpro-guide-id="bakery.guide.search" aria-label="操作ガイド検索"><div class="search-row"><input class="search" id="guideSearch" type="search" placeholder="例：取り置き、ECO、定休日、会員証" aria-label="操作ガイドを検索"><div class="count" id="resultCount" aria-live="polite">29件</div></div><div class="categories" id="categoryFilters" role="group" aria-label="カテゴリで絞り込み"></div></section>
 <div class="section-head"><small>GUIDE ARTICLES</small><h2>使い方を探す</h2><p>記事を開くと、確認ポイントと実際の機能画面へのリンクが表示されます。</p></div><section class="grid" id="articleGrid" aria-live="polite"></section>
 <div class="section-head" id="faq"><small>FAQ</small><h2>よくある質問</h2><p>日常運用で迷いやすい12項目をまとめています。</p></div><section class="faq-list" id="faqList"></section>
-<div class="footer">DPRO SHOP / DPRO TUTORIAL BAKERY / Guide Center R4 V1.1 / 29 articles / 12 FAQ / business mutation 0</div>
+<div class="footer">DPRO SHOP / DPRO ベーカリー LINE / 操作ガイド / 29記事 / 12FAQ</div>
 </main>
 <dialog id="articleDialog" aria-labelledby="dialogTitle"><div class="modal"><div class="modal-top"><div><div class="modal-kicker" id="dialogKicker"></div><h2 id="dialogTitle"></h2></div><button class="close" id="dialogClose" type="button" aria-label="記事を閉じる">×</button></div><div class="modal-body" id="dialogBody"></div><div class="safety">実画面へのリンクは画面を開くだけです。このガイドから業務操作を自動実行しません。</div><div class="modal-actions"><a class="btn" id="dialogFeatureLink" target="_blank" rel="noopener">実際の機能画面を開く</a><button class="btn secondary" id="dialogBack" type="button">記事一覧へ戻る</button></div></div></dialog>
 <script src="./dpro-tutorial-first10.js?v=R4-V1.1-20260828"></script>
