@@ -1,0 +1,70 @@
+name: DPRO CHAT B R2 BAKERY Public Guide Safety
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Repository guard
+        shell: bash
+        run: |
+          test "$GITHUB_REPOSITORY" = "dpromstk2000-lab/bakery-line-system"
+
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Apply minimal R2 fix
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          def patch_file(path, replacements):
+              p=Path(path); s=p.read_text(encoding='utf-8')
+              for a,b in replacements:
+                  if a not in s: raise SystemExit(f'{path}: expected copy not found: {a[:100]}')
+                  s=s.replace(a,b)
+              p.write_text(s,encoding='utf-8')
+
+          patch_file('owner.html', [
+              ('<title>DPROベーカリーLINE | owner.html STEP BAKERY-PHONE-2</title>', '<title>DPROベーカリーLINE｜オーナー管理</title>'),
+          ])
+          patch_file('guide.html', [
+              ('<div class="kicker">DPRO TUTORIAL / BAKERY GUIDE CENTER R4 / STANDARD V1.1</div>', '<div class="kicker">DPRO ベーカリー LINE / 操作ガイド</div>'),
+              ('既存29記事と12FAQを維持し、R3と同じ「最初の10分」から確認できます。', '29記事と12FAQを維持し、「最初の10分」から確認できます。'),
+              ('<small>FIRST 10 / SINGLE SOURCE</small>', '<small>はじめに</small>'),
+              ('R3 First10と同じ10件・同じ順番を、同じソースから表示します。', '最初の10項目を、決められた順番で分かりやすく表示します。'),
+              ('<div class="footer">DPRO SHOP / DPRO TUTORIAL BAKERY / Guide Center R4 V1.1 / 29 articles / 12 FAQ / business mutation 0</div>', '<div class="footer">DPRO SHOP / DPRO ベーカリー LINE / 操作ガイド / 29記事 / 12FAQ</div>'),
+          ])
+          PY
+
+      - name: Static safety QA
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          owner=Path('owner.html').read_text(encoding='utf-8')
+          guide=Path('guide.html').read_text(encoding='utf-8')
+          assert 'STEP BAKERY-PHONE-2' not in owner
+          for x in ['DPRO TUTORIAL / BAKERY GUIDE CENTER R4 / STANDARD V1.1','FIRST 10 / SINGLE SOURCE','R3 First10と同じ10件','Guide Center R4 V1.1','business mutation 0']:
+              assert x not in guide, x
+          for x in ['最初の10分を再実行','オーナー画面へ戻る','29記事','12FAQ']:
+              assert x in guide, x
+          assert 'dpro-tutorial-first10.js?v=R4-V1.1-20260828' in guide
+          PY
+          git diff --check
+
+      - name: Commit forward-only fix
+        shell: bash
+        run: |
+          git config user.name "DPRO CHAT B R2"
+          git config user.email "actions@users.noreply.github.com"
+          git rm ".github/workflows/dpro-chat-b-r2-public-guide-safety.yml"
+          git add guide.html owner.html
+          git commit -m "DPRO CHAT B R2: public guide and demo safety"
+          git push
